@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const authRoute = require("./Routes/authRoute");
 const cors = require("cors");
 
 // Cho phép CORS từ frontend React
@@ -13,5 +14,8 @@ app.use(
 // Giải mã JSON và form-urlencoded body
 app.use(express.json()); // cho JSON (application/json)
 app.use(express.urlencoded({ extended: true })); // cho form (application/x-www-form-urlencoded)
+
+//route
+app.use("/api/auth", authRoute);
 
 module.exports = app;
