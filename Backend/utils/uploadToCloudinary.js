@@ -1,7 +1,7 @@
 const cloudinary = require("../cloudinary");
 const asyncHandler = require("express-async-handler");
 
-const uploadMultiple = asyncHandler(async (req, resizeBy, next) => {
+const uploadMultiple = asyncHandler(async (req, res, next) => {
   try {
     const images = req.files;
     //console.log(images);

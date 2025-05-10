@@ -14,7 +14,7 @@ const teacherSchema = new mongoose.Schema(
       enum: ["full-time", "part-time"],
       required: true,
     },
-    subject: { type: String, required: true },
+    subject: [{ type: String, required: true }],
     description: { type: String, required: true },
     degreeImages: [{ type: String, required: true }],
   },
