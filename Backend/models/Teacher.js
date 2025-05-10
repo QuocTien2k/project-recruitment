@@ -15,7 +15,7 @@ const teacherSchema = new mongoose.Schema(
       required: true,
     },
     subject: { type: String, required: true },
-    description: { type: String },
+    description: { type: String, required: true },
     degreeImages: [{ type: String, required: true }],
   },
   { timestamps: true }
