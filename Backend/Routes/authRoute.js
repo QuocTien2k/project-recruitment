@@ -1,5 +1,9 @@
 const router = require("express").Router();
-const { signupUser, signupTeacher } = require("../controllers/authController");
+const {
+  signupUser,
+  signupTeacher,
+  login,
+} = require("../controllers/authController");
 const upload = require("../middlewares/multer");
 const uploadMultiple = require("../utils/uploadToCloudinary");
 
@@ -10,5 +14,6 @@ router.post(
   uploadMultiple,
   signupTeacher
 );
+router.post("/login", login);
 
 module.exports = router;

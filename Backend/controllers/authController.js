@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 
@@ -205,7 +206,74 @@ const signupTeacher = async (req, res) => {
   }
 };
 
+//Đăng nhập
+const login = async (req, res) => {
+  try {
+    //1. Lấy thông tin từ body
+    const { email, password } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập email",
+      });
+    }
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập mật khẩu",
+      });
+    }
+
+    //2. Kiểm tra email
+    const user = await UserModel.findOne({ email: req.body.email }).select(
+      "+password"
+    );
+
+    if (!user) {
+      return res.status(401).send({
+        message: "Email không tồn tại hoặc chưa đăng ký",
+        success: false,
+      });
+    }
+
+    //3. Kiểm tra mật khẩu
+    const isValid = await bcrypt.compare(req.body.password, user.password);
+    //console.log("Password comparison:", isValid);
+    if (!isValid) {
+      return res.status(401).send({
+        message: "Mật khẩu không đúng",
+        success: false,
+      });
+    }
+
+    //4. Đăng nhập thành công + đăng ký token
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "3d",
+    });
+
+    res.status(200).send({
+      message: "Đăng nhập thành công",
+      success: true,
+      user: {
+        _id: user._id,
+        middleName: user.middleName,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      token: token,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Lỗi hệ thống: ${error.message}`,
+    });
+  }
+};
+
 module.exports = {
   signupUser,
   signupTeacher,
+  login,
 };
