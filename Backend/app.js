@@ -3,6 +3,7 @@ const app = express();
 const authRoute = require("./Routes/authRoute");
 const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
+const messageRoute = require("./Routes/messageRoute");
 const cors = require("cors");
 
 // Cho phép CORS từ frontend React
@@ -21,5 +22,5 @@ app.use(express.urlencoded({ extended: true })); // cho form (application/x-www-
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoute);
-
+app.use("/api/message", messageRoute);
 module.exports = app;
