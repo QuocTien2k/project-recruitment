@@ -80,7 +80,37 @@ const clearUnreadMessageCount = async (req, res) => {
   }
 };
 
+// lấy tất cả tin nhắn trong cuộc trò chuyện của chatId
+const getAllMessages = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+
+    if (!chatId) {
+      return res.status(400).send({
+        message: "Thiếu chatId!",
+        success: false,
+      });
+    }
+
+    const allMessages = await MessageModel.find({ chatId })
+      .sort({ createdAt: 1 })
+      .populate("sender", "middleName name email"); // Lấy thông tin người gửi
+
+    res.status(200).send({
+      message: "Lấy tin nhắn thành công!",
+      success: true,
+      data: allMessages,
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: "Lấy tin nhắn thất bại! " + error.message,
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   createNewMessage,
   clearUnreadMessageCount,
+  getAllMessages,
 };
