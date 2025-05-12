@@ -1,5 +1,6 @@
 const ChatModel = require("../models/Chat");
 
+// Tạo mới cuộc trò chuyện
 const createNewChat = async (req, res) => {
   try {
     const { members } = req.body;
@@ -51,6 +52,29 @@ const createNewChat = async (req, res) => {
   }
 };
 
+// Lấy danh sách cuộc trò chuyện của người dùng
+const getAllChats = async (req, res) => {
+  try {
+    const userId = req.user.userId; // Lấy userId từ middleware authMiddleware
+    const allChats = await ChatModel.find({ members: userId })
+      .populate("members", "middleName name email") // Lấy thông tin user
+      .populate("lastMessage") // Lấy thông tin tin nhắn cuối cùng
+      .sort({ updatedAt: -1 }); // Sắp xếp theo thời gian cập nhật gần nhất
+
+    res.status(201).send({
+      message: `Lấy danh sách chat của ${userId} thành công!`,
+      success: true,
+      data: allChats,
+    });
+  } catch (error) {
+    res.status(400).send({
+      message: "Lấy danh sách chat thất bại!" + error.message,
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   createNewChat,
+  getAllChats,
 };
