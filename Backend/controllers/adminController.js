@@ -70,8 +70,37 @@ const getActiveTeachers = async (req, res) => {
   }
 };
 
+//lấy danh sách teacher tạm khóa
+const getInActiveTeachers = async (req, res) => {
+  try {
+    const teachers = await TeacherModel.find()
+      .populate(
+        "userId",
+        "middleName name email phone profilePic province district isActive"
+      ) // Lấy info cơ bản từ bảng User
+      .select("-__v");
+
+    const activeTeachers = teachers.filter(
+      (teacher) => teacher.userId && !teacher.userId.isActive
+    );
+
+    res.status(200).json({
+      success: true,
+      total: activeTeachers.length,
+      teachers: activeTeachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy danh sách giáo viên",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getActiveUsers,
   getInActiveUsers,
   getActiveTeachers,
+  getInActiveTeachers,
 };
