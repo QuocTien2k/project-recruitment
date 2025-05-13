@@ -5,6 +5,7 @@ const {
   getActiveTeachers,
   getInActiveTeachers,
   toggleAccountStatus,
+  deleteAccount,
 } = require("../controllers/adminController");
 const { protect, isAdmin } = require("../middlewares/authMiddleware");
 
@@ -18,5 +19,6 @@ router.get(
   getInActiveTeachers
 );
 router.patch("/account-status/:userId", protect, isAdmin, toggleAccountStatus);
+router.delete("/delete-account/:userId", protect, isAdmin, deleteAccount);
 
 module.exports = router;
