@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
     role: { type: String, enum: ["user", "teacher", "admin"], default: "user" },
     district: { type: String, required: true },
     province: { type: String, required: true },
+    isActive: {
+      type: Boolean,
+      default: true, // mặc định tài khoản đang hoạt động
+    },
   },
   { timestamps: true }
 );
