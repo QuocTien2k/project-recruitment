@@ -247,7 +247,15 @@ const login = async (req, res) => {
       });
     }
 
-    //4. Đăng nhập thành công + đăng ký token
+    //4. Kiểm tra trạng thái tài khoản
+    if (user.isActive === false) {
+      return res.status(401).send({
+        message: "Tài khoản đã bị khóa",
+        success: false,
+      });
+    }
+
+    //5. Đăng nhập thành công + đăng ký token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.SECRET_KEY,

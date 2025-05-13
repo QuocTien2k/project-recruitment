@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-
+const UserModel = require("../models/User");
 //xac thực token
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -19,6 +19,23 @@ const protect = (req, res, next) => {
 
     // Sau khi verify, lưu toàn bộ thông tin decode
     req.user = decodedToken;
+
+    //kiểm tra user
+    const user = await UserModel.findById(req.user.userId);
+    if (!user) {
+      return res.status(401).send({
+        message: "Không tìm thấy người dùng!",
+        success: false,
+      });
+    }
+
+    //kiểm tra trạng thái tài khoản
+    if (user.isActive === false) {
+      return res.status(401).send({
+        message: "Tài khoản đã bị khóa!",
+        success: false,
+      });
+    }
 
     next(); // Tiếp tục xử lý request
   } catch (error) {
