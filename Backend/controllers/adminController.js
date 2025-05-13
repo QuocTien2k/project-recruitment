@@ -14,7 +14,7 @@ const getActiveUsers = async (req, res) => {
       users,
     });
   } catch (error) {
-    res.status(400).send({
+    res.status(400).json({
       message: "Lấy danh sách người dùng thất bại!" + error.message,
       success: false,
     });
@@ -35,7 +35,7 @@ const getInActiveUsers = async (req, res) => {
       users,
     });
   } catch (error) {
-    res.status(400).send({
+    res.status(400).json({
       message: "Lấy danh sách người dùng thất bại!" + error.message,
       success: false,
     });
@@ -134,10 +134,46 @@ const toggleAccountStatus = async (req, res) => {
   }
 };
 
+//xóa tài khoản
+const deleteAccount = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "không tìm thấy tài khoản",
+        success: false,
+      });
+    }
+
+    //xóa trong bảng teacher
+    if (user.role === "teacher") {
+      await TeacherModel.findOneAndDelete({ userId: user.id });
+    }
+
+    //xóa trong bảng user
+    await UserModel.findOneAndDelete(userId);
+
+    res.status(200).json({
+      message: "Xóa tài khoản thành công",
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi xóa tài khoản",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getActiveUsers,
   getInActiveUsers,
   getActiveTeachers,
   getInActiveTeachers,
   toggleAccountStatus,
+  deleteAccount,
 };

@@ -117,14 +117,14 @@ const signupTeacher = async (req, res) => {
 
     //2. Kiểm tra hình ảnh
     if (degreeFiles.length === 0) {
-      return res.status(400).send({
+      return res.status(400).json({
         message: "Vui lòng tải lên ít nhất 1 ảnh bằng cấp.",
         success: false,
       });
     }
 
     if (degreeFiles.length > 2) {
-      return res.status(400).send({
+      return res.status(400).json({
         message: "Chỉ được phép upload tối đa 2 ảnh bằng cấp",
         success: false,
       });
@@ -161,7 +161,7 @@ const signupTeacher = async (req, res) => {
       .filter((s) => /^[\p{L}\s]+$/gu.test(s));
 
     if (normalizedSubject.length === 0) {
-      return res.status(400).send({
+      return res.status(400).json({
         message: "Môn học không hợp lệ, vui lòng chỉ nhập tên môn học.",
         success: false,
       });
@@ -231,7 +231,7 @@ const login = async (req, res) => {
     );
 
     if (!user) {
-      return res.status(401).send({
+      return res.status(401).json({
         message: "Email không tồn tại hoặc chưa đăng ký",
         success: false,
       });
@@ -241,7 +241,7 @@ const login = async (req, res) => {
     const isValid = await bcrypt.compare(req.body.password, user.password);
     //console.log("Password comparison:", isValid);
     if (!isValid) {
-      return res.status(401).send({
+      return res.status(401).json({
         message: "Mật khẩu không đúng",
         success: false,
       });
@@ -249,7 +249,7 @@ const login = async (req, res) => {
 
     //4. Kiểm tra trạng thái tài khoản
     if (user.isActive === false) {
-      return res.status(401).send({
+      return res.status(401).json({
         message: "Tài khoản đã bị khóa",
         success: false,
       });
@@ -264,7 +264,7 @@ const login = async (req, res) => {
       }
     );
 
-    res.status(200).send({
+    res.status(200).json({
       message: "Đăng nhập thành công",
       success: true,
       user: {

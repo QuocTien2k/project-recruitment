@@ -7,7 +7,7 @@ const createNewChat = async (req, res) => {
 
     // Kiểm tra members có hợp lệ không
     if (!members || !Array.isArray(members) || members.length !== 2) {
-      return res.status(400).send({
+      return res.status(400).json({
         message: "Cuộc trò chuyện tối đa 2 người!",
         success: false,
       });
@@ -15,7 +15,7 @@ const createNewChat = async (req, res) => {
 
     // Kiểm tra xem 2 ID có trùng nhau không
     if (members[0] === members[1]) {
-      return res.status(400).send({
+      return res.status(400).json({
         message: "Không thể tạo cuộc trò chuyện với chính mình!",
         success: false,
       });
@@ -27,7 +27,7 @@ const createNewChat = async (req, res) => {
     });
 
     if (existingChat) {
-      return res.status(200).send({
+      return res.status(200).json({
         message: "Cuộc trò chuyện đã tồn tại!",
         success: true,
         data: existingChat,
@@ -39,13 +39,13 @@ const createNewChat = async (req, res) => {
     const savedChat = await chat.save();
     await savedChat.populate("members");
 
-    res.status(201).send({
+    res.status(201).json({
       message: "Tạo chat thành công!",
       success: true,
       data: savedChat,
     });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message: "Tạo chat thất bại! " + error.message,
       success: false,
     });
@@ -61,13 +61,13 @@ const getAllChats = async (req, res) => {
       .populate("lastMessage") // Lấy thông tin tin nhắn cuối cùng
       .sort({ updatedAt: -1 }); // Sắp xếp theo thời gian cập nhật gần nhất
 
-    res.status(201).send({
+    res.status(201).json({
       message: `Lấy danh sách chat của ${userId} thành công!`,
       success: true,
       data: allChats,
     });
   } catch (error) {
-    res.status(400).send({
+    res.status(400).json({
       message: "Lấy danh sách chat thất bại!" + error.message,
       success: false,
     });
