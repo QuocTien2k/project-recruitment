@@ -21,7 +21,7 @@ const getActiveUsers = async (req, res) => {
   }
 };
 
-//lấy danh sách user bị tạm khóa
+//lấy danh sách user tạm khóa
 const getInActiveUsers = async (req, res) => {
   try {
     const users = await UserModel.find({
@@ -42,20 +42,24 @@ const getInActiveUsers = async (req, res) => {
   }
 };
 
-//lấy danh sách teacher
-const getAllTeachers = async (req, res) => {
+//lấy danh sách teacher hoạt động
+const getActiveTeachers = async (req, res) => {
   try {
     const teachers = await TeacherModel.find()
       .populate(
         "userId",
-        "middleName name email phone profilePic province district"
+        "middleName name email phone profilePic province district isActive"
       ) // Lấy info cơ bản từ bảng User
       .select("-__v");
 
+    const activeTeachers = teachers.filter(
+      (teacher) => teacher.userId && teacher.userId.isActive
+    );
+
     res.status(200).json({
       success: true,
-      total: teachers.length,
-      teachers,
+      total: activeTeachers.length,
+      teachers: activeTeachers,
     });
   } catch (error) {
     res.status(500).json({
@@ -69,5 +73,5 @@ const getAllTeachers = async (req, res) => {
 module.exports = {
   getActiveUsers,
   getInActiveUsers,
-  getAllTeachers,
+  getActiveTeachers,
 };

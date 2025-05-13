@@ -2,12 +2,12 @@ const router = require("express").Router();
 const {
   getActiveUsers,
   getInActiveUsers,
-  getAllTeachers,
+  getActiveTeachers,
 } = require("../controllers/adminController");
 const { protect, isAdmin } = require("../middlewares/authMiddleware");
 
 router.get("/get-lists-user-active", protect, isAdmin, getActiveUsers);
 router.get("/get-lists-user-inactive", protect, isAdmin, getInActiveUsers);
-router.get("/get-lists-teacher-active", protect, isAdmin, getAllTeachers);
+router.get("/get-lists-teacher-active", protect, isAdmin, getActiveTeachers);
 
 module.exports = router;
