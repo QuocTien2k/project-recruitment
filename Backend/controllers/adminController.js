@@ -21,6 +21,27 @@ const getActiveUsers = async (req, res) => {
   }
 };
 
+//lấy danh sách user bị tạm khóa
+const getInActiveUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find({
+      role: "user",
+      isActive: false,
+    }).select("-password -resetPasswordToken");
+
+    res.status(200).json({
+      success: true,
+      total: users.length,
+      users,
+    });
+  } catch (error) {
+    res.status(400).send({
+      message: "Lấy danh sách người dùng thất bại!" + error.message,
+      success: false,
+    });
+  }
+};
+
 //lấy danh sách teacher
 const getAllTeachers = async (req, res) => {
   try {
@@ -47,5 +68,6 @@ const getAllTeachers = async (req, res) => {
 
 module.exports = {
   getActiveUsers,
+  getInActiveUsers,
   getAllTeachers,
 };
