@@ -98,9 +98,46 @@ const getInActiveTeachers = async (req, res) => {
   }
 };
 
+//cập nhật trạng thái cho tài khoản
+const toggleAccountStatus = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await UserModel.findById(userId).select(
+      "-password -resetPasswordToken"
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy người dùng",
+      });
+    }
+
+    // Lật trạng thái
+    user.isActive = !user.isActive;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Tài khoản đã được ${
+        user.isActive ? "mở khóa" : "khóa"
+      } thành công`,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi cập nhật trạng thái tài khoản",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getActiveUsers,
   getInActiveUsers,
   getActiveTeachers,
   getInActiveTeachers,
+  toggleAccountStatus,
 };

@@ -4,6 +4,7 @@ const {
   getInActiveUsers,
   getActiveTeachers,
   getInActiveTeachers,
+  toggleAccountStatus,
 } = require("../controllers/adminController");
 const { protect, isAdmin } = require("../middlewares/authMiddleware");
 
@@ -16,5 +17,6 @@ router.get(
   isAdmin,
   getInActiveTeachers
 );
+router.patch("/account-status/:userId", protect, isAdmin, toggleAccountStatus);
 
 module.exports = router;
