@@ -248,9 +248,13 @@ const login = async (req, res) => {
     }
 
     //4. Đăng nhập thành công + đăng ký token
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
-      expiresIn: "3d",
-    });
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "3d",
+      }
+    );
 
     res.status(200).send({
       message: "Đăng nhập thành công",
