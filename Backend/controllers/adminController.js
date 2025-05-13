@@ -1,10 +1,10 @@
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 
-//lấy danh sách user
-const getAllUsers = async (req, res) => {
+//lấy danh sách user hoạt động
+const getActiveUsers = async (req, res) => {
   try {
-    const users = await UserModel.find({ role: "user" }).select(
+    const users = await UserModel.find({ role: "user", isActive: true }).select(
       "-password -resetPasswordToken"
     );
 
@@ -46,6 +46,6 @@ const getAllTeachers = async (req, res) => {
 };
 
 module.exports = {
-  getAllUsers,
+  getActiveUsers,
   getAllTeachers,
 };
