@@ -77,6 +77,65 @@ const createPost = async () => {
   }
 };
 
+// Cập nhật bài tuyển dụng
+const updatePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const userId = req.user.userId; // lấy từ middleware xác thực
+
+    const {
+      title,
+      description,
+      district,
+      province,
+      salary,
+      workingType,
+      timeType,
+    } = req.body;
+
+    // Tìm bài post
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bài tuyển dụng.",
+      });
+    }
+
+    // Kiểm tra quyền: chỉ người tạo mới được sửa
+    if (post.createdBy.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Bạn không có quyền chỉnh sửa bài viết này.",
+      });
+    }
+
+    // Cập nhật dữ liệu
+    post.title = title || post.title;
+    post.description = description || post.description;
+    post.district = district || post.district;
+    post.province = province || post.province;
+    post.salary = salary || post.salary;
+    post.workingType = workingType || post.workingType;
+    post.timeType = timeType || post.timeType;
+    post.status = "pending"; // reset lại trạng thái duyệt sau khi sửa
+
+    await post.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Cập nhật bài tuyển dụng thành công.",
+      data: post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   createPost,
+  updatePost,
 };
