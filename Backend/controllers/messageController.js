@@ -4,11 +4,11 @@ const MessageModel = require("../models/Message");
 // Tạo tin nhắn mới
 const createNewMessage = async (req, res) => {
   try {
-    const jsoner = req.user.userId; // Lấy userId từ middleware authMiddleware
+    const userId = req.user.userId; // Lấy userId từ middleware authMiddleware
     const { chatId, text } = req.body;
 
     // Kiểm tra dữ liệu đầu vào
-    if (!chatId || !jsoner || !text) {
+    if (!chatId || !userId || !text) {
       return res.status(400).json({
         message: "Thiếu thông tin bắt buộc!",
         success: false,
@@ -16,7 +16,7 @@ const createNewMessage = async (req, res) => {
     }
 
     // 1. Lưu tin nhắn vào collection messages
-    const newMessage = new MessageModel({ chatId, jsoner, text });
+    const newMessage = new MessageModel({ chatId, userId, text });
     const savedMessage = await newMessage.save();
 
     // 2. Cập nhật tin nhắn cuối cùng & tăng số tin chưa đọc
