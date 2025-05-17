@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const authRoute = require("./Routes/authRoute");
 const userRoute = require("./Routes/userRoute");
+const postRoute = require("./Routes/postRoute");
 const chatRoute = require("./Routes/chatRoute");
 const messageRoute = require("./Routes/messageRoute");
 const adminRoute = require("./Routes/adminRoute");
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true })); // cho form (application/x-www-
 //route
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
+app.use("/api/post", postRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/admin", adminRoute);
