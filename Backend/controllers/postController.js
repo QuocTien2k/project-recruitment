@@ -135,7 +135,36 @@ const updatePost = async (req, res) => {
   }
 };
 
+//lấy danh sách bài tuyển dụng của mình
+const getMyPosts = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Không xác thực được người dùng.",
+      });
+    }
+
+    const posts = await PostModel.find({ createdBy: userId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách bài tuyển dụng của bạn thành công.",
+      data: posts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   createPost,
   updatePost,
+  getMyPosts,
 };
