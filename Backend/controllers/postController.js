@@ -163,8 +163,42 @@ const getMyPosts = async (req, res) => {
   }
 };
 
+//xóa bài tuyển dụng của chính mình
+const deletePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const userId = req.user.userId;
+
+    const post = await PostModel.findById(postId);
+
+    if (!post) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy bài tuyển dụng." });
+    }
+
+    // Kiểm tra quyền: chỉ người tạo mới được xóa
+    if (post.createdBy.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Bạn không có quyền chỉnh xóa bài viết này.",
+      });
+    }
+
+    await Post.findByIdAndDelete(postId);
+
+    res.status(200).json({ message: "Xóa bài tuyển dụng thành công." });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   createPost,
   updatePost,
   getMyPosts,
+  deletePost,
 };
