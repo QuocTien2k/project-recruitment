@@ -6,6 +6,7 @@ const {
   getInActiveTeachers,
   toggleAccountStatus,
   deleteAccount,
+  getPendingPost,
   deletePostByAdmin,
 } = require("../controllers/adminController");
 const { protect, isAdmin } = require("../middlewares/authMiddleware");
@@ -21,6 +22,9 @@ router.get(
 );
 router.patch("/account-status/:userId", protect, isAdmin, toggleAccountStatus);
 router.delete("/delete-account/:userId", protect, isAdmin, deleteAccount);
+
+/***********Route Post*********** */
+router.get("/get-pending-post", protect, isAdmin, getPendingPost);
 router.delete("/delete-post/:postId", protect, isAdmin, deletePostByAdmin);
 
 module.exports = router;

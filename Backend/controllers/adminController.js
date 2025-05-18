@@ -2,6 +2,7 @@ const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 const PostModel = require("../models/Post");
 
+/********************* Account ************************** */
 //lấy danh sách user hoạt động
 const getActiveUsers = async (req, res) => {
   try {
@@ -170,6 +171,26 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+/********************* Bài Post ************************** */
+const getPendingPost = async (req, res) => {
+  try {
+    const pendingPosts = await PostModel.find({ status: "pending" }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách bài tuyển dụng đang chờ duyệt thành công.",
+      data: pendingPosts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 //xóa bài post
 const deletePostByAdmin = async (req, res) => {
   try {
@@ -201,5 +222,6 @@ module.exports = {
   getInActiveTeachers,
   toggleAccountStatus,
   deleteAccount,
+  getPendingPost,
   deletePostByAdmin,
 };
