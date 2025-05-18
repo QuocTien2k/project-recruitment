@@ -169,6 +169,27 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+//xóa bài post
+const deletePostByAdmin = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const userId = req.user.userId;
+
+    const post = await PostModel.findById(postId);
+
+    if (!post) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy bài tuyển dụng." });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   getActiveUsers,
   getInActiveUsers,

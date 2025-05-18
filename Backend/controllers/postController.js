@@ -185,7 +185,7 @@ const deletePost = async (req, res) => {
       });
     }
 
-    await Post.findByIdAndDelete(postId);
+    await PostModel.findByIdAndDelete(postId);
 
     res.status(200).json({ message: "Xóa bài tuyển dụng thành công." });
   } catch (error) {
