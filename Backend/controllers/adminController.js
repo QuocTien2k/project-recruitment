@@ -1,5 +1,6 @@
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
+const PostModel = require("../models/Post");
 
 //lấy danh sách user hoạt động
 const getActiveUsers = async (req, res) => {
@@ -173,7 +174,6 @@ const deleteAccount = async (req, res) => {
 const deletePostByAdmin = async (req, res) => {
   try {
     const { postId } = req.params;
-    const userId = req.user.userId;
 
     const post = await PostModel.findById(postId);
 
@@ -182,6 +182,10 @@ const deletePostByAdmin = async (req, res) => {
         .status(404)
         .json({ message: "Không tìm thấy bài tuyển dụng." });
     }
+
+    await PostModel.findByIdAndDelete(postId);
+
+    res.status(200).json({ message: "Xóa bài tuyển dụng thành công." });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -197,4 +201,5 @@ module.exports = {
   getInActiveTeachers,
   toggleAccountStatus,
   deleteAccount,
+  deletePostByAdmin,
 };
