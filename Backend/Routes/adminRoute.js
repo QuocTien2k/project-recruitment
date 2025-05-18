@@ -7,6 +7,7 @@ const {
   toggleAccountStatus,
   deleteAccount,
   getPendingPost,
+  approvePostByAdmin,
   deletePostByAdmin,
 } = require("../controllers/adminController");
 const { protect, isAdmin } = require("../middlewares/authMiddleware");
@@ -25,6 +26,7 @@ router.delete("/delete-account/:userId", protect, isAdmin, deleteAccount);
 
 /***********Route Post*********** */
 router.get("/get-pending-post", protect, isAdmin, getPendingPost);
+router.patch("/get-pending-post", protect, isAdmin, approvePostByAdmin);
 router.delete("/delete-post/:postId", protect, isAdmin, deletePostByAdmin);
 
 module.exports = router;

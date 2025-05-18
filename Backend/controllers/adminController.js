@@ -191,6 +191,43 @@ const getPendingPost = async (req, res) => {
   }
 };
 
+//duyệt bài
+const approvePostByAdmin = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bài tuyển dụng.",
+      });
+    }
+
+    // Nếu bài đã được duyệt rồi thì không cần duyệt lại
+    if (post.status === "approved") {
+      return res.status(400).json({
+        success: false,
+        message: "Bài tuyển dụng đã được duyệt trước đó.",
+      });
+    }
+
+    post.status = "approved";
+    await post.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Duyệt bài tuyển dụng thành công.",
+      data: post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 //xóa bài post
 const deletePostByAdmin = async (req, res) => {
   try {
@@ -223,5 +260,6 @@ module.exports = {
   toggleAccountStatus,
   deleteAccount,
   getPendingPost,
+  approvePostByAdmin,
   deletePostByAdmin,
 };
