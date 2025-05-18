@@ -228,6 +228,53 @@ const approvePostByAdmin = async (req, res) => {
   }
 };
 
+//từ chối bài
+const rejectPost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { reason } = req.body;
+
+    // Kiểm tra có nhập lý do từ chối không
+    if (!reason) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập lý do từ chối.",
+      });
+    }
+
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bài tuyển dụng.",
+      });
+    }
+
+    if (post.status === "rejected") {
+      return res.status(400).json({
+        success: false,
+        message: "Bài tuyển dụng đã bị từ chối trước đó.",
+      });
+    }
+
+    post.status = "rejected";
+    post.rejectionReason = reason;
+
+    await post.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Từ chối bài tuyển dụng thành công.",
+      data: post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 //xóa bài post
 const deletePostByAdmin = async (req, res) => {
   try {
@@ -261,5 +308,6 @@ module.exports = {
   deleteAccount,
   getPendingPost,
   approvePostByAdmin,
+  rejectPost,
   deletePostByAdmin,
 };
