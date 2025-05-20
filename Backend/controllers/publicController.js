@@ -1,4 +1,5 @@
 const PostModel = require("../models/Post");
+const ViewerModel = require("../models/Viewer");
 
 //lấy bài viết tạo bởi user và thông tin user
 const getDetailPost = async (req, res) => {
@@ -39,6 +40,25 @@ const getDetailPost = async (req, res) => {
   }
 };
 
+//tổng số lượt xem 1 bài viết
+const countViews = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    if (!postId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Bài viết không tồn tại." });
+    }
+
+    const totalViews = await ViewerModel.countDocuments({ postId });
+    res.status(200).json({ success: true, totalViews });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   getDetailPost,
+  countViews,
 };
