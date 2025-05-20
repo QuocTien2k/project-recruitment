@@ -6,6 +6,7 @@ const postRoute = require("./Routes/postRoute");
 const chatRoute = require("./Routes/chatRoute");
 const messageRoute = require("./Routes/messageRoute");
 const adminRoute = require("./Routes/adminRoute");
+const publicRoute = require("./Routes/publicRoute");
 
 const cors = require("cors");
 
@@ -28,5 +29,6 @@ app.use("/api/post", postRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/public", publicRoute);
 
 module.exports = app;
