@@ -7,7 +7,7 @@ const {
   toggleAccountStatus,
   deleteAccount,
   getPendingPost,
-  getApprovedPost,
+  getApprovedPostByAdmin,
   approvePostByAdmin,
   rejectPost,
   deletePostByAdmin,
@@ -28,7 +28,7 @@ router.delete("/delete-account/:userId", protect, isAdmin, deleteAccount);
 
 /***********Route Post*********** */
 router.get("/get-pending-post", protect, isAdmin, getPendingPost);
-router.get("/get-approved-post", protect, isAdmin, getApprovedPost);
+router.get("/get-approved-post", protect, isAdmin, getApprovedPostByAdmin);
 router.patch("/approve-post", protect, isAdmin, approvePostByAdmin);
 router.patch("/reject-post", protect, isAdmin, rejectPost);
 router.delete("/delete-post/:postId", protect, isAdmin, deletePostByAdmin);

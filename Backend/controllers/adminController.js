@@ -193,7 +193,7 @@ const getPendingPost = async (req, res) => {
 };
 
 //lấy danh sách bài đã duyệt
-const getApprovedPost = async (req, res) => {
+const getApprovedPostByAdmin = async (req, res) => {
   try {
     const approvedPosts = await PostModel.find({ status: "approved" }).sort({
       createdAt: -1,
@@ -328,7 +328,7 @@ module.exports = {
   toggleAccountStatus,
   deleteAccount,
   getPendingPost,
-  getApprovedPost,
+  getApprovedPostByAdmin,
   approvePostByAdmin,
   rejectPost,
   deletePostByAdmin,
