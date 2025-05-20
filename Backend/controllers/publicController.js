@@ -3,7 +3,7 @@ const PostModel = require("../models/Post");
 //lấy bài viết tạo bởi user và thông tin user
 const getDetailPost = async (req, res) => {
   try {
-    const postId = req.params.postId;
+    const { postId } = req.params;
 
     const post = await PostModel.findById(postId).populate(
       "createdBy",
