@@ -172,6 +172,7 @@ const deleteAccount = async (req, res) => {
 };
 
 /********************* Bài Post ************************** */
+//lấy danh sách bài đang chờ duyệt
 const getPendingPost = async (req, res) => {
   try {
     const pendingPosts = await PostModel.find({ status: "pending" }).sort({
@@ -182,6 +183,26 @@ const getPendingPost = async (req, res) => {
       success: true,
       message: "Lấy danh sách bài tuyển dụng đang chờ duyệt thành công.",
       data: pendingPosts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+//lấy danh sách bài đã duyệt
+const getApprovedPost = async (req, res) => {
+  try {
+    const approvedPosts = await PostModel.find({ status: "approved" }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách bài tuyển dụng duyệt thành công.",
+      data: approvedPosts,
     });
   } catch (error) {
     res.status(500).json({
@@ -307,6 +328,7 @@ module.exports = {
   toggleAccountStatus,
   deleteAccount,
   getPendingPost,
+  getApprovedPost,
   approvePostByAdmin,
   rejectPost,
   deletePostByAdmin,
