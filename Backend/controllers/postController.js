@@ -200,6 +200,5 @@ module.exports = {
   createPost,
   updatePost,
   getMyPosts,
-  getDetailPost,
   deletePost,
 };
