@@ -1,4 +1,5 @@
 const ChatModel = require("../models/Chat");
+const UserModel = require("../models/User");
 
 // Tạo mới cuộc trò chuyện
 const createNewChat = async (req, res) => {
@@ -17,6 +18,26 @@ const createNewChat = async (req, res) => {
     if (members[0] === members[1]) {
       return res.status(400).json({
         message: "Không thể tạo cuộc trò chuyện với chính mình!",
+        success: false,
+      });
+    }
+
+    // Kiểm tra trạng thái của từng user
+    const users = await UserModel.find({ _id: { $in: members } });
+
+    if (users.length !== 2) {
+      return res.status(404).json({
+        message: "Một hoặc cả hai tài khoản không tồn tại!",
+        success: false,
+      });
+    }
+
+    // Tìm tài khoản bị khóa (nếu có)
+    const inactiveUser = users.find((user) => user.isActive === false);
+
+    if (inactiveUser) {
+      return res.status(403).json({
+        message: `Tài khoản "${inactiveUser.name}" đã bị khóa bởi admin. Không thể trò chuyện.`,
         success: false,
       });
     }
@@ -55,20 +76,21 @@ const createNewChat = async (req, res) => {
 // Lấy danh sách cuộc trò chuyện của người dùng
 const getAllChats = async (req, res) => {
   try {
-    const userId = req.user.userId; // Lấy userId từ middleware authMiddleware
-    const allChats = await ChatModel.find({ members: userId })
-      .populate("members", "middleName name email") // Lấy thông tin user
-      .populate("lastMessage") // Lấy thông tin tin nhắn cuối cùng
-      .sort({ updatedAt: -1 }); // Sắp xếp theo thời gian cập nhật gần nhất
+    const userId = req.user.userId;
 
-    res.status(201).json({
+    const allChats = await ChatModel.find({ members: userId })
+      .populate("members", "middleName name email isActive") // Lấy thêm trạng thái tài khoản
+      .populate("lastMessage")
+      .sort({ updatedAt: -1 });
+
+    res.status(200).json({
       message: `Lấy danh sách chat của ${userId} thành công!`,
       success: true,
       data: allChats,
     });
   } catch (error) {
     res.status(400).json({
-      message: "Lấy danh sách chat thất bại!" + error.message,
+      message: "Lấy danh sách chat thất bại! " + error.message,
       success: false,
     });
   }

@@ -40,6 +40,41 @@ const getDetailPost = async (req, res) => {
   }
 };
 
+//chi tiết bài viết dựa vào slug
+const getPostBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    const post = await PostModel.findOne({ slug }).populate(
+      "createdBy",
+      "middleName name email profilePic"
+    );
+
+    if (!post) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Bài viết không tồn tại." });
+    }
+
+    const fullName = `${post.createdBy.middleName} ${post.createdBy.name}`;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        ...post._doc,
+        createdBy: {
+          ...post.createdBy._doc,
+          fullName,
+        },
+      },
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Lỗi server: " + error.message });
+  }
+};
+
 //tổng số lượt xem 1 bài viết
 const countViews = async (req, res) => {
   try {
@@ -60,5 +95,6 @@ const countViews = async (req, res) => {
 
 module.exports = {
   getDetailPost,
+  getPostBySlug,
   countViews,
 };
