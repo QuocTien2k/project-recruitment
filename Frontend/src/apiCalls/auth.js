@@ -8,3 +8,23 @@ export const login = async ({ email, password }) => {
   });
   return response.data;
 };
+
+// API đăng ký người dùng
+export const signupUser = async (formData) => {
+  const response = await axiosInstance.post("/api/auth/signup-user", formData);
+  return response.data;
+};
+
+// API đăng ký giáo viên (có upload ảnh)
+export const signupTeacher = async (formData) => {
+  const response = await axiosInstance.post(
+    "/api/auth/signup-teacher",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
