@@ -79,6 +79,7 @@ const Login = () => {
         <h2 className="text-2xl font-bold mb-6 text-center">Đăng nhập</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/*Field email */}
           <div>
             <label className="block mb-1 font-medium">Email</label>
             <input
@@ -93,6 +94,7 @@ const Login = () => {
             )}
           </div>
 
+          {/*Field password */}
           <div>
             <label className="block mb-1 font-medium">Mật khẩu</label>
             <input

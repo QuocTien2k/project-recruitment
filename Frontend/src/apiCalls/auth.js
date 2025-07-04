@@ -11,8 +11,16 @@ export const login = async ({ email, password }) => {
 
 // API đăng ký người dùng
 export const signupUser = async (formData) => {
-  const response = await axiosInstance.post("/api/auth/signup-user", formData);
-  return response.data;
+  try {
+    const response = await axiosInstance.post(
+      "/api/auth/signup-user",
+      formData
+    );
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
 };
 
 // API đăng ký giáo viên (có upload ảnh)

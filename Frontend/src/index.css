@@ -20,6 +20,19 @@
     }
 }
 
+@layer utilities {
+    .scroll-y-hidden {
+        overflow-y: auto;
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .scroll-y-hidden::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari */
+    }
+}
+
 /* loading */
 @keyframes spin {
     to {
