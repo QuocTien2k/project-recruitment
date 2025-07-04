@@ -1,23 +1,27 @@
 const cloudinary = require("../cloudinary");
 const asyncHandler = require("express-async-handler");
+const fs = require("fs");
 
 const uploadMultiple = asyncHandler(async (req, res, next) => {
   try {
     const images = req.files;
-    //console.log(images);
-    const imageUrls = [];
+    const imageResults = [];
 
     for (const image of images) {
       const result = await cloudinary.uploader.upload(image.path, {
         resource_type: "auto",
       });
 
-      imageUrls.push(result.secure_url);
+      imageResults.push({
+        url: result.secure_url,
+        public_id: result.public_id,
+      });
+
+      // ❌ Xóa file tạm sau khi upload
+      fs.unlinkSync(image.path);
     }
 
-    req.images = imageUrls;
-    //console.log(req.images);
-
+    req.images = imageResults; // [{ url, public_id }, ...]
     next();
   } catch (error) {
     console.log(error);

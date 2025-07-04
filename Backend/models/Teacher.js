@@ -16,7 +16,12 @@ const teacherSchema = new mongoose.Schema(
     },
     subject: [{ type: String, required: true }],
     description: { type: String, required: true },
-    degreeImages: [{ type: String, required: true }],
+    degreeImages: [
+      {
+        url: String,
+        public_id: String,
+      },
+    ],
   },
   { timestamps: true }
 );
