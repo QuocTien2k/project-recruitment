@@ -30,7 +30,9 @@ const Button = ({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`rounded transition duration-200 ${sizeClasses[size] || ""} ${
+      className={`cursor-pointer rounded transition duration-200 ${
+        sizeClasses[size] || ""
+      } ${
         variantClasses[variant] || variantClasses["default"]
       } ${disabledClasses} ${className}`}
     >

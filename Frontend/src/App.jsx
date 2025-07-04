@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import AdminLayout from "./layouts/AdminLayout";
