@@ -12,32 +12,35 @@ import LoginAdmin from "./pages/Auth/LoginAdmin";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Layout User dùng chung cho user + teacher */}
-        <Route element={<UserLayout />}>
-          <Route path="/" element={<Home />} />
-        </Route>
-
-        <Route path="login" element={<Login />} />
-        <Route path="/admin/login" element={<LoginAdmin />} />
-        <Route path="signup" element={<Signup />} />
-
-        {/* Layout Admin riêng biệt */}
-        <Route
-          path="/admin"
-          element={<ProtectedRoutes allowedRoles={["admin"]} />}
-        >
-          <Route element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Router>
+        <Routes>
+          {/* Layout User dùng chung cho user + teacher */}
+          <Route element={<UserLayout />}>
+            <Route path="/" element={<Home />} />
           </Route>
-        </Route>
 
-        {/* Trang lỗi */}
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
+          <Route path="login" element={<Login />} />
+          <Route path="/admin/login" element={<LoginAdmin />} />
+          <Route path="signup" element={<Signup />} />
+
+          {/* Layout Admin riêng biệt */}
+          <Route
+            path="/admin"
+            element={<ProtectedRoutes allowedRoles={["admin"]} />}
+          >
+            <Route element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+            </Route>
+          </Route>
+
+          {/* Trang lỗi */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
