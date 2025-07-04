@@ -13,10 +13,14 @@ const Login = () => {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+
+    // Clear error khi đang nhập
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
   //xử lý đăng nhập
