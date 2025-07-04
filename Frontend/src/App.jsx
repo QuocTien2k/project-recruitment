@@ -8,6 +8,7 @@ import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import LoginAdmin from "./pages/Auth/LoginAdmin";
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
         <Route element={<UserLayout />}>
           <Route path="/" element={<Home />} />
         </Route>
+
         <Route path="login" element={<Login />} />
+        <Route path="/admin/login" element={<LoginAdmin />} />
         <Route path="signup" element={<Signup />} />
 
         {/* Layout Admin riêng biệt */}
