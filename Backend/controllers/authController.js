@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
+const sendEmail = require("../utils/sendEmail");
 
 // Đăng ký role là user
 const signupUser = async (req, res) => {
@@ -284,8 +285,104 @@ const login = async (req, res) => {
   }
 };
 
+//quên mật khẩu
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập email",
+      });
+    }
+
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Email không tồn tại trong hệ thống",
+      });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = resetToken;
+    await user.save();
+
+    const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+    const htmlContent = `
+      <h2>Yêu cầu đặt lại mật khẩu</h2>
+      <p>Bạn đã yêu cầu đặt lại mật khẩu. Nhấn vào link bên dưới để tiếp tục:</p>
+      <a href="${resetLink}" target="_blank">${resetLink}</a>
+      <p>Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.</p>
+    `;
+
+    await sendEmail(email, "Khôi phục mật khẩu", htmlContent);
+
+    return res.status(200).json({
+      success: true,
+      message: "Đã gửi email đặt lại mật khẩu",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Lỗi hệ thống: ${error.message}`,
+    });
+  }
+};
+
+//reset mật khẩu
+const resetPassword = async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const { token } = req.query;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu token đặt lại mật khẩu",
+      });
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Mật khẩu mới phải có ít nhất 6 ký tự",
+      });
+    }
+
+    const user = await UserModel.findOne({ resetPasswordToken: token }).select(
+      "+resetPasswordToken"
+    );
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Token không hợp lệ hoặc đã hết hạn",
+      });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordToken = undefined;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Đặt lại mật khẩu thành công. Bạn có thể đăng nhập lại.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Lỗi hệ thống: ${error.message}`,
+    });
+  }
+};
+
 module.exports = {
   signupUser,
   signupTeacher,
   login,
+  forgotPassword,
+  resetPassword,
 };

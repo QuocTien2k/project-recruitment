@@ -3,6 +3,8 @@ const {
   signupUser,
   signupTeacher,
   login,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/authController");
 const upload = require("../middlewares/multer");
 const uploadMultiple = require("../utils/uploadToCloudinary");
@@ -21,5 +23,8 @@ router.post(
   signupTeacher
 );
 router.post("/login", login);
+
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 module.exports = router;
