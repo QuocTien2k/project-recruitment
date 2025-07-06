@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@layout/*": ["src/layouts/*"],
+      "@components/*": ["src/components/*"],
+      "@components-signup/*": ["src/components/Signup/*"],
+      "@pages/*": ["src/pages/*"],
+      "@pages-admin/*": ["src/pages/Admin/*"],
+      "@pages-auth/*": ["src/pages/Auth/*"],
+      "@pages-user/*": ["src/pages/User/*"],
+      "@api/*": ["src/apiCalls/*"],
+      "@utils/*": ["src/utils/*"]
+    }
+  },
+  "include": ["src"]
+}
