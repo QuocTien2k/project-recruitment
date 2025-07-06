@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 //define email option
 const sendEmail = async (to, subject, html) => {
   const mailOptions = {
-    from: '"Tueyndung" <no-reply@tuyendung.com>', // tên và địa chỉ hiển thị
+    from: '"Tuyển Dụng Gia Sư Phát Tiến" <no-reply@phattiengiasu.com>', // tên và địa chỉ hiển thị
     to,
     subject,
     html,

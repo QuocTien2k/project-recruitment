@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 const sendEmail = require("../utils/sendEmail");
@@ -369,7 +370,7 @@ const resetPassword = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Đặt lại mật khẩu thành công. Bạn có thể đăng nhập lại.",
+      message: "Đặt lại mật khẩu thành công",
     });
   } catch (error) {
     return res.status(500).json({
