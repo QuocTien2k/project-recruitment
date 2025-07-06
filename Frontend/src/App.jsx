@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
+import ResetPassword from "./pages/Auth/ResetPassword";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
           <Route path="login" element={<Login />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="signup" element={<Signup />} />
 
           {/* Layout Admin riêng biệt */}

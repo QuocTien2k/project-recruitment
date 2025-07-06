@@ -36,3 +36,22 @@ export const signupTeacher = async (formData) => {
   );
   return response.data;
 };
+
+//quên mật khẩu
+export const forgotPassword = async (email) => {
+  const response = await axiosInstance.post("/api/auth/forgot-password", {
+    email,
+  });
+  return response.data;
+};
+
+//đặt mật khẩu mới
+export const resetPassword = async (newPassword, token) => {
+  const response = await axiosInstance.post(
+    `/api/auth/reset-password?token=${token}`,
+    {
+      newPassword,
+    }
+  );
+  return response.data;
+};

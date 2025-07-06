@@ -1,5 +1,8 @@
 import { useState } from "react";
 import Button from "../../components/Button";
+import { forgotPassword } from "../../apiCalls/auth";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({ email: "" });
@@ -16,7 +19,7 @@ const ForgotPassword = () => {
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email } = formData;
     const newErrors = {};
@@ -37,6 +40,24 @@ const ForgotPassword = () => {
       setErrors(newErrors);
       return;
     }
+
+    try {
+      setLoading(true);
+
+      const data = await forgotPassword(email);
+
+      if (data.success) {
+        const msg = data?.message || "Đã gửi email đặt lại mật khẩu";
+        toast.success(msg);
+        setFormData({ email: "" });
+      }
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || "Đăng nhập thất bại, thử lại sau!";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,13 +67,19 @@ const ForgotPassword = () => {
           Quên mật khẩu
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Email
+          </label>
           <input
             id="email"
-            type="email"
+            type="text"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200 focus:outline-none"
+            className="w-full border border-gray-300 rounded px-3 py-2"
             placeholder="example@gmail.com"
           />
           {errors.email && (
@@ -63,6 +90,14 @@ const ForgotPassword = () => {
             <Button type="submit" disabled={loading}>
               {loading ? "Đang xử lý..." : "Đặt lại mật khẩu"}
             </Button>
+          </div>
+
+          <div className="text-center mt-4 space-y-2 text-sm">
+            <p>
+              <Link to="/login" className="text-blue-600 hover:underline">
+                Quay lại
+              </Link>
+            </p>
           </div>
         </form>
       </div>
