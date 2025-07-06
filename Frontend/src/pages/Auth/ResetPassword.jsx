@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { resetPassword } from "../../apiCalls/auth";
+import { resetPassword } from "@api/auth";
 import toast from "react-hot-toast";
-import Button from "../../components/Button";
+import Button from "@components/Button";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();

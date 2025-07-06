@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getDistricts, provinces } from "../../utils/vnLocation";
-import Button from "../Button";
+import { getDistricts, provinces } from "@utils/vnLocation";
+import Button from "@components/Button";
 import toast from "react-hot-toast";
-import { signupUser } from "../../apiCalls/auth";
+import { signupUser } from "@api/auth";
 import { useNavigate } from "react-router-dom";
 
 const SignupUser = () => {

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import Loading from "../../components/Loading";
-import Button from "../../components/Button";
-import { login } from "../../apiCalls/auth";
+import Button from "@/components/Button";
+import { login } from "@api/auth";
 
 const Login = () => {
   const navigate = useNavigate();

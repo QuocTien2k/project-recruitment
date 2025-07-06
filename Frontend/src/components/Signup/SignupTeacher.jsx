@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getDistricts, provinces } from "../../utils/vnLocation";
-import { signupTeacher } from "../../apiCalls/auth";
+import { getDistricts, provinces } from "@utils/vnLocation";
+import { signupTeacher } from "@api/auth";
 import toast from "react-hot-toast";
-import Button from "../Button";
+import Button from "@components/Button";
 
 const SignupTeacher = () => {
   const [formData, setFormData] = useState({

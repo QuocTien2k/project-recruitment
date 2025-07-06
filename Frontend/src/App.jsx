@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Login from "./pages/Auth/Login";
-import Signup from "./pages/Auth/Signup";
-import AdminLayout from "./layouts/AdminLayout";
-import UserLayout from "./layouts/UserLayout";
-import Home from "./pages/User/Home";
-import Unauthorized from "./pages/Unauthorized";
-import NotFound from "./pages/NotFound";
+import AdminLayout from "@layouts/AdminLayout";
+import UserLayout from "@layouts/UserLayout";
+import Home from "@pages-user/Home";
+import Unauthorized from "@pages/Unauthorized";
+import NotFound from "@pages/NotFound";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
-import ForgotPassword from "./pages/Auth/ForgotPassword";
-import ResetPassword from "./pages/Auth/ResetPassword";
+import AdminDashboard from "@pages-admin/AdminDashboard";
+import ForgotPassword from "@pages-auth/ForgotPassword";
+import ResetPassword from "@pages-auth/ResetPassword";
+import Login from "@pages-auth/Login";
+import Signup from "@pages-auth/Signup";
 
 function App() {
   return (
