@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import AdminLayout from "@layouts/AdminLayout";
-import UserLayout from "@layouts/UserLayout";
+import AdminLayout from "@layout/AdminLayout";
+import UserLayout from "@layout/UserLayout";
 import Home from "@pages-user/Home";
 import Unauthorized from "@pages/Unauthorized";
 import NotFound from "@pages/NotFound";
