@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDistricts, provinces } from "@utils/vnLocation";
+import { getDistricts, getProvinces } from "@utils/vnLocation";
 import Button from "@components/Button";
 import toast from "react-hot-toast";
 import { signupUser } from "@api/auth";
@@ -19,15 +19,31 @@ const SignupUser = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [selectedProvince, setSelectedProvince] = useState("");
+  const [provinces, setProvinces] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  //thành phố
   useEffect(() => {
-    if (selectedProvince) {
-      const districts = getDistricts(selectedProvince);
-      setDistrictList(districts);
-      setFormData((prev) => ({ ...prev, district: "" }));
-    }
+    const fetchProvinces = async () => {
+      const data = await getProvinces();
+      setProvinces(data);
+    };
+
+    fetchProvinces();
+  }, []);
+
+  // Phường xã
+  useEffect(() => {
+    const fetchDistricts = async () => {
+      if (selectedProvince) {
+        const districts = await getDistricts(selectedProvince);
+        setDistrictList(districts);
+        setFormData((prev) => ({ ...prev, district: "" }));
+      }
+    };
+
+    fetchDistricts();
   }, [selectedProvince]);
 
   //kiểm tra định dạng email

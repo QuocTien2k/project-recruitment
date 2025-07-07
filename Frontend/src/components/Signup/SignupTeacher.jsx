@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getDistricts, provinces } from "@utils/vnLocation";
+import { getDistricts, getProvinces } from "@utils/vnLocation";
 import { signupTeacher } from "@api/auth";
 import toast from "react-hot-toast";
 import Button from "@components/Button";
@@ -26,14 +26,30 @@ const SignupTeacher = () => {
   const [errors, setErrors] = useState({});
   const [selectedProvince, setSelectedProvince] = useState("");
   const [districtList, setDistrictList] = useState([]);
+  const [provinces, setProvinces] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  //thành phố
   useEffect(() => {
-    if (selectedProvince) {
-      const districts = getDistricts(selectedProvince);
-      setDistrictList(districts);
-      setFormData((prev) => ({ ...prev, district: "" }));
-    }
+    const fetchProvinces = async () => {
+      const data = await getProvinces();
+      setProvinces(data);
+    };
+
+    fetchProvinces();
+  }, []);
+
+  //Phường xã
+  useEffect(() => {
+    const fetchDistricts = async () => {
+      if (selectedProvince) {
+        const districts = await getDistricts(selectedProvince);
+        setDistrictList(districts);
+        setFormData((prev) => ({ ...prev, district: "" }));
+      }
+    };
+
+    fetchDistricts();
   }, [selectedProvince]);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
