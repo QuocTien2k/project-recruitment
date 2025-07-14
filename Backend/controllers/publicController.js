@@ -1,5 +1,6 @@
 const PostModel = require("../models/Post");
 const ViewerModel = require("../models/Viewer");
+const TeacherModel = require("../models/Teacher");
 
 //lấy bài viết tạo bởi user và thông tin user
 const getDetailPost = async (req, res) => {
@@ -75,6 +76,35 @@ const getPostBySlug = async (req, res) => {
   }
 };
 
+// Lấy danh sách giáo viên đang hoạt động (isActive = true)
+const getPublicTeachers = async (req, res) => {
+  try {
+    const teachers = await TeacherModel.find()
+      .populate(
+        "userId",
+        "middleName name email profilePic province district isActive"
+      )
+      .select("-degreeImages -__v");
+
+    // Lọc những giáo viên có userId.isActive === true
+    const activeTeachers = teachers.filter(
+      (teacher) => teacher.userId && teacher.userId.isActive
+    );
+
+    res.status(200).json({
+      success: true,
+      total: activeTeachers.length,
+      teachers: activeTeachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy danh sách giáo viên",
+      error: error.message,
+    });
+  }
+};
+
 //tổng số lượt xem 1 bài viết
 const countViews = async (req, res) => {
   try {
@@ -96,5 +126,6 @@ const countViews = async (req, res) => {
 module.exports = {
   getDetailPost,
   getPostBySlug,
+  getPublicTeachers,
   countViews,
 };
