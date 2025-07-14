@@ -1,7 +1,12 @@
+import ListTeacher from "@/section/ListTeacher";
 import React from "react";
 
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <>
+      <ListTeacher />
+    </>
+  );
 };
 
 export default Home;

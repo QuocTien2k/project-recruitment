@@ -17,6 +17,7 @@ const UserLayout = () => {
       try {
         const res = await getLogged(); // có token gọi API
         if (res?.success) {
+          //console.log(res.data);
           dispatch(setUser(res.data)); // lưu thông tin user hiện tại vào kho
         } else {
           localStorage.removeItem("token");
