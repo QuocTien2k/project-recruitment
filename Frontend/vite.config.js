@@ -23,6 +23,7 @@ export default defineConfig({
       "@pages-auth": path.resolve(__dirname, "./src/pages/Auth"),
       "@api": path.resolve(__dirname, "./src/apiCalls"),
       "@utils": path.resolve(__dirname, "./src/utils"),
+      "@redux": path.resolve(__dirname, "./src/redux"),
     },
   },
 });
