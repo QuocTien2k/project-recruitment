@@ -1,6 +1,5 @@
 const UserModel = require("../models/User");
 
-
 //lấy toàn bộ thông tin
 const getLogged = async (req, res) => {
   try {
@@ -25,8 +24,6 @@ const getLogged = async (req, res) => {
   }
 };
 
-
 module.exports = {
   getLogged,
-  getPublicTeachers,
 };
