@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
 import { login } from "@/apiCalls/auth";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -56,13 +57,18 @@ const Login = () => {
 
       //Lưu token và user vào localStorage
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      //localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Decode token để lấy role
+      const decoded = jwtDecode(data.token);
+      const role = decoded.role;
 
       if (data?.success) {
         setErrors({});
       }
 
-      if (data?.user?.role === "admin") {
+      // Điều hướng theo role
+      if (role === "admin") {
         navigate("/admin");
       } else {
         navigate("/");

@@ -1,7 +1,20 @@
+import Footer from "@/components/Layouts/User-Teacher/Footer";
+import Header from "@/components/Layouts/User-Teacher/Header";
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 const UserLayout = () => {
-  return <div>UserLayout</div>;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+
+      <Footer />
+    </div>
+  );
 };
 
 export default UserLayout;
