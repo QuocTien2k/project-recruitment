@@ -12,6 +12,7 @@ import ResetPassword from "@pages-auth/ResetPassword";
 import Login from "@pages-auth/Login";
 import Signup from "@pages-auth/Signup";
 import DynamicTitle from "@context/DynamicTitle";
+import TeacherDetail from "@pages-user/TeacherDetail";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           {/* Layout User dùng chung cho user + teacher */}
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/teachers/:teacherId" element={<TeacherDetail />} />
           </Route>
 
           <Route path="login" element={<Login />} />
