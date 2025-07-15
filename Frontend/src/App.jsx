@@ -11,12 +11,14 @@ import ForgotPassword from "@pages-auth/ForgotPassword";
 import ResetPassword from "@pages-auth/ResetPassword";
 import Login from "@pages-auth/Login";
 import Signup from "@pages-auth/Signup";
+import DynamicTitle from "@context/DynamicTitle";
 
 function App() {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <Router>
+        <DynamicTitle />
         <Routes>
           {/* Layout User dùng chung cho user + teacher */}
           <Route element={<UserLayout />}>
@@ -25,7 +27,7 @@ function App() {
 
           <Route path="login" element={<Login />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           <Route path="signup" element={<Signup />} />
 
           {/* Layout Admin riêng biệt */}

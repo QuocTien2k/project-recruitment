@@ -12,7 +12,8 @@
       "@pages-user/*": ["src/pages/User/*"],
       "@api/*": ["src/apiCalls/*"],
       "@utils/*": ["src/utils/*"],
-      "@redux/*": ["src/redux/*"]
+      "@redux/*": ["src/redux/*"],
+      "@context/*": ["src/context/*"]
     }
   },
   "include": ["src"]

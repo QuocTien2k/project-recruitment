@@ -24,6 +24,7 @@ export default defineConfig({
       "@api": path.resolve(__dirname, "./src/apiCalls"),
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@redux": path.resolve(__dirname, "./src/redux"),
+      "@context": path.resolve(__dirname, "./src/context"),
     },
   },
 });

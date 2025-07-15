@@ -22,7 +22,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
     // Gọi API xóa giáo viên
   };
 
-  console.log("Giáo viên: ", teacher);
+  //console.log("Giáo viên: ", teacher);
 
   return (
     <div className="border rounded-lg shadow p-4 bg-white hover:shadow-md transition duration-300">
