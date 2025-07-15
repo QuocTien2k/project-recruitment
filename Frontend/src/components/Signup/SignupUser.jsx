@@ -118,8 +118,19 @@ const SignupUser = () => {
       return;
     }
 
+    // Tìm tên tỉnh từ danh sách provinces dựa trên code đang lưu
+    const selectedProvinceName = provinces.find(
+      (prov) => prov.code === formData.province
+    )?.name;
+
+    // Tạo bản sao formData với tên tỉnh thay vì mã
+    const submitData = {
+      ...formData,
+      province: selectedProvinceName || "", // nếu không tìm thấy thì fallback rỗng
+    };
+
     try {
-      const res = await signupUser(formData);
+      const res = await signupUser(submitData);
 
       if (res?.success) {
         toast.success(res.message || "Đăng ký thành công!");

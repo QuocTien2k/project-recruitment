@@ -122,6 +122,7 @@ const SignupTeacher = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length > 0) {
@@ -130,15 +131,26 @@ const SignupTeacher = () => {
       return;
     }
 
+    // Tìm tên tỉnh từ danh sách provinces dựa trên code đang lưu
+    const selectedProvinceName = provinces.find(
+      (prov) => prov.code === formData.province
+    )?.name;
+
+    // Tạo bản sao formData với tên tỉnh thay vì mã
+    const submitData = {
+      ...formData,
+      province: selectedProvinceName || "", // nếu không tìm thấy thì fallback rỗng
+    };
+
     try {
       const data = new FormData();
-      for (const key in formData) {
+      for (const key in submitData) {
         if (key === "degreeImages") {
-          formData.degreeImages.forEach((file) =>
+          submitData.degreeImages.forEach((file) =>
             data.append("degreeImages", file)
           );
         } else {
-          data.append(key, formData[key]);
+          data.append(key, submitData[key]);
         }
       }
 
