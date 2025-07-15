@@ -105,6 +105,47 @@ const getPublicTeachers = async (req, res) => {
   }
 };
 
+// Lấy chi tiết 1 giáo viên đang hoạt động
+const getPublicTeacherDetail = async (req, res) => {
+  const { teacherId } = req.params;
+
+  try {
+    const teacher = await TeacherModel.findById(teacherId)
+      .populate(
+        "userId",
+        "middleName name email profilePic province district isActive"
+      )
+      .select("-degreeImages -__v");
+
+    // Trường hợp không tìm thấy giáo viên
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy giáo viên",
+      });
+    }
+
+    // Kiểm tra user liên kết có đang hoạt động không
+    if (!teacher.userId || !teacher.userId.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Giáo viên không còn hoạt động",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: teacher,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy chi tiết giáo viên",
+      error: error.message,
+    });
+  }
+};
+
 //tổng số lượt xem 1 bài viết
 const countViews = async (req, res) => {
   try {
@@ -127,5 +168,6 @@ module.exports = {
   getDetailPost,
   getPostBySlug,
   getPublicTeachers,
+  getPublicTeacherDetail,
   countViews,
 };
