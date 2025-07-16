@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { FiMessageSquare } from "react-icons/fi";
 import Button from "@/components/Button";
 import MessageNotification from "@/components/MessageNotification";
+import { FiPower } from "react-icons/fi";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -41,8 +41,6 @@ const Header = () => {
         <div className="flex items-center gap-4 relative">
           {/* Icon message */}
           <MessageNotification />
-          {/* Hoặc tạm thời là icon */}
-          <FiMessageSquare className="text-2xl text-green-600 cursor-pointer" />
 
           {/* Avatar + Name + Dropdown */}
           <div
@@ -61,25 +59,52 @@ const Header = () => {
 
           {/* Dropdown */}
           {openDropdown && (
-            <div className="absolute top-14 right-0 w-48 bg-white border rounded shadow-md animate-fade-down">
-              <button className="block px-4 py-2 w-full text-left hover:bg-gray-100">
-                Đổi ảnh
-              </button>
-              <button className="block px-4 py-2 w-full text-left hover:bg-gray-100">
-                Thông tin
-              </button>
-              <button className="block px-4 py-2 w-full text-left hover:bg-gray-100">
-                Bài viết của tôi
-              </button>
-              <button className="block px-4 py-2 w-full text-left hover:bg-gray-100">
-                Tạo hợp đồng
-              </button>
-              <button
-                onClick={handleLogout}
-                className="block px-4 py-2 w-full text-left text-red-500 hover:bg-gray-100"
-              >
-                Đăng xuất
-              </button>
+            <div className="absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg animate-fade-down overflow-hidden z-20">
+              <div className="py-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                  onClick={() => {}}
+                >
+                  <span>🖼️</span> <span>Đổi ảnh</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                  onClick={() => {}}
+                >
+                  <span>📝</span> <span>Thông tin</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                  onClick={() => {}}
+                >
+                  <span>📄</span> <span>Bài viết của tôi</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                  onClick={() => {}}
+                >
+                  <span>✍️</span> <span>Tạo hợp đồng</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 px-4 py-2 w-full text-left text-red-500 hover:bg-red-50 border-t border-gray-200 mt-1"
+                  onClick={handleLogout}
+                >
+                  <span className="text-lg">
+                    <FiPower />
+                  </span>
+                  <span>Đăng xuất</span>
+                </Button>
+              </div>
             </div>
           )}
         </div>
