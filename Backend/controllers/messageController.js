@@ -47,7 +47,7 @@ const clearUnreadMessageCount = async (req, res) => {
   try {
     const chatId = req.body.chatId;
 
-    //1. we want to update the unread message count in chat collection
+    //1.tin nhắn chưa đọc
     const chat = await ChatModel.findById(chatId);
     if (!chat) {
       return res.status(404).json({
@@ -64,7 +64,7 @@ const clearUnreadMessageCount = async (req, res) => {
       .populate("members")
       .populate("lastMessage");
 
-    //2. we want to update the read property to true in message collection
+    //2. cập nhật tin đã đọc false -> true
     await MessageModel.updateMany({ chatId, read: false }, { read: true });
 
     res.status(200).json({
