@@ -1,16 +1,20 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import Button from "@/components/Button";
 import MessageNotification from "@/components/MessageNotification";
 import { FiPower } from "react-icons/fi";
+import { setGlobalLoading } from "@/redux/loadingSlice";
+import { useNavigate } from "react-router-dom";
+import { clearUser } from "@/redux/currentUserSlice";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
 
 const Header = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
+  const dispatch = useDispatch();
   const [openDropdown, setOpenDropdown] = useState(false);
-
+  const navigate = useNavigate();
   const fullName = `${currentUser?.middleName || ""} ${
     currentUser?.name || ""
   }`.trim();
@@ -19,16 +23,21 @@ const Header = () => {
     setOpenDropdown((prev) => !prev);
   };
 
-  const handleLogin = () => {
-    console.log("Đi đến trang đăng nhập");
-  };
-
-  const handleRegister = () => {
-    console.log("Đi đến trang đăng ký");
-  };
-
   const handleLogout = () => {
-    console.log("Đăng xuất");
+    //console.log("Đăng xuất");
+    dispatch(setGlobalLoading(true));
+
+    setTimeout(() => {
+      // 2. Xoá thông tin user khỏi Redux và localStorage
+      dispatch(clearUser());
+      localStorage.removeItem("token");
+
+      // 3. Tắt loading
+      dispatch(setGlobalLoading(false));
+
+      // 4. Chuyển hướng
+      navigate("/");
+    }, 1000);
   };
 
   return (
@@ -61,57 +70,70 @@ const Header = () => {
           {openDropdown && (
             <div className="absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg animate-fade-down overflow-hidden z-20">
               <div className="py-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                  onClick={() => {}}
-                >
-                  <span>🖼️</span> <span>Đổi ảnh</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                  onClick={() => {}}
-                >
-                  <span>📝</span> <span>Thông tin</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                  onClick={() => {}}
-                >
-                  <span>📄</span> <span>Bài viết của tôi</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                  onClick={() => {}}
-                >
-                  <span>✍️</span> <span>Tạo hợp đồng</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center gap-2 px-4 py-2 w-full text-left text-red-500 hover:bg-red-50 border-t border-gray-200 mt-1"
-                  onClick={handleLogout}
-                >
-                  <span className="text-lg">
-                    <FiPower />
-                  </span>
-                  <span>Đăng xuất</span>
-                </Button>
+                <div className="flex flex-col px-2">
+                  {/*Avatar */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                    onClick={() => {}}
+                  >
+                    <span>🖼️</span> <span>Đổi ảnh</span>
+                  </Button>
+
+                  {/*Infor */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                    onClick={() => {}}
+                  >
+                    <span>📝</span> <span>Thông tin</span>
+                  </Button>
+
+                  {/*My post */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                    onClick={() => {}}
+                  >
+                    <span>📄</span> <span>Bài viết của tôi</span>
+                  </Button>
+
+                  {/*Contract */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                    onClick={() => {}}
+                  >
+                    <span>✍️</span> <span>Tạo hợp đồng</span>
+                  </Button>
+                </div>
+
+                {/*Logout */}
+                <div className="flex justify-center">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-2 px-4 py-2 w-[65%] text-left text-red-500 hover:bg-red-50 border-t border-gray-200 mt-1"
+                    onClick={handleLogout}
+                  >
+                    <span className="text-lg">
+                      <FiPower />
+                    </span>
+                    <span>Đăng xuất</span>
+                  </Button>
+                </div>
               </div>
             </div>
           )}
         </div>
       ) : (
         <div className="flex gap-2">
-          <Button onClick={handleLogin}>Đăng nhập</Button>
-          <Button onClick={handleRegister}>Đăng ký</Button>
+          <Button onClick={() => navigate("/login")}>Đăng nhập</Button>
+          <Button onClick={() => navigate("/signup")}>Đăng ký</Button>
         </div>
       )}
     </header>
