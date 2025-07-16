@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useEffect } from "react";
 
 const DynamicTitle = () => {
   const location = useLocation();
@@ -17,11 +16,6 @@ const DynamicTitle = () => {
 
   const matched = customTitleMap.find(({ match }) => path.startsWith(match));
   const title = matched ? matched.title : "Thuê gia sư";
-
-  // Optional: for debugging
-  useEffect(() => {
-    console.log("Changed path to:", path);
-  }, [path]);
 
   return (
     <Helmet>

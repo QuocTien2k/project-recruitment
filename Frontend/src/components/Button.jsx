@@ -20,6 +20,7 @@ const Button = ({
   const variantClasses = {
     default: "bg-green-500 text-white hover:bg-green-600",
     danger: "bg-red-500 text-white hover:bg-red-600",
+    ghost: "bg-transparent text-black hover:bg-gray-100",
   };
 
   // Trạng thái disabled
