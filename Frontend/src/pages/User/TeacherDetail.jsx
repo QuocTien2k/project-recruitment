@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTeacherLoading } from "@/redux/loadingSlice";
 import Loading from "@/components/Loading";
 import Button from "@/components/Button";
-import { useChatContext } from "@/context/ChatContext";
+import { useChatContext } from "@context/ChatContext";
 import toast from "react-hot-toast";
 
 const TeacherDetail = () => {
@@ -17,6 +17,8 @@ const TeacherDetail = () => {
   const isTeacherLoading = useSelector((state) => state.loading.teacher);
   const currentUser = useSelector((state) => state.currentUser.user);
   const { openChat } = useChatContext();
+
+  //console.log("Thông tin của mình: ", currentUser._id);
 
   const avatarDefault =
     "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -42,12 +44,16 @@ const TeacherDetail = () => {
   const fullName = `${userId?.middleName || ""} ${userId?.name || ""}`.trim();
 
   const handleStartChat = async () => {
-    if (currentUser._id === teacherId) {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập để trò chuyện!");
+    }
+
+    if (currentUser._id === userId) {
       toast.error("Không thể trò chuyện với chính mình!");
       return;
     }
 
-    await openChat(teacherId); // Gọi context xử lý logic tạo hoặc chọn chat
+    await openChat(userId); // Gọi context xử lý logic tạo hoặc chọn chat
   };
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">

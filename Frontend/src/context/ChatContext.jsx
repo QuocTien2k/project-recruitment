@@ -1,4 +1,3 @@
-// src/context/ChatContext.jsx
 import { createNewChat, getAllChats } from "@/apiCalls/chat";
 import { setAllChats, setSelectedChat } from "@/redux/currentUserSlice";
 import React, { createContext, useContext, useEffect, useState } from "react";
