@@ -13,6 +13,7 @@ import Login from "@pages-auth/Login";
 import Signup from "@pages-auth/Signup";
 import DynamicTitle from "@context/DynamicTitle";
 import TeacherDetail from "@pages-user/TeacherDetail";
+import ChatArea from "@components/ChatArea";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatArea />
       </Router>
     </>
   );

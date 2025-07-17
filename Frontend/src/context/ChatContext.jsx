@@ -92,6 +92,8 @@ export const ChatProvider = ({ children }) => {
     } else {
       await startNewChat(selectedUserId);
     }
+
+    //console.log("Đã set selectedChat: ", selectedUserId);
   };
 
   //lấy tin nhắn

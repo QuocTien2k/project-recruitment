@@ -55,6 +55,7 @@ const TeacherDetail = () => {
 
     await openChat(userId); // Gọi context xử lý logic tạo hoặc chọn chat
   };
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
       <Link to="/" className="text-sm text-blue-600 hover:underline block mb-4">
