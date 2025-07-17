@@ -16,27 +16,33 @@ const createNewMessage = async (req, res) => {
     }
 
     // 1. Lưu tin nhắn vào collection messages
-    const newMessage = new MessageModel({ chatId, userId, text });
-    const savedMessage = await newMessage.save();
+    const newMessage = new MessageModel({ chatId, sender: userId, text });
+    let savedMessage = await newMessage.save();
 
-    // 2. Cập nhật tin nhắn cuối cùng & tăng số tin chưa đọc
-    const currentChat = await ChatModel.findOneAndUpdate(
+    // 2. Populate người gửi để FE hiển thị được ngay
+    savedMessage = await savedMessage.populate(
+      "sender",
+      "middleName name email"
+    );
+
+    // 3. Cập nhật tin nhắn cuối cùng & tăng số tin chưa đọc
+    await ChatModel.findOneAndUpdate(
       { _id: chatId },
       {
         lastMessage: savedMessage._id,
-        $inc: { unreadMessageCount: 1 }, // Tăng số tin nhắn chưa đọc
-      },
-      { new: true } // Trả về dữ liệu đã cập nhật
+        $inc: { unreadMessageCount: 1 },
+      }
     );
 
+    // 4. Trả về message đầy đủ (có sender) cho FE đẩy lên UI
     res.status(201).json({
       message: "Tạo tin nhắn thành công!",
       success: true,
-      data: currentChat,
+      data: savedMessage,
     });
   } catch (error) {
     res.status(400).json({
-      message: "Tạo tin nhắn thất bại!" + error.message,
+      message: "Tạo tin nhắn thất bại! " + error.message,
       success: false,
     });
   }
