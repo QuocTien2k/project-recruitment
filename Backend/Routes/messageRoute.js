@@ -8,6 +8,6 @@ const { protect } = require("../middlewares/authMiddleware");
 
 router.post("/new-message", protect, createNewMessage);
 router.post("/clear-unread-message-count", protect, clearUnreadMessageCount);
-router.get("/get-all-messages/:chatId", protect, getAllMessages);
+router.get("/get-messages/:chatId", protect, getAllMessages);
 
 module.exports = router;

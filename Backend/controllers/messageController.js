@@ -94,7 +94,7 @@ const getAllMessages = async (req, res) => {
 
     const allMessages = await MessageModel.find({ chatId })
       .sort({ createdAt: 1 })
-      .populate("jsoner", "middleName name email"); // Lấy thông tin người gửi
+      .populate("userId", "middleName name email"); // Lấy thông tin người gửi
 
     res.status(200).json({
       message: "Lấy tin nhắn thành công!",
