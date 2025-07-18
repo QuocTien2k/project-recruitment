@@ -42,17 +42,8 @@ const ChatArea = () => {
     fetchReceiver();
   }, [selectedChat, user]);
 
-  // useEffect(() => {
-  //   if (!selectedChat || !user || !selectedChat.members) return;
+  //console.log("Thông tin người nhận đã cập nhật:", receiverInfo?.data);
 
-  //   const receiverId = selectedChat.members.find((m) => m !== user._id);
-
-  //   //console.log("Người dùng hiện tại: ", user._id);
-  //   //console.log("Danh sách thành viên: ", selectedChat.members);
-  //   //console.log("Người nhận ID: ", receiverId);
-  // }, [selectedChat, user]);
-
-  //console.log("Thông tin người nhận: ", receiverInfo?.data);
   const fullName = `${receiverInfo?.data?.middleName || ""} ${
     receiverInfo?.data?.name || ""
   }`.trim();
@@ -61,6 +52,11 @@ const ChatArea = () => {
   const handleSend = async () => {
     if (!message.trim()) return;
 
+    //Nếu tài khoản người nhận đã bị khóa thì không gửi
+    if (receiverInfo?.data?.isActive) {
+      toast.error("Không thể gửi tin nhắn. Tài khoản người nhận đã bị khóa.");
+      return;
+    }
     try {
       const newMessage = {
         chatId: selectedChat._id,

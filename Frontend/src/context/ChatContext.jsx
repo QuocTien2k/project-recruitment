@@ -89,6 +89,7 @@ export const ChatProvider = ({ children }) => {
       return;
     }
 
+    //kiểm tra tồn tại giữa user và teacher
     const existingChat = allChats.find(
       (chat) =>
         chat.members.some((m) => m._id === user._id) &&
@@ -96,6 +97,14 @@ export const ChatProvider = ({ children }) => {
     );
 
     if (existingChat) {
+      const otherUser = existingChat.members.find(
+        (m) => m._id === selectedUserId
+      );
+      //trạng thái hoạt động
+      if (otherUser && otherUser.isActive === false) {
+        toast.error("Tài khoản này đã bị khóa, không thể trò chuyện.");
+        return;
+      }
       dispatch(setSelectedChat(existingChat));
     } else {
       await startNewChat(selectedUserId);
