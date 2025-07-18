@@ -18,8 +18,6 @@ const TeacherDetail = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const { openChat } = useChatContext();
 
-  //console.log("Thông tin của mình: ", currentUser._id);
-
   const avatarDefault =
     "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
 
@@ -46,16 +44,21 @@ const TeacherDetail = () => {
   const handleStartChat = async () => {
     if (!currentUser) {
       toast.error("Vui lòng đăng nhập để trò chuyện!");
+      return;
     }
 
-    if (currentUser._id === userId) {
+    if (currentUser?._id === userId?.id) {
       toast.error("Không thể trò chuyện với chính mình!");
       return;
     }
 
-    await openChat(userId); // Gọi context xử lý logic tạo hoặc chọn chat
+    await openChat(userId?._id); // Gọi context xử lý logic tạo hoặc chọn chat
   };
 
+  // useEffect(() => {
+  //   console.log("Thông tin của mình: ", currentUser?._id);
+  //   console.log("Thông tin của giáo viên: ", userId?._id);
+  // }, [userId, currentUser]);
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
       <Link to="/" className="text-sm text-blue-600 hover:underline block mb-4">

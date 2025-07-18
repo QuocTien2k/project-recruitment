@@ -23,7 +23,12 @@ const ChatArea = () => {
     const fetchReceiver = async () => {
       if (!selectedChat || !user) return;
 
-      const receiverId = selectedChat.members.find((m) => m !== user._id);
+      const receiver = selectedChat.members.find((m) =>
+        typeof m === "string" ? m !== user._id : m._id !== user._id
+      );
+
+      const receiverId =
+        typeof receiver === "string" ? receiver : receiver?._id;
       if (!receiverId) return;
 
       try {

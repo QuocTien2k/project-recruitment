@@ -56,6 +56,9 @@ export const ChatProvider = ({ children }) => {
       return null;
     }
 
+    const members = [user._id, targetUserId];
+    console.log("🔵 Đang gửi members lên server:", members);
+
     try {
       const res = await createNewChat([user._id, targetUserId]);
       if (res?.success) {
@@ -78,6 +81,11 @@ export const ChatProvider = ({ children }) => {
   const openChat = async (selectedUserId) => {
     if (!user) {
       toast.error("Vui lòng đăng nhập để trò chuyện!");
+      return;
+    }
+
+    if (user._id === selectedUserId) {
+      toast.error("Không thể trò chuyện với chính mình!");
       return;
     }
 
