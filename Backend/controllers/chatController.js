@@ -5,8 +5,9 @@ const UserModel = require("../models/User");
 const createNewChat = async (req, res) => {
   try {
     const { members } = req.body;
+    // console.log("members nhận từ frontend:", members);
 
-    // Kiểm tra members có hợp lệ không
+    //kiểm tra số lượng
     if (!members || !Array.isArray(members) || members.length !== 2) {
       return res.status(400).json({
         message: "Cuộc trò chuyện tối đa 2 người!",
@@ -14,17 +15,16 @@ const createNewChat = async (req, res) => {
       });
     }
 
-    // Kiểm tra xem 2 ID có trùng nhau không
-    if (members[0] === members[1]) {
+    const [id1, id2] = members.map(String); // Fix ở đây
+    if (id1 === id2) {
       return res.status(400).json({
         message: "Không thể tạo cuộc trò chuyện với chính mình!",
         success: false,
       });
     }
 
-    // Kiểm tra trạng thái của từng user
+    //kiểm tra tồn tại
     const users = await UserModel.find({ _id: { $in: members } });
-
     if (users.length !== 2) {
       return res.status(404).json({
         message: "Một hoặc cả hai tài khoản không tồn tại!",
