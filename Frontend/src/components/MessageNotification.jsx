@@ -91,15 +91,11 @@ const MessageNotification = () => {
                           className={`font-medium text-sm text-gray-800 ${
                             isLocked ? "line-through text-gray-500" : ""
                           }`}
+                          title={`${isLocked ? "Tài khoản bị khóa" : ""}`}
                         >
                           {`${u.middleName || ""} ${u.name || ""}`}
                         </span>
-                        {isLocked && (
-                          <MdBlock
-                            className="text-red-500"
-                            title="Tài khoản đã bị khóa"
-                          />
-                        )}
+                        {isLocked && <MdBlock className="text-red-500" />}
                       </div>
                       <span className="text-xs text-gray-500 truncate max-w-[180px]">
                         {getLastMessage(u._id, u.name || "") ||
