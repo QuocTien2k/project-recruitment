@@ -56,8 +56,8 @@ export const ChatProvider = ({ children }) => {
       return null;
     }
 
-    const members = [user._id, targetUserId];
-    console.log("🔵 Đang gửi members lên server:", members);
+    //const members = [user._id, targetUserId];
+    //console.log("🔵 Đang gửi members lên server:", members);
 
     try {
       const res = await createNewChat([user._id, targetUserId]);
@@ -100,8 +100,12 @@ export const ChatProvider = ({ children }) => {
       const otherUser = existingChat.members.find(
         (m) => m._id === selectedUserId
       );
+
+      //console.log("User hiện tại: ", user._id);
+      //console.log("Trạng thái User được chọn: ", otherUser?.isActive);
+
       //trạng thái hoạt động
-      if (otherUser && otherUser.isActive === false) {
+      if (otherUser && !otherUser.isActive) {
         toast.error("Tài khoản này đã bị khóa, không thể trò chuyện.");
         return;
       }

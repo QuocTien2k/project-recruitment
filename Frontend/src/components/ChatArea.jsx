@@ -53,7 +53,7 @@ const ChatArea = () => {
     if (!message.trim()) return;
 
     //Nếu tài khoản người nhận đã bị khóa thì không gửi
-    if (receiverInfo?.data?.isActive) {
+    if (!receiverInfo?.data?.isActive) {
       toast.error("Không thể gửi tin nhắn. Tài khoản người nhận đã bị khóa.");
       return;
     }
