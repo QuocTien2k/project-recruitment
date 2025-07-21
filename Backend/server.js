@@ -20,18 +20,20 @@ const port = process.env.PORT || 3000;
 const onlineUsers = [];
 
 io.on("connection", (socket) => {
-  console.log("Connected with socket id:", socket.id);
+  //console.log("Connected with socket id:", socket.id);
 
   socket.on("join-room", (userId) => {
-    console.log("User tham gia:", userId);
+    //console.log("User tham gia:", userId);
     socket.join(userId);
   });
 
   socket.on("send-message", (message) => {
-    console.log("Tin nhắn mới:", message);
-    io.to(message.members[0])
-      .to(message.members[1])
-      .emit("receive-message", message);
+    //console.log("Tin nhắn mới:", message);
+    message.members.forEach((memberId) => {
+      if (memberId !== message.sender._id) {
+        io.to(memberId).emit("receive-message", message);
+      }
+    });
   });
 
   socket.on("clear-unread-messages", (data) => {
