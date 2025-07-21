@@ -74,12 +74,18 @@ const ChatArea = () => {
         setMessage(""); // clear input
 
         // Gửi tin qua socket để cả 2 bên nhận được
-        socket.emit("send-message", {
+        const msgData = {
           ...res.data,
           members: selectedChat.members.map((m) =>
             typeof m === "string" ? m : m._id
           ),
-        });
+        };
+
+        // 👇 Gửi qua socket để người nhận nhận được
+        socket.emit("send-message", msgData);
+
+        // 👇 Tự thêm vào danh sách hiển thị
+        setMessages((prev) => [...prev, res.data]);
       }
     } catch (err) {
       console.log("Lỗi gửi tin: ", err);

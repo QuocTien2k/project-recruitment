@@ -7,6 +7,7 @@ const currentUserSlice = createSlice({
     allChats: [], // Danh sách toàn bộ cuộc trò chuyện
     userList: [], // Danh sách user chat
     selectedChat: null, // Cuộc trò chuyện đang được chọn để hiển thị
+    notifications: [], //thông báo
   },
   reducers: {
     setUser: (state, action) => {
@@ -24,10 +25,30 @@ const currentUserSlice = createSlice({
     setSelectedChat: (state, action) => {
       state.selectedChat = action.payload;
     },
+    addNotification: (state, action) => {
+      state.notifications.unshift(action.payload);
+    },
+    clearNotifications: (state) => {
+      state.notifications = [];
+    },
+    removeNotificationsByChatId: (state, action) => {
+      const chatId = action.payload;
+      state.notifications = state.notifications.filter(
+        (msg) => msg.chatId !== chatId
+      );
+    },
   },
 });
 
-export const { setUser, clearUser, setAllChats, setUserList, setSelectedChat } =
-  currentUserSlice.actions;
+export const {
+  setUser,
+  clearUser,
+  setAllChats,
+  setUserList,
+  setSelectedChat,
+  addNotification,
+  clearNotifications,
+  removeNotificationsByChatId,
+} = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;

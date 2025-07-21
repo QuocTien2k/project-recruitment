@@ -1,6 +1,17 @@
 import { createNewChat, getAllChats } from "@/apiCalls/chat";
-import { setAllChats, setSelectedChat } from "@/redux/currentUserSlice";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import {
+  addNotification,
+  removeNotificationsByChatId,
+  setAllChats,
+  setSelectedChat,
+} from "@/redux/currentUserSlice";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
@@ -10,18 +21,27 @@ const socket = io(import.meta.env.VITE_API_URL); // bật socket
 
 export const ChatProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const { user, allChats } = useSelector((state) => state.currentUser);
+  const { user, allChats, selectedChat } = useSelector(
+    (state) => state.currentUser
+  );
   const [onlineUser, setOnlineUser] = useState([]);
+  const currentChatId = selectedChat?._id;
+  const chatsRef = useRef(allChats);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("✅ Socket connected, ID:", socket.id);
-    });
+    chatsRef.current = allChats;
+  }, [allChats]);
 
-    return () => {
-      socket.off("connect");
-    };
-  }, []);
+  //Test socket
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Socket connected, ID:", socket.id);
+  //   });
+
+  //   return () => {
+  //     socket.off("connect");
+  //   };
+  // }, []);
 
   // Kết nối socket
   useEffect(() => {
@@ -45,6 +65,48 @@ export const ChatProvider = ({ children }) => {
       fetchAllChats();
     }
   }, [user]);
+
+  // Nhận tin nhắn realtime
+  useEffect(() => {
+    const handleReceiveMessage = (message) => {
+      // Chặn nếu chính mình là người gửi
+      if (message.sender === user._id || message.sender?._id === user._id)
+        return;
+
+      // Nếu đang mở đúng đoạn chat thì KHÔNG cần cập nhật gì
+      if (message.chatId === currentChatId) {
+        return; // Không cần cập nhật lastMessage hoặc unread count
+      }
+
+      const existingChats = chatsRef.current;
+      const existingChatIndex = existingChats.findIndex(
+        (chat) => chat._id === message.chatId
+      );
+
+      if (existingChatIndex !== -1) {
+        const updatedChats = [...existingChats];
+        const chatToUpdate = updatedChats[existingChatIndex];
+
+        updatedChats[existingChatIndex] = {
+          ...chatToUpdate,
+          lastMessage: message,
+          unreadMessageCount: (chatToUpdate.unreadMessageCount || 0) + 1,
+        };
+
+        dispatch(setAllChats(updatedChats));
+      } else {
+        fetchAllChats(); // nếu chưa có đoạn chat nào
+      }
+
+      //chỉ push vào notifications nếu chưa mở chat đó
+      dispatch(addNotification(message));
+    };
+
+    socket.on("receive-message", handleReceiveMessage);
+    return () => {
+      socket.off("receive-message", handleReceiveMessage);
+    };
+  }, [user, currentChatId]);
 
   const fetchAllChats = async () => {
     try {
@@ -119,6 +181,21 @@ export const ChatProvider = ({ children }) => {
         return;
       }
       dispatch(setSelectedChat(existingChat));
+
+      // 👉 Clear số tin chưa đọc nếu có
+      const updatedChats = allChats.map((chat) => {
+        if (
+          chat._id === existingChat._id &&
+          chat.unreadMessageCount &&
+          chat.lastMessage?.sender !== user._id
+        ) {
+          return { ...chat, unreadMessageCount: 0 };
+        }
+        return chat;
+      });
+
+      dispatch(setAllChats(updatedChats));
+      dispatch(removeNotificationsByChatId(existingChat._id));
     } else {
       await startNewChat(selectedUserId);
     }
