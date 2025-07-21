@@ -4,8 +4,9 @@ import {
   getMessages,
 } from "@/apiCalls/message";
 import { getUserById } from "@/apiCalls/user";
+import { ChatContext } from "@/context/ChatContext";
 import { setAllChats, setSelectedChat } from "@/redux/currentUserSlice";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,6 +19,8 @@ const ChatArea = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+
+  const { socket } = useContext(ChatContext);
 
   useEffect(() => {
     const fetchReceiver = async () => {
@@ -52,11 +55,12 @@ const ChatArea = () => {
   const handleSend = async () => {
     if (!message.trim()) return;
 
-    //Nếu tài khoản người nhận đã bị khóa thì không gửi
+    // Nếu tài khoản người nhận đã bị khóa thì không gửi
     if (!receiverInfo?.data?.isActive) {
       toast.error("Không thể gửi tin nhắn. Tài khoản người nhận đã bị khóa.");
       return;
     }
+
     try {
       const newMessage = {
         chatId: selectedChat._id,
@@ -65,9 +69,17 @@ const ChatArea = () => {
       };
 
       const res = await createNewMessage(newMessage);
+
       if (res?.success) {
-        setMessages((prev) => [...prev, res.data]);
-        setMessage("");
+        setMessage(""); // clear input
+
+        // Gửi tin qua socket để cả 2 bên nhận được
+        socket.emit("send-message", {
+          ...res.data,
+          members: selectedChat.members.map((m) =>
+            typeof m === "string" ? m : m._id
+          ),
+        });
       }
     } catch (err) {
       console.log("Lỗi gửi tin: ", err);
@@ -96,12 +108,37 @@ const ChatArea = () => {
         const updatedChats = allChats.map((chat) =>
           chat._id === selectedChat._id ? res.data : chat
         );
+        socket.emit("clear-unread-messages", {
+          members: selectedChat.members.map((m) =>
+            typeof m === "string" ? m : m._id
+          ),
+          chatId: selectedChat._id,
+        });
+
         dispatch(setAllChats(updatedChats));
       }
     } catch (err) {
       console.error("Lỗi xóa tin chưa đọc", err);
     }
   };
+
+  //nhận tin
+  useEffect(() => {
+    if (!socket || !selectedChat) return;
+
+    const handleReceiveMessage = (newMsg) => {
+      const isInCurrentChat = newMsg.chatId === selectedChat._id;
+      if (isInCurrentChat) {
+        setMessages((prev) => [...prev, newMsg]);
+      }
+    };
+
+    socket.on("receive-message", handleReceiveMessage);
+
+    return () => {
+      socket.off("receive-message", handleReceiveMessage);
+    };
+  }, [socket, selectedChat]);
 
   useEffect(() => {
     if (selectedChat?._id) {
@@ -114,7 +151,7 @@ const ChatArea = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (!selectedChat) return null;
+  if (!user || !selectedChat) return null;
 
   //console.log("Tin nhắn: ", messages);
 

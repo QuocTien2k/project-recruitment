@@ -3,32 +3,41 @@ import { setAllChats, setSelectedChat } from "@/redux/currentUserSlice";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 
 export const ChatContext = createContext();
+const socket = io(import.meta.env.VITE_API_URL); // bật socket
 
 export const ChatProvider = ({ children }) => {
-  // const socket = io("http://localhost:5000"); // Dùng sau khi bật socket
   const dispatch = useDispatch();
   const { user, allChats } = useSelector((state) => state.currentUser);
   const [onlineUser, setOnlineUser] = useState([]);
 
-  // Kết nối socket sau này (đã note sẵn)
-  // useEffect(() => {
-  //   if (user) {
-  //     socket.emit("join-room", user._id);
-  //     socket.emit("user-login", user._id);
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("✅ Socket connected, ID:", socket.id);
+    });
 
-  //     socket.on("online-users", setOnlineUser);
-  //     socket.on("online-users-updated", setOnlineUser);
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
 
-  //     return () => {
-  //       socket.off("online-users");
-  //       socket.off("online-users-updated");
-  //     };
-  //   }
-  // }, [user]);
+  // Kết nối socket
+  useEffect(() => {
+    if (user) {
+      socket.emit("join-room", user._id);
+      socket.emit("user-login", user._id);
+
+      socket.on("online-users", setOnlineUser);
+      socket.on("online-users-updated", setOnlineUser);
+
+      return () => {
+        socket.off("online-users");
+        socket.off("online-users-updated");
+      };
+    }
+  }, [user]);
 
   // Tự động gọi danh sách chat khi login
   useEffect(() => {
@@ -149,7 +158,7 @@ export const ChatProvider = ({ children }) => {
   return (
     <ChatContext.Provider
       value={{
-        // socket,
+        socket,
         onlineUser,
         fetchAllChats,
         startNewChat,

@@ -5,7 +5,7 @@ import MessageNotification from "@/components/MessageNotification";
 import { FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import { useNavigate } from "react-router-dom";
-import { clearUser } from "@/redux/currentUserSlice";
+import { clearUser, setSelectedChat } from "@/redux/currentUserSlice";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -24,10 +24,12 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    //console.log("Đăng xuất");
     dispatch(setGlobalLoading(true));
 
     setTimeout(() => {
+      // 1. Xóa chat đang chọn (ẩn ChatArea)
+      dispatch(setSelectedChat(null));
+
       // 2. Xoá thông tin user khỏi Redux và localStorage
       dispatch(clearUser());
       localStorage.removeItem("token");
