@@ -21,3 +21,21 @@ export const getUserById = async (id) => {
     throw err;
   }
 };
+
+export const updateAvatar = async (formData) => {
+  try {
+    const response = await axiosInstance.patch(
+      "/api/user/update-avatar",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi cập nhật:", err?.message);
+    throw err;
+  }
+};
