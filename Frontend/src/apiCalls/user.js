@@ -22,6 +22,7 @@ export const getUserById = async (id) => {
   }
 };
 
+//Cập nhật avatar
 export const updateAvatar = async (formData) => {
   try {
     const response = await axiosInstance.patch(

@@ -5,7 +5,7 @@ import MessageNotification from "@/components/MessageNotification";
 import { FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import { useNavigate } from "react-router-dom";
-import { clearUser, setSelectedChat } from "@/redux/currentUserSlice";
+import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
 
 const avatarDefault =
@@ -25,8 +25,16 @@ const Header = () => {
     setOpenDropdown((prev) => !prev);
   };
 
-  //
-  const handleUpdateSuccess = () =>{};
+  //cập nhật avatar
+  const handleUpdateAvatarSuccess = (url, public_id) => {
+    dispatch(
+      setUser({
+        ...currentUser,
+        profilePic: { url, public_id },
+      })
+    );
+    setOpenModalUpdateAvatar(false);
+  };
 
   const handleLogout = () => {
     dispatch(setGlobalLoading(true));
@@ -47,6 +55,8 @@ const Header = () => {
     }, 1000);
   };
 
+  //console.log("Thông tin: ", currentUser);
+
   return (
     <header className="w-full bg-white shadow-md px-4 py-3 flex justify-between items-center relative z-20">
       {/* Logo trái */}
@@ -65,7 +75,7 @@ const Header = () => {
               onClick={handleToggleDropdown}
             >
               <img
-                src={currentUser.profilePic || avatarDefault}
+                src={currentUser.profilePic?.url || avatarDefault}
                 alt="Avatar"
                 className="w-10 h-10 rounded-full object-cover border"
               />
@@ -139,9 +149,12 @@ const Header = () => {
             )}
           </div>
           {openModalUpdateAvatar && (
-            <UpdateAvatar onClose={() => setOpenModalUpdateAvatar(false)} onUpdateSuccess={} />
-          )
-          }
+            <UpdateAvatar
+              currentUserAvatar={currentUser.profilePic}
+              onClose={() => setOpenModalUpdateAvatar(false)}
+              onUpdateSuccess={handleUpdateAvatarSuccess}
+            />
+          )}
         </>
       ) : (
         <div className="flex gap-2">

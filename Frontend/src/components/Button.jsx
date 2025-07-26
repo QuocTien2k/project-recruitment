@@ -23,6 +23,11 @@ const Button = ({
     ghost: "bg-transparent text-black hover:bg-gray-100",
   };
 
+  // Thay đổi con trỏ chuột và opacity tùy vào trạng thái
+  const interactionClasses = disabled
+    ? "cursor-not-allowed opacity-50"
+    : "cursor-pointer";
+
   // Trạng thái disabled
   const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
 
@@ -31,11 +36,9 @@ const Button = ({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`cursor-pointer rounded transition duration-200 ${
-        sizeClasses[size] || ""
-      } ${
+      className={`rounded transition duration-200 ${sizeClasses[size] || ""} ${
         variantClasses[variant] || variantClasses["default"]
-      } ${disabledClasses} ${className}`}
+      } ${disabledClasses} ${interactionClasses} ${className}`}
     >
       {children}
     </button>
