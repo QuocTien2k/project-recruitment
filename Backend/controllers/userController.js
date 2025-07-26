@@ -90,7 +90,10 @@ const updateAvatar = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Cập nhật ảnh đại diện thành công",
-      avatar: user.profilePic.url,
+      avatar: {
+        user: user.profilePic.url,
+        public_id: user.profilePic.public_id,
+      },
     });
   } catch (error) {
     return res.status(500).json({
