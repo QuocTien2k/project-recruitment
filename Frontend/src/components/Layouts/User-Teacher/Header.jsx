@@ -6,6 +6,7 @@ import { FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import { useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat } from "@/redux/currentUserSlice";
+import UpdateAvatar from "@/Modals/UpdateAvatar";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -14,6 +15,7 @@ const Header = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const dispatch = useDispatch();
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [openModalUpdateAvatar, setOpenModalUpdateAvatar] = useState(false);
   const navigate = useNavigate();
   const fullName = `${currentUser?.middleName || ""} ${
     currentUser?.name || ""
@@ -22,6 +24,9 @@ const Header = () => {
   const handleToggleDropdown = () => {
     setOpenDropdown((prev) => !prev);
   };
+
+  //
+  const handleUpdateSuccess = () =>{};
 
   const handleLogout = () => {
     dispatch(setGlobalLoading(true));
@@ -49,89 +54,95 @@ const Header = () => {
 
       {/* Phần phải */}
       {currentUser ? (
-        <div className="flex items-center gap-4 relative">
-          {/* Icon message */}
-          <MessageNotification />
+        <>
+          <div className="flex items-center gap-4 relative">
+            {/* Icon message */}
+            <MessageNotification />
 
-          {/* Avatar + Name + Dropdown */}
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={handleToggleDropdown}
-          >
-            <img
-              src={currentUser.profilePic || avatarDefault}
-              alt="Avatar"
-              className="w-10 h-10 rounded-full object-cover border"
-            />
-            <span className="max-w-[120px] truncate font-medium text-sm hidden sm:inline-block">
-              {fullName}
-            </span>
-          </div>
+            {/* Avatar + Name + Dropdown */}
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={handleToggleDropdown}
+            >
+              <img
+                src={currentUser.profilePic || avatarDefault}
+                alt="Avatar"
+                className="w-10 h-10 rounded-full object-cover border"
+              />
+              <span className="max-w-[120px] truncate font-medium text-sm hidden sm:inline-block">
+                {fullName}
+              </span>
+            </div>
 
-          {/* Dropdown */}
-          {openDropdown && (
-            <div className="absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg animate-fade-down overflow-hidden z-20">
-              <div className="py-2">
-                <div className="flex flex-col px-2">
-                  {/*Avatar */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                    onClick={() => {}}
-                  >
-                    <span>🖼️</span> <span>Đổi ảnh</span>
-                  </Button>
+            {/* Dropdown */}
+            {openDropdown && (
+              <div className="absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg animate-fade-down overflow-hidden z-20">
+                <div className="py-2">
+                  <div className="flex flex-col px-2">
+                    {/*Avatar */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      onClick={() => setOpenModalUpdateAvatar(true)}
+                    >
+                      <span>🖼️</span> <span>Đổi ảnh</span>
+                    </Button>
 
-                  {/*Infor */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                    onClick={() => {}}
-                  >
-                    <span>📝</span> <span>Thông tin</span>
-                  </Button>
+                    {/*Infor */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      onClick={() => {}}
+                    >
+                      <span>📝</span> <span>Thông tin</span>
+                    </Button>
 
-                  {/*My post */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                    onClick={() => {}}
-                  >
-                    <span>📄</span> <span>Bài viết của tôi</span>
-                  </Button>
+                    {/*My post */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      onClick={() => {}}
+                    >
+                      <span>📄</span> <span>Bài viết của tôi</span>
+                    </Button>
 
-                  {/*Contract */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                    onClick={() => {}}
-                  >
-                    <span>✍️</span> <span>Tạo hợp đồng</span>
-                  </Button>
-                </div>
+                    {/*Contract */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      onClick={() => {}}
+                    >
+                      <span>✍️</span> <span>Tạo hợp đồng</span>
+                    </Button>
+                  </div>
 
-                {/*Logout */}
-                <div className="flex justify-center">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-2 px-4 py-2 w-[65%] text-left text-red-500 hover:bg-red-50 border-t border-gray-200 mt-1"
-                    onClick={handleLogout}
-                  >
-                    <span className="text-lg">
-                      <FiPower />
-                    </span>
-                    <span>Đăng xuất</span>
-                  </Button>
+                  {/*Logout */}
+                  <div className="flex justify-center">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-2 px-4 py-2 w-[65%] text-left text-red-500 hover:bg-red-50 border-t border-gray-200 mt-1"
+                      onClick={handleLogout}
+                    >
+                      <span className="text-lg">
+                        <FiPower />
+                      </span>
+                      <span>Đăng xuất</span>
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+          {openModalUpdateAvatar && (
+            <UpdateAvatar onClose={() => setOpenModalUpdateAvatar(false)} onUpdateSuccess={} />
+          )
+          }
+        </>
       ) : (
         <div className="flex gap-2">
           <Button onClick={() => navigate("/login")}>Đăng nhập</Button>

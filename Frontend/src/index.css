@@ -99,3 +99,14 @@
     border-radius: 9999px;
     /* Để làm emoji hoặc background hình tròn */
 }
+
+/* bg -modal */
+.bg-modal {
+    background: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    inset: calc(var(--spacing) * 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
