@@ -13,10 +13,10 @@ router.get("/info-user/:id", protect, getUserById);
 
 router.patch(
   "/update-avatar",
-  protect, // Xác thực user từ JWT
-  upload.single("avatar"), // Nhận 1 file tên "avatar"
+  protect,
+  upload.single("avatar"),
   uploadSingleToCloud, // Upload lên Cloudinary
-  updateAvatar // Controller xử lý
+  updateAvatar
 );
 
 module.exports = router;
