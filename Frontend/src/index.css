@@ -124,6 +124,22 @@
     /* Để làm emoji hoặc background hình tròn */
 }
 
+/* shine */
+@keyframes shine {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.animate-shine {
+    animation: shine 2s infinite linear;
+}
+
+
 /* bg -modal */
 .bg-modal {
     background: rgba(0, 0, 0, 0.2);
