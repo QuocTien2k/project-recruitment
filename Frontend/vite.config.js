@@ -25,6 +25,7 @@ export default defineConfig({
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@redux": path.resolve(__dirname, "./src/redux"),
       "@context": path.resolve(__dirname, "./src/context"),
+      "@modal": path.resolve(__dirname, "./src/Modals"),
     },
   },
 });
