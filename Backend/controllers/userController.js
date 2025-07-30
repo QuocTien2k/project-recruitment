@@ -225,6 +225,7 @@ const updateInfo = async (req, res) => {
 
     await user.save();
 
+    let teacherData = null;
     // 4. Nếu là teacher → cập nhật bảng TeacherModel
     if (user.role === "teacher") {
       const teacher = await TeacherModel.findOne({ userId: user._id });
@@ -240,6 +241,11 @@ const updateInfo = async (req, res) => {
       if (description) teacher.description = description;
 
       await teacher.save();
+      teacherData = {
+        workingType: teacher.workingType,
+        timeType: teacher.timeType,
+        description: teacher.description,
+      };
     }
 
     return res.status(200).json({
@@ -256,13 +262,7 @@ const updateInfo = async (req, res) => {
           province: user.province,
           role: user.role,
         },
-        ...(user.role === "teacher" && {
-          teacher: {
-            workingType: teacher.workingType,
-            timeType: teacher.timeType,
-            description: teacher.description,
-          },
-        }),
+        ...(teacherData && { teacher: teacherData }),
       },
     });
   } catch (error) {
