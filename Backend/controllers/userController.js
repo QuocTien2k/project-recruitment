@@ -1,5 +1,6 @@
 const UserModel = require("../models/User");
 const cloudinary = require("../cloudinary");
+const bcrypt = require("bcryptjs");
 
 //lấy toàn bộ thông tin
 const getLogged = async (req, res) => {
@@ -103,8 +104,66 @@ const updateAvatar = async (req, res) => {
   }
 };
 
+// Đổi mật khẩu
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+
+    // 1. Kiểm tra đủ trường
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập đầy đủ các trường",
+      });
+    }
+
+    // 2. Kiểm tra confirm khớp
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Mật khẩu xác nhận không khớp",
+      });
+    }
+
+    // 3. Tìm user theo token
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+
+    // 4. Kiểm tra mật khẩu cũ có đúng không
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Mật khẩu cũ không đúng",
+      });
+    }
+
+    // 5. Hash lại mật khẩu mới
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Đổi mật khẩu thành công",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Lỗi hệ thống: ${error.message}`,
+    });
+  }
+};
+
 module.exports = {
   getLogged,
   getUserById,
   updateAvatar,
+  changePassword,
 };

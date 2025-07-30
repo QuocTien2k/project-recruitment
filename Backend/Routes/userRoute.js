@@ -3,6 +3,7 @@ const {
   getLogged,
   getUserById,
   updateAvatar,
+  changePassword,
 } = require("../controllers/userController");
 const { protect } = require("../middlewares/authMiddleware");
 const uploadSingleToCloud = require("../utils/uploadSingleToCloud");
@@ -18,5 +19,7 @@ router.patch(
   uploadSingleToCloud, // Upload lên Cloudinary
   updateAvatar
 );
+
+router.patch("/change-password", protect, changePassword);
 
 module.exports = router;
