@@ -14,10 +14,39 @@ const getLogged = async (req, res) => {
       });
     }
 
+    let responseData = {
+      _id: user._id,
+      name: user.name,
+      middleName: user.middleName,
+      email: user.email,
+      phone: user.phone,
+      province: user.province,
+      district: user.district,
+      role: user.role,
+      profilePic: user.profilePic,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    // Nếu là giáo viên → lấy thêm thông tin từ bảng teacher
+    if (user.role === "teacher") {
+      const teacher = await TeacherModel.findOne({ userId: user._id });
+      if (teacher) {
+        responseData = {
+          ...responseData,
+          teacher: {
+            workingType: teacher.workingType,
+            timeType: teacher.timeType,
+            description: teacher.description,
+          },
+        };
+      }
+    }
+
     res.status(200).json({
       message: "Lấy thông tin user đăng nhập thành công",
       success: true,
-      data: user,
+      data: responseData,
     });
   } catch (error) {
     res.status(500).json({
