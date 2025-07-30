@@ -33,6 +33,30 @@
     }
 }
 
+@layer components {
+    .form-select-custom {
+        @apply w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 shadow-sm cursor-pointer transition-all;
+
+        /* Tùy chọn hover/focus */
+
+
+        /* font đẹp hơn */
+        font-family: var(--font-main);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* thêm icon mũi tên */
+    select.form-select-custom {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg fill='gray' viewBox='0 0 20 20'%3e%3cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 1.2em;
+        padding-right: 2.5rem;
+        appearance: none;
+    }
+}
+
 /* loading */
 @keyframes spin {
     to {

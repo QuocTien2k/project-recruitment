@@ -174,7 +174,7 @@ const SignupUser = () => {
               placeholder="Họ và tên lót ..."
               value={formData.middleName}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.middleName && (
               <span className="text-red-500 text-sm">{errors.middleName}</span>
@@ -189,7 +189,7 @@ const SignupUser = () => {
               placeholder="Tên ..."
               value={formData.name}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.name && (
               <span className="text-red-500 text-sm">{errors.name}</span>
@@ -207,7 +207,7 @@ const SignupUser = () => {
               placeholder="Email ..."
               value={formData.email}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.email && (
               <span className="text-red-500 text-sm">{errors.email}</span>
@@ -222,7 +222,7 @@ const SignupUser = () => {
               placeholder="Mật khẩu ..."
               value={formData.password}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.password && (
               <span className="text-red-500 text-sm">{errors.password}</span>
@@ -239,7 +239,7 @@ const SignupUser = () => {
             placeholder="Số điện thoại..."
             value={formData.phone}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-gray-300 rounded px-3 py-2"
           />
           {errors.phone && (
             <span className="text-red-500 text-sm">{errors.phone}</span>
@@ -253,7 +253,7 @@ const SignupUser = () => {
             name="province"
             value={selectedProvince}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2 cursor-pointer"
+            className="form-select-custom"
           >
             <option value="">Chọn tỉnh / thành phố</option>
             {provinces.map((prov) => (
@@ -275,7 +275,7 @@ const SignupUser = () => {
               name="district"
               value={formData.district}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2 cursor-pointer"
+              className="form-select-custom"
             >
               <option value="">Chọn quận / huyện</option>
               {districtList.map((dist) => (

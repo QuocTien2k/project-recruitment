@@ -101,8 +101,14 @@ const SignupTeacher = () => {
       newErrors.province = "Vui lòng chọn tỉnh/thành phố.";
     if (!formData.district) newErrors.district = "Vui lòng chọn quận/huyện.";
 
-    if (!formData.experience)
+    if (!formData.experience) {
       newErrors.experience = "Vui lòng nhập số năm kinh nghiệm.";
+    } else if (Number(formData.experience) < 0) {
+      newErrors.experience = "Số năm kinh nghiệm không được là số âm.";
+    } else if (Number(formData.experience) > 60) {
+      newErrors.experience = "Số năm kinh nghiệm tối đa là 60.";
+    }
+
     if (!formData.workingType)
       newErrors.workingType = "Vui lòng chọn hình thức làm việc.";
     if (!formData.timeType)
@@ -206,7 +212,7 @@ const SignupTeacher = () => {
               placeholder="Họ và tên lót ..."
               value={formData.middleName}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.middleName && (
               <span className="text-red-500 text-sm">{errors.middleName}</span>
@@ -221,7 +227,7 @@ const SignupTeacher = () => {
               placeholder="Tên ..."
               value={formData.name}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.name && (
               <span className="text-red-500 text-sm">{errors.name}</span>
@@ -239,7 +245,7 @@ const SignupTeacher = () => {
               placeholder="Email ..."
               value={formData.email}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.email && (
               <span className="text-red-500 text-sm">{errors.email}</span>
@@ -254,7 +260,7 @@ const SignupTeacher = () => {
               placeholder="Mật khẩu ..."
               value={formData.password}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.password && (
               <span className="text-red-500 text-sm">{errors.password}</span>
@@ -271,7 +277,7 @@ const SignupTeacher = () => {
             placeholder="Số điện thoại..."
             value={formData.phone}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-gray-300 rounded px-3 py-2"
           />
           {errors.phone && (
             <span className="text-red-500 text-sm">{errors.phone}</span>
@@ -285,7 +291,7 @@ const SignupTeacher = () => {
             name="province"
             value={selectedProvince}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2 cursor-pointer"
+            className="form-select-custom"
           >
             <option value="">Chọn tỉnh / thành phố</option>
             {provinces.map((prov) => (
@@ -307,7 +313,7 @@ const SignupTeacher = () => {
               name="district"
               value={formData.district}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2 cursor-pointer"
+              className="form-select-custom"
             >
               <option value="">Chọn quận / huyện</option>
               {districtList.map((dist) => (
@@ -332,7 +338,7 @@ const SignupTeacher = () => {
               placeholder="VD: 2"
               value={formData.experience}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.experience && (
               <span className="text-red-500 text-sm">{errors.experience}</span>
@@ -347,7 +353,7 @@ const SignupTeacher = () => {
               placeholder="VD: Toán, Lý, Hóa"
               value={formData.subject}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
             {errors.subject && (
               <span className="text-red-500 text-sm">{errors.subject}</span>
@@ -363,7 +369,7 @@ const SignupTeacher = () => {
               name="workingType"
               value={formData.workingType}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="form-select-custom"
             >
               <option value="">Chọn hình thức</option>
               <option value="online">Online</option>
@@ -381,7 +387,7 @@ const SignupTeacher = () => {
               name="timeType"
               value={formData.timeType}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="form-select-custom"
             >
               <option value="">Chọn thời gian</option>
               <option value="part-time">Part-time</option>
@@ -401,7 +407,7 @@ const SignupTeacher = () => {
             placeholder="Giới thiệu kinh nghiệm, kỹ năng, v.v."
             value={formData.description}
             onChange={handleChange}
-            className="w-full border rounded px-3 py-2 h-[100px]"
+            className="w-full border border-gray-300 px-3 py-2 h-[100px]"
           />
           {errors.description && (
             <span className="text-red-500 text-sm">{errors.description}</span>
