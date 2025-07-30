@@ -7,6 +7,7 @@ import { setGlobalLoading } from "@/redux/loadingSlice";
 import { useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
+import UpdatePassword from "@/Modals/UpdatePassword";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -16,6 +17,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openModalUpdateAvatar, setOpenModalUpdateAvatar] = useState(false);
+  const [openModalUpdateChangePassword, setOpenModalUpdateChangePassword] =
+    useState(false);
   const navigate = useNavigate();
   const fullName = `${currentUser?.middleName || ""} ${
     currentUser?.name || ""
@@ -99,6 +102,16 @@ const Header = () => {
                       <span>🖼️</span> <span>Đổi ảnh</span>
                     </Button>
 
+                    {/*Change Password */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      onClick={() => setOpenModalUpdateChangePassword(true)}
+                    >
+                      <span>📝</span> <span>Đổi mật khẩu</span>
+                    </Button>
+
                     {/*Infor */}
                     <Button
                       variant="ghost"
@@ -153,6 +166,11 @@ const Header = () => {
               currentUserAvatar={currentUser.profilePic}
               onClose={() => setOpenModalUpdateAvatar(false)}
               onUpdateSuccess={handleUpdateAvatarSuccess}
+            />
+          )}
+          {openModalUpdateChangePassword && (
+            <UpdatePassword
+              onClose={() => setOpenModalUpdateChangePassword(false)}
             />
           )}
         </>

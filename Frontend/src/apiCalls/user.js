@@ -40,3 +40,17 @@ export const updateAvatar = async (formData) => {
     throw err;
   }
 };
+
+//Cập nhật mật khẩu
+export const changePassword = async (formData) => {
+  try {
+    const response = await axiosInstance.patch(
+      "/api/user/change-password",
+      formData
+    );
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi cập nhật:", err?.message);
+    throw err;
+  }
+};
