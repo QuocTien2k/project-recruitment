@@ -9,6 +9,7 @@ import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
 import UpdatePassword from "@/Modals/UpdatePassword";
 import UpdateInfo from "@/Modals/UpdateInfo";
+import { FiImage, FiLock, FiUser, FiFileText, FiEdit } from "react-icons/fi";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -115,50 +116,55 @@ const Header = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
                       onClick={() => setOpenModalUpdateAvatar(true)}
                     >
-                      <span>🖼️</span> <span>Đổi ảnh</span>
+                      <FiImage className="text-[16px]" />
+                      <span>Đổi ảnh</span>
                     </Button>
 
-                    {/*Change Password */}
+                    {/*Mật khẩu */}
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
                       onClick={() => setOpenModalUpdateChangePassword(true)}
                     >
-                      <span>📝</span> <span>Đổi mật khẩu</span>
+                      <FiLock className="text-[16px]" />
+                      <span>Đổi mật khẩu</span>
                     </Button>
 
-                    {/*Infor */}
+                    {/*Thông tin */}
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
                       onClick={() => setOpenModalUpdateInfo(true)}
                     >
-                      <span>📝</span> <span>Thông tin</span>
+                      <FiUser className="text-[16px]" />
+                      <span>Thông tin</span>
                     </Button>
 
                     {/*My post */}
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
                       onClick={() => {}}
                     >
-                      <span>📄</span> <span>Bài viết của tôi</span>
+                      <FiFileText className="text-[16px]" />
+                      <span>Bài viết của tôi</span>
                     </Button>
 
-                    {/*Contract */}
+                    {/*Bài viết */}
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
+                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
                       onClick={() => {}}
                     >
-                      <span>✍️</span> <span>Tạo hợp đồng</span>
+                      <FiEdit className="text-[16px]" />
+                      <span>Tạo hợp đồng</span>
                     </Button>
                   </div>
 
