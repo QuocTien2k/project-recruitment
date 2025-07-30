@@ -9,7 +9,14 @@ import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
 import UpdatePassword from "@/Modals/UpdatePassword";
 import UpdateInfo from "@/Modals/UpdateInfo";
-import { FiImage, FiLock, FiUser, FiFileText, FiEdit } from "react-icons/fi";
+import {
+  FiImage,
+  FiLock,
+  FiUser,
+  FiFileText,
+  FiEdit,
+  FiList,
+} from "react-icons/fi";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -145,27 +152,42 @@ const Header = () => {
                       <span>Thông tin</span>
                     </Button>
 
-                    {/*My post */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                      onClick={() => {}}
-                    >
-                      <FiFileText className="text-[16px]" />
-                      <span>Bài viết của tôi</span>
-                    </Button>
+                    {currentUser?.role === "user" && (
+                      <>
+                        {/*Create post */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                          onClick={() => {}}
+                        >
+                          <FiFileText className="text-[16px]" />
+                          <span>Tạo bài tuyển dụng</span>
+                        </Button>
 
-                    {/*Bài viết */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                      onClick={() => {}}
-                    >
-                      <FiEdit className="text-[16px]" />
-                      <span>Tạo hợp đồng</span>
-                    </Button>
+                        {/*My post */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                          onClick={() => {}}
+                        >
+                          <FiList className="text-[16px]" />
+                          <span>Bài tuyển dụng của tôi</span>
+                        </Button>
+
+                        {/*Bài viết */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                          onClick={() => {}}
+                        >
+                          <FiEdit className="text-[16px]" />
+                          <span>Tạo hợp đồng</span>
+                        </Button>
+                      </>
+                    )}
                   </div>
 
                   {/*Logout */}
