@@ -1,4 +1,5 @@
 const UserModel = require("../models/User");
+const TeacherModel = require("../models/Teacher");
 const cloudinary = require("../cloudinary");
 const bcrypt = require("bcryptjs");
 
@@ -161,9 +162,92 @@ const changePassword = async (req, res) => {
   }
 };
 
+//cập nhật thông tin
+const updateInfo = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { phone, district, province, workingType, timeType, description } =
+      req.body;
+
+    // 1. Tìm user theo ID
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+
+    // 2. Nếu có đổi phone → kiểm tra trùng
+    if (phone && phone !== user.phone) {
+      const phoneExists = await UserModel.findOne({ phone });
+      if (phoneExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Số điện thoại đã được sử dụng",
+        });
+      }
+      user.phone = phone;
+    }
+
+    // 3. Cập nhật các trường chung (user & teacher)
+    if (district) user.district = district;
+    if (province) user.province = province;
+
+    await user.save();
+
+    // 4. Nếu là teacher → cập nhật bảng TeacherModel
+    if (user.role === "teacher") {
+      const teacher = await TeacherModel.findOne({ userId: user._id });
+      if (!teacher) {
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy hồ sơ giáo viên",
+        });
+      }
+
+      if (workingType) teacher.workingType = workingType;
+      if (timeType) teacher.timeType = timeType;
+      if (description) teacher.description = description;
+
+      await teacher.save();
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Cập nhật thông tin thành công",
+      data: {
+        user: {
+          _id: user._id,
+          middleName: user.middleName,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          district: user.district,
+          province: user.province,
+          role: user.role,
+        },
+        ...(user.role === "teacher" && {
+          teacher: {
+            workingType: teacher.workingType,
+            timeType: teacher.timeType,
+            description: teacher.description,
+          },
+        }),
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Lỗi hệ thống: ${error.message}`,
+    });
+  }
+};
+
 module.exports = {
   getLogged,
   getUserById,
   updateAvatar,
   changePassword,
+  updateInfo,
 };

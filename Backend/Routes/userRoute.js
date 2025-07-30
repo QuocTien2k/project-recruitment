@@ -4,6 +4,7 @@ const {
   getUserById,
   updateAvatar,
   changePassword,
+  updateInfo,
 } = require("../controllers/userController");
 const { protect } = require("../middlewares/authMiddleware");
 const uploadSingleToCloud = require("../utils/uploadSingleToCloud");
@@ -21,5 +22,6 @@ router.patch(
 );
 
 router.patch("/change-password", protect, changePassword);
+router.patch("/update-info", protect, updateInfo);
 
 module.exports = router;
