@@ -54,3 +54,17 @@ export const changePassword = async (formData) => {
     throw err;
   }
 };
+
+//Cập nhật thông tin
+export const updateInfo = async (formData) => {
+  try {
+    const response = await axiosInstance.patch(
+      "/api/user/update-info",
+      formData
+    );
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi cập nhật:", err?.message);
+    throw err;
+  }
+};

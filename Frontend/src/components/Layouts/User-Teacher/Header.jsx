@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
 import UpdatePassword from "@/Modals/UpdatePassword";
+import UpdateInfo from "@/Modals/UpdateInfo";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -19,6 +20,7 @@ const Header = () => {
   const [openModalUpdateAvatar, setOpenModalUpdateAvatar] = useState(false);
   const [openModalUpdateChangePassword, setOpenModalUpdateChangePassword] =
     useState(false);
+  const [openModalUpdateInfo, setOpenModalUpdateInfo] = useState(false);
   const navigate = useNavigate();
   const fullName = `${currentUser?.middleName || ""} ${
     currentUser?.name || ""
@@ -37,6 +39,23 @@ const Header = () => {
       })
     );
     setOpenModalUpdateAvatar(false);
+  };
+
+  // cập nhật thông tin
+  const handleUpdateInfo = (newInfo, newTeacherInfo) => {
+    dispatch(
+      setUser({
+        ...currentUser,
+        ...newInfo, // thông tin cập nhật chung (phone, province, district,...)
+        ...(currentUser.role === "teacher" && {
+          teacher: {
+            ...currentUser.teacher,
+            ...newTeacherInfo, // thông tin riêng của teacher (workingType, timeType, description,...)
+          },
+        }),
+      })
+    );
+    setOpenModalUpdateInfo(false);
   };
 
   const handleLogout = () => {
@@ -117,7 +136,7 @@ const Header = () => {
                       variant="ghost"
                       size="sm"
                       className="flex items-center gap-2 px-4 py-2 w-full text-left hover:bg-gray-100"
-                      onClick={() => {}}
+                      onClick={() => setOpenModalUpdateInfo(true)}
                     >
                       <span>📝</span> <span>Thông tin</span>
                     </Button>
@@ -161,6 +180,7 @@ const Header = () => {
               </div>
             )}
           </div>
+          {/*Modal Update Avatar */}
           {openModalUpdateAvatar && (
             <UpdateAvatar
               currentUserAvatar={currentUser.profilePic}
@@ -168,6 +188,17 @@ const Header = () => {
               onUpdateSuccess={handleUpdateAvatarSuccess}
             />
           )}
+
+          {/*Modal Update Info */}
+          {openModalUpdateInfo && (
+            <UpdateInfo
+              currentUser={currentUser}
+              onClose={() => setOpenModalUpdateInfo(false)}
+              onUpdateSuccess={handleUpdateInfo}
+            />
+          )}
+
+          {/*Modal Update Password */}
           {openModalUpdateChangePassword && (
             <UpdatePassword
               onClose={() => setOpenModalUpdateChangePassword(false)}

@@ -11,7 +11,6 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
 
   const {
     _id,
-    profilePic,
     description,
     experience,
     subject,
@@ -39,7 +38,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
       {/* Header */}
       <div className="flex items-center gap-4">
         <img
-          src={profilePic || avatarDefault}
+          src={userId?.profilePic?.url || avatarDefault}
           alt={fullName}
           className="w-20 h-20 object-cover rounded-full border-2 border-gray-200"
         />
