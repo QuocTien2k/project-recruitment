@@ -54,7 +54,9 @@ const UpdatePassword = ({ onClose }) => {
       const res = await changePassword(formData);
       if (res.success) {
         toast.success(res.message || "Đổi mật khẩu thành công!");
-        onClose();
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       }
     } catch (err) {
       const msg = err.response?.data?.message || "Thao tác thất bại!";

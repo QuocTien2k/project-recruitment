@@ -16,7 +16,7 @@ const Signup = () => {
         </h2>
 
         {/* Cuộn nội dung form bên trong */}
-        <div className="scroll-y-hidden overflow-y-auto max-h-[480px] pr-2">
+        <div className="scroll-y-hidden max-h-[480px] pr-2">
           {isTeacher ? <SignupTeacher /> : <SignupUser />}
         </div>
 

@@ -180,6 +180,7 @@ const Header = () => {
               </div>
             )}
           </div>
+
           {/*Modal Update Avatar */}
           {openModalUpdateAvatar && (
             <UpdateAvatar
