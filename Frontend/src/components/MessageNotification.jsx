@@ -2,6 +2,7 @@ import { ChatContext } from "@/context/ChatContext";
 import { useContext, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { MdBlock } from "react-icons/md";
+import { MessageCircle } from "lucide-react";
 
 const MessageNotification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -52,7 +53,7 @@ const MessageNotification = () => {
         <span
           className={`text-xl ${hasNewMessages ? "animate-pulse-ring" : ""}`}
         >
-          💬
+          <MessageCircle size={20} />
         </span>
         <span
           className={`text-sm ${
