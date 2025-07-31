@@ -66,13 +66,15 @@ const TeacherDetail = () => {
       </Link>
 
       {isTeacherLoading ? (
-        <Loading size="md" />
+        <div className="flex justify-center items-center h-40">
+          <Loading size="md" />
+        </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-6">
           {/* Avatar + Info */}
-          <div className="flex-shrink-0 flex flex-col justify-around items-center">
+          <div className="flex-shrink-0 flex flex-col justify-around items-center gap-y-2 sm:gap-y-4 md:gap-y-6">
             <img
-              src={userId?.profilePic || avatarDefault}
+              src={userId?.profilePic?.url || avatarDefault}
               alt={fullName}
               className="w-32 h-32 object-cover rounded-full border"
             />
@@ -87,16 +89,16 @@ const TeacherDetail = () => {
             <h1 className="text-2xl font-bold">{fullName}</h1>
 
             <p className="flex items-center gap-2 text-sm text-gray-600">
-              <FaEnvelope className="text-gray-400" /> {userId?.email}
+              <FaEnvelope className="text-blue-500" /> {userId?.email}
             </p>
 
             <p className="flex items-center gap-2">
-              <FaUserTie className="text-gray-500" /> Môn dạy:
+              <FaUserTie className="text-indigo-500" /> Môn dạy:
               <span className="font-medium">{subject?.join(", ")}</span>
             </p>
 
             <p className="flex items-center gap-2">
-              <MdWork className="text-gray-500" /> Kinh nghiệm:
+              <MdWork className="text-green-500 text-lg" /> Kinh nghiệm:
               <span className="font-medium">{experience} năm</span>
             </p>
 
@@ -107,11 +109,11 @@ const TeacherDetail = () => {
               </span>
             </p>
 
-            <p className="flex items-center gap-2">
-              <FaMapMarkerAlt className="text-gray-500" />
-              Khu vực:
+            <p className="flex items-start gap-2 text-gray-700">
+              <FaMapMarkerAlt className="text-red-400 flex-shrink-0 mt-1" />
               <span>
-                {userId?.district}, {userId?.province}
+                <span className="font-medium">Khu vực:</span> {userId?.district}
+                , {userId?.province}
               </span>
             </p>
 
