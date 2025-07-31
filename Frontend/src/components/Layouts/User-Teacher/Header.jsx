@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import MessageNotification from "@/components/MessageNotification";
 import { FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@/redux/loadingSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
 import UpdatePassword from "@/Modals/UpdatePassword";
@@ -88,9 +88,11 @@ const Header = () => {
   //console.log("Thông tin: ", currentUser);
 
   return (
-    <header className="w-full bg-white shadow-md px-4 py-3 flex justify-between items-center relative z-20">
+    <header className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative z-20 max-h-[72px]">
       {/* Logo trái */}
-      <div className="text-xl font-bold text-green-600">LOGO</div>
+      <Link to="/" className="flex items-center">
+        <img src="/logo.jpg" alt="Logo" className="w-28 h-18 object-contain" />
+      </Link>
 
       {/* Phần phải */}
       {currentUser ? (

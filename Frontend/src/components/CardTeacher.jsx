@@ -11,7 +11,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
 
   const {
     _id,
-    description,
+    //description,
     experience,
     subject,
     timeType,
@@ -34,36 +34,52 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
   //console.log("Giáo viên: ", teacher);
 
   return (
-    <div className="border rounded-xl shadow-md bg-white p-5 hover:shadow-lg transition duration-300 space-y-5">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <img
-          src={userId?.profilePic?.url || avatarDefault}
-          alt={fullName}
-          className="w-20 h-20 object-cover rounded-full border-2 border-gray-200"
-        />
-        <div className="flex-1">
-          <h2 className="text-xl font-semibold text-gray-800">{fullName}</h2>
-          <p className="text-sm text-gray-600 flex items-center gap-2 mt-1">
-            <FaEnvelope className="text-blue-500" />
-            <span className="truncate">{userId.email}</span>
-          </p>
+    <div className="max-w-[380px] relative border rounded-xl shadow-md bg-white p-5 hover:shadow-lg transition duration-300 space-y-5 flex flex-col items-center text-center">
+      {/* 2 nút hành động của Admin ở góc phải */}
+      {showActions && currentUser?.role === "admin" && (
+        <div className="absolute top-4 left-4 right-4 flex justify-between">
+          <Button variant="default" size="sm" onClick={handleToggleActive}>
+            {userId.isActive ? "Khóa" : "Mở khóa"}
+          </Button>
+          <Button variant="danger" size="sm" onClick={handleDelete}>
+            Xóa
+          </Button>
         </div>
+      )}
+
+      {/* Avatar */}
+      <img
+        src={userId?.profilePic?.url || avatarDefault}
+        alt={fullName}
+        className="w-24 h-24 object-cover rounded-full border-2 border-gray-200"
+      />
+
+      {/* Thông tin cơ bản */}
+      <div>
+        <h2 className="text-xl font-semibold text-gray-800">{fullName}</h2>
+        <p className="text-sm text-gray-600 mt-1 flex items-center justify-center gap-2">
+          <FaEnvelope className="text-blue-500" />
+          <span className="truncate">{userId.email}</span>
+        </p>
       </div>
 
       {/* Thông tin chi tiết */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm text-gray-700">
-        <p className="flex items-center gap-2">
-          <MdWork className="text-green-500" />
-          <span>
-            Kinh nghiệm: <strong>{experience} năm</strong>
+      <div className="flex flex-col gap-3 text-md text-gray-700 w-full">
+        <p className="flex items-center gap-2 justify-center sm:justify-start">
+          <MdWork className="text-green-500 text-lg" />
+          <span className="text-sm text-gray-700">
+            Kinh nghiệm:{" "}
+            <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
+              {experience} năm
+            </strong>
           </span>
         </p>
-        <p className="flex items-center gap-2">
+
+        <p className="flex items-center gap-2 justify-center sm:justify-start">
           <FaUserTie className="text-indigo-500" />
           <span>Môn dạy: {subject?.join(", ")}</span>
         </p>
-        <p className="flex items-center gap-2 col-span-1 sm:col-span-2">
+        <p className="flex items-center gap-2 col-span-full justify-center sm:justify-start">
           <span className="text-yellow-600">🕒</span>
           <span>
             Hình thức làm việc:{" "}
@@ -72,22 +88,17 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
             </i>
           </span>
         </p>
-        <p className="flex items-center gap-2 col-span-1 sm:col-span-2">
-          <FaMapMarkerAlt className="text-red-400" />
-          <span>
+        <p className="flex items-center gap-2 col-span-full justify-center sm:justify-start overflow-hidden">
+          <FaMapMarkerAlt className="text-red-400 flex-shrink-0" />
+          <span className="truncate whitespace-nowrap">
             Khu vực: {userId.district}, {userId.province}
           </span>
         </p>
-        {description && (
-          <p className="col-span-full text-gray-600 text-sm line-clamp-2 italic">
-            {description}
-          </p>
-        )}
       </div>
 
       {/* Bằng cấp */}
       {showDegree && teacher?.degreeImages?.length > 0 && (
-        <div className="space-y-2">
+        <div className="w-full text-left space-y-2">
           <p className="text-sm font-semibold text-gray-800">🎓 Bằng cấp</p>
           <div className="flex flex-wrap gap-3">
             {teacher.degreeImages.map((img, index) => (
@@ -102,21 +113,9 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
         </div>
       )}
 
-      {/* Hành động cho admin */}
-      {showActions && currentUser?.role === "admin" && (
-        <div className="flex gap-3">
-          <Button variant="default" size="sm" onClick={handleToggleActive}>
-            {userId.isActive ? "Khóa" : "Mở khóa"}
-          </Button>
-          <Button variant="danger" size="sm" onClick={handleDelete}>
-            Xóa
-          </Button>
-        </div>
-      )}
-
-      {/*Nút xem chi tiết */}
+      {/* Nút xem chi tiết */}
       {currentUser?.role !== "admin" && (
-        <div className="pt-2 mt-3">
+        <div className="pt-2">
           <Link
             to={`/teachers/${_id}`}
             className="inline-block text-blue-600 hover:text-blue-800 text-sm font-medium transition"
