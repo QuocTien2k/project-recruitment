@@ -2,7 +2,7 @@ const PostModel = require("../models/Post");
 const UserModel = require("../models/User");
 
 //tạo bài tuyển dụng
-const createPost = async () => {
+const createPost = async (req, res) => {
   try {
     const {
       title,

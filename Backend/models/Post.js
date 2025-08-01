@@ -4,7 +4,7 @@ const slugify = require("slugify");
 const postSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, unique: true },
     description: { type: String, required: true },
     district: { type: String, required: true },
     province: { type: String, required: true },
@@ -41,7 +41,7 @@ postSchema.pre("save", async function (next) {
     let counter = 1;
 
     // Kiểm tra trùng slug trong DB
-    while (await PostModel.exists({ slug })) {
+    while (await this.constructor.exists({ slug })) {
       slug = `${baseSlug}-${counter++}`;
     }
 
