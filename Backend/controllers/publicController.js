@@ -2,6 +2,38 @@ const PostModel = require("../models/Post");
 const ViewerModel = require("../models/Viewer");
 const TeacherModel = require("../models/Teacher");
 
+//lấy bài viết đã duyệt
+const getAllApprovedPosts = async (req, res) => {
+  try {
+    const posts = await PostModel.find({ status: "approved" })
+      .sort({ createdAt: -1 })
+      .populate("createdBy", "middleName name");
+
+    const formattedPosts = posts.map((post) => {
+      const { _id } = post.createdBy;
+      const fullName = `${post.createdBy.middleName} ${post.createdBy.name}`;
+      return {
+        ...post._doc,
+        createdBy: {
+          _id,
+          fullName,
+        },
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách bài viết đã duyệt thành công.",
+      data: formattedPosts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 //lấy bài viết tạo bởi user và thông tin user
 const getDetailPost = async (req, res) => {
   try {
@@ -165,6 +197,7 @@ const countViews = async (req, res) => {
 };
 
 module.exports = {
+  getAllApprovedPosts,
   getDetailPost,
   getPostBySlug,
   getPublicTeachers,
