@@ -21,3 +21,14 @@ export const getTeacherDetail = async (teacherId) => {
     throw err;
   }
 };
+
+export const getApprovedPost = async () => {
+  try {
+    const res = await axiosInstance.get("/api/public/list-posts/");
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi khi dữ liệu:", err?.message);
+    throw err;
+  }
+};
