@@ -92,8 +92,8 @@ const Header = () => {
   return (
     <header className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative z-20 max-h-[72px]">
       {/* Logo trái */}
-      <Link to="/" className="flex items-center">
-        <img src="/logo.jpg" alt="Logo" className="w-28 h-18 object-contain" />
+      <Link to="/" className="flex items-center p-2">
+        <img src="/logo.png" alt="Logo" className="w-28 h-17 object-contain" />
       </Link>
 
       {/* Phần phải */}
