@@ -111,7 +111,7 @@ const PostDetail = () => {
                 </strong>
               </p>
 
-              <div className="pt-4">
+              <div className="pt-2 scroll-y-hidden max-h-[60px]">
                 <p className="font-semibold text-gray-700">Mô tả:</p>
                 <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
                   {post?.description}

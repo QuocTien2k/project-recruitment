@@ -35,7 +35,7 @@ const Post = () => {
     fetchPost();
   }, []);
 
-  console.log(listPost);
+  //console.log(listPost);
 
   return (
     <>
