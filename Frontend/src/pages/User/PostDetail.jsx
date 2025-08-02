@@ -1,0 +1,128 @@
+import { getPostDetail } from "@/apiCalls/public";
+import Button from "@/components/Button";
+import Loading from "@/components/Loading";
+import { useChatContext } from "@/context/ChatContext";
+import { setGlobalLoading } from "@/redux/loadingSlice";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { FaEnvelope } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+
+const avatarDefault =
+  "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
+
+const PostDetail = () => {
+  const { slug } = useParams();
+  const [post, setPost] = useState(null);
+  const dispatch = useDispatch();
+  const isGlobalLoading = useSelector((state) => state.loading.global);
+  const currentUser = useSelector((state) => state.currentUser.user);
+  const { openChat } = useChatContext();
+
+  const fetchPost = async () => {
+    dispatch(setGlobalLoading(true));
+    try {
+      const res = await getPostDetail(slug);
+      if (res.success) {
+        setPost(res.data);
+      }
+    } catch (err) {
+      console.error("Lỗi khi lấy chi tiết bài viết:", err);
+    } finally {
+      dispatch(setGlobalLoading(false));
+    }
+  };
+
+  useEffect(() => {
+    fetchPost();
+  }, []);
+
+  const authorId = post?.createdBy?._id;
+
+  const handleStartChat = async () => {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập để trò chuyện!");
+      return;
+    }
+
+    if (currentUser?._id === authorId) {
+      toast.error("Không thể trò chuyện với chính mình!");
+      return;
+    }
+
+    await openChat(authorId);
+  };
+
+  //console.log(post?.createdBy?._id);
+
+  return (
+    <>
+      {isGlobalLoading ? (
+        <Loading size="md" />
+      ) : (
+        <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
+          <Link
+            to="/"
+            className="text-sm text-blue-600 hover:underline block mb-4"
+          >
+            ← Quay lại trang chủ
+          </Link>
+
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Bên trái: avatar + chat */}
+            <div className="flex-shrink-0 flex flex-col justify-around items-center gap-y-4">
+              <img
+                src={post?.createdBy?.profilePic?.url || avatarDefault}
+                alt={post?.createdBy?.fullName}
+                className="w-32 h-32 object-cover rounded-full border"
+              />
+              <Button size="sm" variant="default" onClick={handleStartChat}>
+                💬 Liên hệ
+              </Button>
+            </div>
+
+            {/* Bên phải: nội dung chi tiết */}
+            <div className="flex-1 space-y-2 text-gray-800">
+              <h1 className="text-2xl font-bold">{post?.title}</h1>
+
+              <p className="text-sm italic text-gray-600">
+                Người đăng: {post?.createdBy?.fullName}
+              </p>
+
+              <p className="flex items-center gap-2 text-sm text-gray-600">
+                <FaEnvelope className="text-blue-500" />{" "}
+                {post?.createdBy?.email}
+              </p>
+
+              <p className="text-gray-600">
+                <strong>Hình thức:</strong> {post?.workingType} /{" "}
+                {post?.timeType}
+              </p>
+
+              <p className="text-gray-600">
+                <strong>Khu vực:</strong> {post?.district}, {post?.province}
+              </p>
+
+              <p className="text-gray-600">
+                <strong>Mức lương:</strong>{" "}
+                <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
+                  {post?.salary}
+                </strong>
+              </p>
+
+              <div className="pt-4">
+                <p className="font-semibold text-gray-700">Mô tả:</p>
+                <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
+                  {post?.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default PostDetail;

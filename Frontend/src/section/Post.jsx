@@ -5,9 +5,11 @@ import { setGlobalLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Post = () => {
   const [listPost, setListPost] = useState([]);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -43,7 +45,11 @@ const Post = () => {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {listPost.map((post) => (
-              <PostCard post={post} key={post._id} />
+              <PostCard
+                post={post}
+                key={post._id}
+                onViewDetail={() => navigate(`/post/${post.slug}`)}
+              />
             ))}
           </div>
         </>

@@ -14,6 +14,7 @@ import Signup from "@pages-auth/Signup";
 import DynamicTitle from "@context/DynamicTitle";
 import TeacherDetail from "@pages-user/TeacherDetail";
 import ChatArea from "@components/ChatArea";
+import PostDetail from "@pages-user/PostDetail";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/teachers/:teacherId" element={<TeacherDetail />} />
+            <Route path="/post/:slug" element={<PostDetail />} />
           </Route>
 
           <Route path="login" element={<Login />} />

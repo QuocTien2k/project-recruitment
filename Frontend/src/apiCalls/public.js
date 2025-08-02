@@ -32,3 +32,14 @@ export const getApprovedPost = async () => {
     throw err;
   }
 };
+
+export const getPostDetail = async (slug) => {
+  try {
+    const res = await axiosInstance.get(`/api/public/detail-by-slug/${slug}`);
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi khi dữ liệu: ", err?.message);
+    throw err;
+  }
+};
