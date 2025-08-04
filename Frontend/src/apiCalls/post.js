@@ -9,3 +9,13 @@ export const createPost = async (formData) => {
     throw err;
   }
 };
+
+export const getMyPosts = async () => {
+  try {
+    const res = await axiosInstance.get("/api/post/my-posts");
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};

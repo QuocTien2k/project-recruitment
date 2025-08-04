@@ -26,14 +26,15 @@ function App() {
           {/* Layout User dùng chung cho user + teacher */}
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/teachers/:teacherId" element={<TeacherDetail />} />
-            <Route path="/post/:slug" element={<PostDetail />} />
+            <Route path="/giao-vien/:teacherId" element={<TeacherDetail />} />
+            <Route path="/bai-viet/:slug" element={<PostDetail />} />
+            <Route path="/bai-viet-cua-toi" element={<Home />} />
           </Route>
 
-          <Route path="login" element={<Login />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="signup" element={<Signup />} />
+          <Route path="dang-nhap" element={<Login />} />
+          <Route path="quen-mat-khau" element={<ForgotPassword />} />
+          <Route path="khoi-phuc-mat-khau" element={<ResetPassword />} />
+          <Route path="dang-ky" element={<Signup />} />
 
           {/* Layout Admin riêng biệt */}
           <Route

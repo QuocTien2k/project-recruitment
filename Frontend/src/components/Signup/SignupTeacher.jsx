@@ -186,7 +186,7 @@ const SignupTeacher = () => {
         setErrors({});
 
         setTimeout(() => {
-          navigate("/login");
+          navigate("/dang-nhap");
         }, 2000);
       }
     } catch (err) {

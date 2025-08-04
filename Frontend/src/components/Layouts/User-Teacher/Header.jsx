@@ -245,8 +245,8 @@ const Header = () => {
         </>
       ) : (
         <div className="flex gap-2">
-          <Button onClick={() => navigate("/login")}>Đăng nhập</Button>
-          <Button onClick={() => navigate("/signup")}>Đăng ký</Button>
+          <Button onClick={() => navigate("/dang-nhap")}>Đăng nhập</Button>
+          <Button onClick={() => navigate("/dang-ky")}>Đăng ký</Button>
         </div>
       )}
     </header>

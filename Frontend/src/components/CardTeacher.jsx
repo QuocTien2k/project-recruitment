@@ -117,7 +117,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
       {currentUser?.role !== "admin" && (
         <div className="pt-2">
           <Link
-            to={`/teachers/${_id}`}
+            to={`/giao-vien/${_id}`}
             className="inline-block text-blue-600 hover:text-blue-800 text-sm font-medium transition"
           >
             👉 Xem chi tiết

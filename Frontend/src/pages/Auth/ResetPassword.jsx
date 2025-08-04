@@ -50,7 +50,7 @@ const ResetPassword = () => {
       if (res.success) {
         toast.success(res.message || "Đặt lại mật khẩu thành công");
         setTimeout(() => {
-          navigate("/login");
+          navigate("/dang-nhap");
         }, 2000);
       }
     } catch (err) {

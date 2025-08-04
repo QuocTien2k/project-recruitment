@@ -48,7 +48,7 @@ const Post = () => {
               <PostCard
                 post={post}
                 key={post._id}
-                onViewDetail={() => navigate(`/post/${post.slug}`)}
+                onViewDetail={() => navigate(`/bai-viet/${post.slug}`)}
               />
             ))}
           </div>
