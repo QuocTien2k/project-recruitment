@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import MessageNotification from "@/components/MessageNotification";
 import { FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@/redux/loadingSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
 import UpdatePassword from "@/Modals/UpdatePassword";
@@ -26,6 +26,7 @@ const Header = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const dispatch = useDispatch();
   const [openDropdown, setOpenDropdown] = useState(false);
+  const location = useLocation(); // theo dõi route
   const [openModalUpdateAvatar, setOpenModalUpdateAvatar] = useState(false);
   const [openModalUpdateChangePassword, setOpenModalUpdateChangePassword] =
     useState(false);
@@ -39,6 +40,11 @@ const Header = () => {
   const handleToggleDropdown = () => {
     setOpenDropdown((prev) => !prev);
   };
+
+  // Tự động đóng dropdown khi URL đổi
+  useEffect(() => {
+    setOpenDropdown(false);
+  }, [location.pathname]);
 
   //cập nhật avatar
   const handleUpdateAvatarSuccess = (url, public_id) => {
