@@ -26,6 +26,7 @@ const Header = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const dispatch = useDispatch();
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const location = useLocation(); // theo dõi route
   const [openModalUpdateAvatar, setOpenModalUpdateAvatar] = useState(false);
   const [openModalUpdateChangePassword, setOpenModalUpdateChangePassword] =
@@ -37,14 +38,22 @@ const Header = () => {
     currentUser?.name || ""
   }`.trim();
 
-  const handleToggleDropdown = () => {
-    setOpenDropdown((prev) => !prev);
-  };
-
   // Tự động đóng dropdown khi URL đổi
   useEffect(() => {
     setOpenDropdown(false);
   }, [location.pathname]);
+
+  // Bắt đầu hiện dropdown
+  const handleOpenDropdown = () => {
+    setShowDropdown(true);
+    setTimeout(() => setOpenDropdown(true), 10); // để đảm bảo class animation chạy
+  };
+
+  // Đóng dropdown
+  const handleCloseDropdown = () => {
+    setOpenDropdown(false);
+    setTimeout(() => setShowDropdown(false), 180); // chờ fade-out xong
+  };
 
   //cập nhật avatar
   const handleUpdateAvatarSuccess = (url, public_id) => {
@@ -112,7 +121,7 @@ const Header = () => {
             {/* Avatar + Name + Dropdown */}
             <div
               className="flex items-center gap-2 cursor-pointer"
-              onClick={handleToggleDropdown}
+              onClick={openDropdown ? handleCloseDropdown : handleOpenDropdown}
             >
               <img
                 src={currentUser.profilePic?.url || avatarDefault}
@@ -125,8 +134,12 @@ const Header = () => {
             </div>
 
             {/* Dropdown */}
-            {openDropdown && (
-              <div className="absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg animate-fade-down overflow-hidden z-20">
+            {showDropdown && (
+              <div
+                className={`absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-20
+      ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
+    `}
+              >
                 <div className="py-2">
                   <div className="flex flex-col px-2">
                     {/*Avatar */}

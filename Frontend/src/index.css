@@ -75,7 +75,7 @@
     animation: spin 0.8s linear infinite;
 }
 
-/* fade down */
+/* fadeDown*/
 @keyframes fadeDown {
     0% {
         opacity: 0;
@@ -88,9 +88,27 @@
     }
 }
 
-.animate-fade-down {
-    animation: fadeDown 0.2s ease-out;
+/* fadeUp*/
+@keyframes fadeUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
+
+.animate-fade-in {
+    animation: fadeDown 0.3s ease-out forwards;
+}
+
+.animate-fade-out {
+    animation: fadeUp 0.2s ease-in forwards;
+}
+
 
 /* ring */
 @keyframes pulseRing {
