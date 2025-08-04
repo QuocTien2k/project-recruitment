@@ -15,6 +15,7 @@ import DynamicTitle from "@context/DynamicTitle";
 import TeacherDetail from "@pages-user/TeacherDetail";
 import ChatArea from "@components/ChatArea";
 import PostDetail from "@pages-user/PostDetail";
+import MyPost from "@pages-user/MyPost";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/giao-vien/:teacherId" element={<TeacherDetail />} />
             <Route path="/bai-viet/:slug" element={<PostDetail />} />
-            <Route path="/bai-viet-cua-toi" element={<Home />} />
+            <Route path="/bai-viet-cua-toi" element={<MyPost />} />
           </Route>
 
           <Route path="dang-nhap" element={<Login />} />
