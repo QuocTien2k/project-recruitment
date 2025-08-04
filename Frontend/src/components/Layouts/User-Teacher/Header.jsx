@@ -174,7 +174,7 @@ const Header = () => {
                           variant="ghost"
                           size="sm"
                           className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                          onClick={() => {}}
+                          onClick={() => navigate("/bai-viet-cua-toi")}
                         >
                           <FiList className="text-[16px]" />
                           <span>Bài tuyển dụng của tôi</span>
