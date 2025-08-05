@@ -31,6 +31,15 @@ const MyPost = () => {
   useEffect(() => {
     fetchMyPost();
   }, []);
+
+  const handleUpdatePost = (updatedPost) => {
+    setMyPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      )
+    );
+  };
+
   return (
     <>
       {isGlobalLoading ? (
@@ -44,6 +53,7 @@ const MyPost = () => {
                 key={post._id}
                 showOwnerActions={true}
                 showFullDescription={true}
+                handleUpdatePost={handleUpdatePost}
               />
             ))}
           </div>

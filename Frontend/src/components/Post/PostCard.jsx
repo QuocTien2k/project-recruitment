@@ -16,12 +16,11 @@ import PostActionAdmin from "./PostActionAdmin";
 const PostCard = ({
   post,
   showOwnerActions = false,
-  onEdit,
-  onDelete,
   onApprove,
   onReject,
   onViewDetail,
   showFullDescription = false,
+  handleUpdatePost,
 }) => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const isAdmin = currentUser?.role === "admin";
@@ -32,13 +31,13 @@ const PostCard = ({
       {/* Post actions (User hoặc Admin) */}
       <div className="flex justify-end mb-2">
         {isPostOwner && showOwnerActions && (
-          <PostActionUser onEdit={onEdit} onDelete={onDelete} />
+          <PostActionUser post={post} handleUpdatePost={handleUpdatePost} />
         )}
         {isAdmin && (
           <PostActionAdmin
             onApprove={onApprove}
             onReject={onReject}
-            onDelete={onDelete}
+            // onDelete={onDelete}
           />
         )}
       </div>

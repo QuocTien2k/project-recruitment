@@ -19,3 +19,17 @@ export const getMyPosts = async () => {
     throw err;
   }
 };
+
+export const updatePost = async (formData) => {
+  try {
+    const { postId, ...data } = formData;
+    const res = await axiosInstance.patch(
+      `/api/post/update-post/${postId}`,
+      data
+    );
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
