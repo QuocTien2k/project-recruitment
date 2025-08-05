@@ -46,7 +46,10 @@ const Header = () => {
   // Bắt đầu hiện dropdown
   const handleOpenDropdown = () => {
     setShowDropdown(true);
-    setTimeout(() => setOpenDropdown(true), 10); // để đảm bảo class animation chạy
+    // setTimeout(() => setOpenDropdown(true), 10);
+    requestAnimationFrame(() => {
+      setOpenDropdown(true);
+    });
   };
 
   // Đóng dropdown
