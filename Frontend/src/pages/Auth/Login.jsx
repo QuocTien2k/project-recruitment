@@ -127,13 +127,13 @@ const Login = () => {
           <div className="text-center mt-4 space-y-2 text-sm">
             <p>
               Bạn chưa có tài khoản?{" "}
-              <Link to="/signup" className="text-blue-600 hover:underline">
+              <Link to="/dang-ky" className="text-blue-600 hover:underline">
                 Đăng ký
               </Link>
             </p>
             <p>
               <Link
-                to="/forgot-password"
+                to="/quen-mat-khau"
                 className="text-blue-600 hover:underline"
               >
                 Quên mật khẩu?

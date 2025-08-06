@@ -94,7 +94,7 @@ const ForgotPassword = () => {
 
           <div className="text-center mt-4 space-y-2 text-sm">
             <p>
-              <Link to="/login" className="text-blue-600 hover:underline">
+              <Link to="/dang-nhap" className="text-blue-600 hover:underline">
                 Quay lại
               </Link>
             </p>

@@ -30,7 +30,7 @@ const Signup = () => {
           </div>
 
           <Link
-            to="/login"
+            to="/dang-nhap"
             className="text-sm text-gray-600 hover:text-blue-600 hover:underline transition duration-200"
           >
             Đăng nhập
