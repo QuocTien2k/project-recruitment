@@ -33,3 +33,13 @@ export const updatePost = async (formData) => {
     throw err;
   }
 };
+
+export const deletePost = async (postId) => {
+  try {
+    const res = await axiosInstance.delete(`/api/post/delete-post/${postId}`);
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};

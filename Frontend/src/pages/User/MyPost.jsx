@@ -33,11 +33,17 @@ const MyPost = () => {
   }, []);
 
   const handleUpdatePost = (updatedPost) => {
-    setMyPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post._id === updatedPost._id ? updatedPost : post
-      )
-    );
+    if (updatedPost.deleted) {
+      setMyPosts((prevPosts) =>
+        prevPosts.filter((post) => post._id !== updatedPost._id)
+      );
+    } else {
+      setMyPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === updatedPost._id ? updatedPost : post
+        )
+      );
+    }
   };
 
   return (
