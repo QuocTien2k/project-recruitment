@@ -1,0 +1,108 @@
+import Button from "@/components/Button";
+import { clearUser } from "@/redux/currentUserSlice";
+import { setGlobalLoading } from "@/redux/loadingSlice";
+import React, { useEffect, useState } from "react";
+import { FiPower } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { HiMenuAlt2, HiOutlineX } from "react-icons/hi";
+
+const avatarDefault =
+  "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
+
+const Navbar = () => {
+  const currentUser = useSelector((state) => state.currentUser.user);
+  const dispatch = useDispatch();
+  //const isGlobalLoading = useSelector((state) => state.loading.global);
+  const fullName = `${currentUser?.middleName || ""} ${
+    currentUser?.name || ""
+  }`.trim();
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const location = useLocation(); // theo dõi route
+  const navigate = useNavigate();
+
+  // Tự động đóng dropdown khi URL đổi
+  useEffect(() => {
+    setOpenDropdown(false);
+  }, [location.pathname]);
+
+  // Bắt đầu hiện dropdown
+  const handleOpenDropdown = () => {
+    setShowDropdown(true);
+    // setTimeout(() => setOpenDropdown(true), 10);
+    requestAnimationFrame(() => {
+      setOpenDropdown(true);
+    });
+  };
+
+  // Đóng dropdown
+  const handleCloseDropdown = () => {
+    setOpenDropdown(false);
+    setTimeout(() => setShowDropdown(false), 180); // chờ fade-out xong
+  };
+
+  const handleLogout = () => {
+    dispatch(setGlobalLoading(true));
+
+    setTimeout(() => {
+      // 1. Xoá thông tin user khỏi Redux và localStorage
+      dispatch(clearUser());
+      localStorage.removeItem("token");
+
+      // 2. Tắt loading
+      dispatch(setGlobalLoading(false));
+
+      // 3. Chuyển hướng
+      navigate("/dang-nhap");
+    }, 1500);
+  };
+
+  return (
+    <header className="h-16 px-4 flex items-center justify-between border-b bg-white shadow-sm">
+      {/* Khoảng trống thay vì logo (vì logo chuyển sang sidebar) */}
+      <div className="flex-1"></div>
+
+      <div
+        className="relative flex items-center gap-3 cursor-pointer group"
+        onClick={openDropdown ? handleCloseDropdown : handleOpenDropdown}
+      >
+        <img
+          src={avatarDefault}
+          alt="Avatar"
+          className="w-10 h-10 rounded-full object-cover border border-gray-300 group-hover:border-green-500 transition"
+        />
+        <span className="max-w-[120px] truncate font-medium text-sm hidden sm:inline-block text-gray-800">
+          Xin chào, {fullName}
+        </span>
+      </div>
+
+      {/* Dropdown */}
+      {showDropdown && (
+        <div
+          className={`
+      absolute top-16 right-4 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-30
+      transition-all duration-200 ease-out
+      ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
+    `}
+        >
+          <div className="flex justify-center px-4 py-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2 w-full text-left text-red-500 hover:bg-red-50 transition"
+              onClick={handleLogout}
+            >
+              <FiPower className="text-lg" />
+              <span>Đăng xuất</span>
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Phần còn lại của Navbar */}
+    </header>
+  );
+};
+
+export default Navbar;

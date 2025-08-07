@@ -1,7 +1,61 @@
-import React from "react";
+import { getLogged } from "@/apiCalls/user";
+import Navbar from "@/components/Layouts/Admin/Navbar";
+import Sidebar from "@/components/Layouts/Admin/Sidebar";
+import { setUser } from "@/redux/currentUserSlice";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const AdminLayout = () => {
-  return <div>AdminLayout</div>;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setTimeout(() => {
+        navigate("/dang-nhap");
+      }, 2000);
+      toast.error("Vui lòng đăng nhập!");
+    }
+
+    const fetchUser = async () => {
+      try {
+        const res = await getLogged(); // có token gọi API
+        if (res?.success) {
+          //console.log(res.data);
+          dispatch(setUser(res.data)); // lưu thông tin user hiện tại vào kho
+        } else {
+          localStorage.removeItem("token");
+        }
+      } catch (error) {
+        console.log("Token không hợp lệ hoặc hết hạn:", error.message);
+        localStorage.removeItem("token");
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  return (
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+      />
+
+      {/* Main content */}
+      <div className="flex flex-col flex-1">
+        <Navbar />
+        <main className="flex-1 scroll-y-hidden p-4">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
 };
 
 export default AdminLayout;
