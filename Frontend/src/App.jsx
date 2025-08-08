@@ -16,6 +16,12 @@ import TeacherDetail from "@pages-user/TeacherDetail";
 import ChatArea from "@components/ChatArea";
 import PostDetail from "@pages-user/PostDetail";
 import MyPost from "@pages-user/MyPost";
+import ActiveUsers from "@pages-admin/users/ActiveUsers";
+import BannedUsers from "@pages-admin/users/BannedUsers";
+import ActiveTeachers from "@pages-admin/teachers/ActiveTeachers";
+import BannedTeachers from "@pages-admin/teachers/BannedTeachers";
+import PendingPosts from "@pages-admin/posts/PendingPosts";
+import ApprovedPosts from "@pages-admin/posts/ApprovedPosts";
 
 function App() {
   return (
@@ -44,6 +50,18 @@ function App() {
           >
             <Route element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+
+              {/* Users */}
+              <Route path="tai-khoan/hoat-dong" element={<ActiveUsers />} />
+              <Route path="tai-khoan/bi-khoa" element={<BannedUsers />} />
+
+              {/* Teachers */}
+              <Route path="giao-vien/hoat-dong" element={<ActiveTeachers />} />
+              <Route path="giao-vien/bi-khoa" element={<BannedTeachers />} />
+
+              {/* Posts */}
+              <Route path="bai-viet/cho-duyet" element={<PendingPosts />} />
+              <Route path="bai-viet/da-duyet" element={<ApprovedPosts />} />
             </Route>
           </Route>
 
