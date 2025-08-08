@@ -5,12 +5,17 @@ import React, { useEffect, useState } from "react";
 import { FiPower } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { HiMenuAlt2, HiOutlineX } from "react-icons/hi";
+import {
+  HiChevronLeft,
+  HiChevronRight,
+  HiMenuAlt2,
+  HiOutlineX,
+} from "react-icons/hi";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
 
-const Navbar = () => {
+const Navbar = ({ isOpen, toggleSidebar }) => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const dispatch = useDispatch();
   //const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -59,8 +64,19 @@ const Navbar = () => {
   };
 
   return (
-    <header className="h-16 px-4 flex items-center justify-between border-b bg-white shadow-sm">
-      {/* Khoảng trống thay vì logo (vì logo chuyển sang sidebar) */}
+    <header className="h-16 relative px-4 flex items-center justify-between border-b bg-white shadow-sm">
+      {/* Nút toggle - nằm trong Sidebar */}
+      <button
+        onClick={toggleSidebar}
+        className="bg-slate-900 text-white cursor-pointer absolute top-3 -left-5 translate-x-1/4 z-20 py-1 pl-2 pr-1 border-l-0 rounded-t-full rounded-b-full rounded-r-full border-gray-400 transition"
+      >
+        {isOpen ? (
+          <HiChevronLeft className="text-xl" />
+        ) : (
+          <HiChevronRight className="text-xl" />
+        )}
+      </button>
+
       <div className="flex-1"></div>
 
       <div

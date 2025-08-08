@@ -42,14 +42,14 @@ const AdminLayout = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
-      <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
-      />
+      <Sidebar isOpen={isSidebarOpen} />
 
       {/* Main content */}
       <div className="flex flex-col flex-1">
-        <Navbar />
+        <Navbar
+          isOpen={isSidebarOpen}
+          toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+        />
         <main className="flex-1 scroll-y-hidden p-4">
           <Outlet />
         </main>
