@@ -117,8 +117,9 @@ const CreatePost = ({ onClose }) => {
     try {
       const res = await createPost(submitData);
       if (res.success) {
-        toast.success(res.message);
-        setTimeout(() => onClose(), 2000); // đóng modal
+        toast.success("Vui lòng vào bài viết của tôi để xem");
+        toast.success("Tạo bài viết thành công!");
+        setTimeout(() => onClose(), 3000); // đóng modal
       }
     } catch (err) {
       console.error("Lỗi tạo bài viết:", err);
