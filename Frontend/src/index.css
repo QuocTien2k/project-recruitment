@@ -17,6 +17,7 @@
         background-color: var(--color-bg);
         color: var(--color-text);
         scroll-behavior: smooth;
+        overflow-y: scroll;
     }
 }
 
@@ -157,6 +158,7 @@
     animation: shine 2s infinite linear;
 }
 
+/* ping */
 .ping-effect {
     position: relative;
     overflow: visible;

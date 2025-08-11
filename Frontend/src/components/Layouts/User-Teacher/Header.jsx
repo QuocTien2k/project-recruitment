@@ -108,7 +108,7 @@ const Header = () => {
   //console.log("Thông tin: ", currentUser);
 
   return (
-    <header className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative z-20 max-h-[72px]">
+    <header className="fixed top-0 left-0 w-full bg-white shadow-md px-6 py-4 flex justify-between items-center z-20 max-h-[72px]">
       {/* Logo trái */}
       <Link to="/" className="flex items-center p-2">
         <img src="/logo.png" alt="Logo" className="w-28 h-17 object-contain" />
@@ -139,9 +139,10 @@ const Header = () => {
             {/* Dropdown */}
             {showDropdown && (
               <div
-                className={`absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-20
-      ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
-    `}
+                className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-50
+    ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
+  `}
+                style={{ top: "100%" }}
               >
                 <div className="py-2">
                   <div className="flex flex-col px-2">
