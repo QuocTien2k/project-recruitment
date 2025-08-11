@@ -22,6 +22,7 @@ import ActiveTeachers from "@pages-admin/teachers/ActiveTeachers";
 import BannedTeachers from "@pages-admin/teachers/BannedTeachers";
 import PendingPosts from "@pages-admin/posts/PendingPosts";
 import ApprovedPosts from "@pages-admin/posts/ApprovedPosts";
+import ContactAdminButton from "@components/ContactAdmin";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatArea />
+        <ContactAdminButton />
       </Router>
     </>
   );
