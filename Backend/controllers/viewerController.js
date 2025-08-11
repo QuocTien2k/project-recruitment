@@ -48,6 +48,27 @@ const recordView = async (req, res) => {
   }
 };
 
+// Lấy tổng lượt xem của một bài viết
+const getPostViews = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    // Đếm số lượt xem dựa trên postId
+    const count = await ViewerModel.countDocuments({ postId });
+
+    res.status(200).json({
+      success: true,
+      data: { totalViews: count },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   recordView,
+  getPostViews,
 };
