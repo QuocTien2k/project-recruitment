@@ -2,7 +2,7 @@ const PostModel = require("../models/Post");
 const ViewerModel = require("../models/Viewer");
 
 //ghi nhận lượt xem
-const view = async (req, res) => {
+const recordView = async (req, res) => {
   try {
     const { postId } = req.params;
     const userId = req.user.userId;
@@ -49,5 +49,5 @@ const view = async (req, res) => {
 };
 
 module.exports = {
-  view,
+  recordView,
 };

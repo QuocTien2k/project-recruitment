@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const { view } = require("../controllers/viewerController");
+const { recordView } = require("../controllers/viewerController");
 const { protect } = require("../middlewares/authMiddleware");
 
-router.post("/:postId", protect, view);
+router.post("/:postId", protect, recordView);
 
 module.exports = router;
