@@ -15,22 +15,22 @@ export default function ContactAdminButton() {
       toast.error("Vui lòng đăng nhập để trò chuyện!");
       return;
     }
-
-    if (currentUser._id === ADMIN_ID) {
-      toast.error("Bạn đang là admin!");
-      return;
-    }
-
     openChat(ADMIN_ID);
   };
 
+  if (currentUser && currentUser._id === ADMIN_ID) {
+    return null;
+  }
+
   return (
-    <button
-      onClick={handleClick}
-      className="ping-effect cursor-pointer fixed bottom-6 left-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-all z-50"
-      title="Liên hệ Admin"
-    >
-      <MessageCircle size={18} />
-    </button>
+    <>
+      <button
+        onClick={handleClick}
+        className="ping-effect cursor-pointer fixed bottom-6 left-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-all z-50"
+        title="Liên hệ Admin"
+      >
+        <MessageCircle size={18} />
+      </button>
+    </>
   );
 }

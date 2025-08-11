@@ -11,6 +11,7 @@ import {
   HiMenuAlt2,
   HiOutlineX,
 } from "react-icons/hi";
+import MessageNotification from "@/components/MessageNotification";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -79,42 +80,46 @@ const Navbar = ({ isOpen, toggleSidebar }) => {
 
       <div className="flex-1"></div>
 
-      <div
-        className="relative flex items-center gap-3 cursor-pointer group"
-        onClick={openDropdown ? handleCloseDropdown : handleOpenDropdown}
-      >
-        <img
-          src={avatarDefault}
-          alt="Avatar"
-          className="w-10 h-10 rounded-full object-cover border border-gray-300 group-hover:border-green-500 transition"
-        />
-        <span className="max-w-[120px] truncate font-medium text-sm hidden sm:inline-block text-gray-800">
-          Xin chào, {fullName}
-        </span>
-      </div>
+      <div className="flex gap-2 justify-around items-center">
+        <MessageNotification />
 
-      {/* Dropdown */}
-      {showDropdown && (
         <div
-          className={`
+          className="relative flex items-center gap-3 cursor-pointer group"
+          onClick={openDropdown ? handleCloseDropdown : handleOpenDropdown}
+        >
+          <img
+            src={avatarDefault}
+            alt="Avatar"
+            className="w-10 h-10 rounded-full object-cover border border-gray-300 group-hover:border-green-500 transition"
+          />
+          <span className="max-w-[120px] truncate font-medium text-sm hidden sm:inline-block text-gray-800">
+            Xin chào, {fullName}
+          </span>
+        </div>
+
+        {/* Dropdown */}
+        {showDropdown && (
+          <div
+            className={`
       absolute top-16 right-4 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-30
       transition-all duration-200 ease-out
       ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
     `}
-        >
-          <div className="flex justify-center px-4 py-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center gap-2 w-full text-left text-red-500 hover:bg-red-50 transition"
-              onClick={handleLogout}
-            >
-              <FiPower className="text-lg" />
-              <span>Đăng xuất</span>
-            </Button>
+          >
+            <div className="flex justify-center px-4 py-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-2 w-full text-left text-red-500 hover:bg-red-50 transition"
+                onClick={handleLogout}
+              >
+                <FiPower className="text-lg" />
+                <span>Đăng xuất</span>
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Phần còn lại của Navbar */}
     </header>
