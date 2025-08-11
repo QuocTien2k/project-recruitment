@@ -10,3 +10,13 @@ export const recordPostView = async (id) => {
     throw err;
   }
 };
+
+export const getPostViews = async (id) => {
+  try {
+    const res = await axiosInstance.get(`/api/view/${id}`);
+    return res?.data;
+  } catch (err) {
+    console.error("Lỗi khi lấy lượt xem:", err?.message);
+    throw err;
+  }
+};

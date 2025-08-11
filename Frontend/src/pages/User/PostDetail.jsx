@@ -1,4 +1,5 @@
 import { getPostDetail } from "@/apiCalls/public";
+import { recordPostView } from "@/apiCalls/viewer";
 import Button from "@/components/Button";
 import Loading from "@/components/Loading";
 import { useChatContext } from "@/context/ChatContext";
@@ -34,9 +35,25 @@ const PostDetail = () => {
     }
   };
 
+  // Ghi nhận lượt xem
+  const recordView = async (postId) => {
+    if (!currentUser?._id || !postId) return;
+    try {
+      await recordPostView(postId);
+    } catch (err) {
+      console.error("Lỗi ghi nhận view:", err);
+    }
+  };
+
   useEffect(() => {
     fetchPost();
   }, []);
+
+  useEffect(() => {
+    if (post?._id && currentUser?._id) {
+      recordView(post._id);
+    }
+  }, [post, currentUser]);
 
   const authorId = post?.createdBy?._id;
 

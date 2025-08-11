@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   FaMapMarkerAlt,
@@ -12,6 +12,8 @@ import Button from "@components/Button";
 import { Link } from "react-router-dom";
 import PostActionUser from "./PostActionUser";
 import PostActionAdmin from "./PostActionAdmin";
+import { FaEye } from "react-icons/fa";
+import { getPostViews } from "@/apiCalls/viewer";
 
 const PostCard = ({
   post,
@@ -25,6 +27,17 @@ const PostCard = ({
   const currentUser = useSelector((state) => state.currentUser.user);
   const isAdmin = currentUser?.role === "admin";
   const isPostOwner = currentUser?._id === post.createdBy;
+  const [views, setViews] = useState(0);
+
+  useEffect(() => {
+    if (post?._id) {
+      getPostViews(post._id).then((res) => {
+        if (res.success) {
+          setViews(res.data.totalViews);
+        }
+      });
+    }
+  }, [post?._id]);
 
   return (
     <div className="bg-white shadow-md rounded-lg border border-gray-200 p-5 mb-4 hover:shadow-lg transition-shadow duration-300">
@@ -83,6 +96,12 @@ const PostCard = ({
         <p className="flex items-center gap-2">
           <FaClock className="text-yellow-500" />
           <span>Thời gian: {post.timeType}</span>
+        </p>
+
+        {/* Lượt xem */}
+        <p className="flex items-center gap-2 text-gray-600 text-sm mt-2">
+          <FaEye className="text-blue-500" />
+          <span>{views} lượt xem</span>
         </p>
 
         {/* Trạng thái */}
