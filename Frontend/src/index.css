@@ -10,6 +10,7 @@
         /* Tailwind orange-500 */
         --color-text: #000000;
         --color-bg: #ffffff;
+        --header-height: 72px;
     }
 
     html {
