@@ -9,15 +9,7 @@ import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
 import UpdateAvatar from "@/Modals/UpdateAvatar";
 import UpdatePassword from "@/Modals/UpdatePassword";
 import UpdateInfo from "@/Modals/UpdateInfo";
-import {
-  FiImage,
-  FiLock,
-  FiUser,
-  FiFileText,
-  FiEdit,
-  FiList,
-} from "react-icons/fi";
-import CreatePost from "@/Modals/CreatePost";
+import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -32,7 +24,7 @@ const Header = () => {
   const [openModalUpdateChangePassword, setOpenModalUpdateChangePassword] =
     useState(false);
   const [openModalUpdateInfo, setOpenModalUpdateInfo] = useState(false);
-  const [openModalCreatePost, setOpenModalCreatePost] = useState(false);
+
   const navigate = useNavigate();
   const fullName = `${currentUser?.middleName || ""} ${
     currentUser?.name || ""
@@ -181,17 +173,6 @@ const Header = () => {
 
                     {currentUser?.role === "user" && (
                       <>
-                        {/*Create post */}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                          onClick={() => setOpenModalCreatePost(true)}
-                        >
-                          <FiFileText className="text-[16px]" />
-                          <span>Tạo bài tuyển dụng</span>
-                        </Button>
-
                         {/*My post */}
                         <Button
                           variant="ghost"
@@ -259,11 +240,6 @@ const Header = () => {
             <UpdatePassword
               onClose={() => setOpenModalUpdateChangePassword(false)}
             />
-          )}
-
-          {/*Modal Update Password */}
-          {openModalCreatePost && (
-            <CreatePost onClose={() => setOpenModalCreatePost(false)} />
           )}
         </>
       ) : (

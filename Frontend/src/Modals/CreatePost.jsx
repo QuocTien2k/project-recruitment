@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 
-const CreatePost = ({ onClose }) => {
+const CreatePost = ({ onClose, handleUpdatePost }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -117,10 +117,10 @@ const CreatePost = ({ onClose }) => {
     try {
       const res = await createPost(submitData);
       if (res.success) {
-        toast.success("Vui lòng vào bài viết của tôi để xem");
         toast.success("Tạo bài viết thành công!");
-        setTimeout(() => onClose(), 3000); // đóng modal
+        setTimeout(() => onClose(), 2000); // đóng modal
       }
+      handleUpdatePost(res.data);
     } catch (err) {
       console.error("Lỗi tạo bài viết:", err);
       const errorMsg =

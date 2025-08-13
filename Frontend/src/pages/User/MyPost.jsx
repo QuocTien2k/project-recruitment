@@ -1,15 +1,19 @@
 import { getMyPosts } from "@/apiCalls/post";
+import Button from "@/components/Button";
 import Loading from "@/components/Loading";
 import PostCard from "@/components/Post/PostCard";
+import CreatePost from "@/Modals/CreatePost";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FiFileText } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 
 const MyPost = () => {
   const dispatch = useDispatch();
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [myPosts, setMyPosts] = useState([]);
+  const [openModalCreatePost, setOpenModalCreatePost] = useState(false);
 
   const fetchMyPost = async () => {
     dispatch(setGlobalLoading(true));
@@ -52,6 +56,36 @@ const MyPost = () => {
         <Loading size="md" />
       ) : (
         <>
+          {/* Header: Search + Create Button */}
+          <div className="flex items-center justify-between mb-4">
+            {/* Placeholder cho Search */}
+            <div className="flex-1">
+              {/* sau này sẽ thay bằng component Search */}
+              <input
+                type="text"
+                placeholder="Tìm kiếm..."
+                className="w-full max-w-xs border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
+              />
+            </div>
+
+            {/* Create Post Button */}
+            <div className="flex-shrink-0 ml-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gray-100"
+                onClick={() => setOpenModalCreatePost(true)}
+              >
+                <FiFileText className="text-[16px]" />
+                <span>Tạo bài tuyển dụng</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <hr className="border-gray-300 mb-4" />
+
+          {/* List Posts */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {myPosts.map((post) => (
               <PostCard
@@ -63,6 +97,14 @@ const MyPost = () => {
               />
             ))}
           </div>
+
+          {/* Modal Create Post */}
+          {openModalCreatePost && (
+            <CreatePost
+              onClose={() => setOpenModalCreatePost(false)}
+              handleUpdatePost={handleUpdatePost}
+            />
+          )}
         </>
       )}
     </>
