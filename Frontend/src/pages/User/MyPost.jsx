@@ -16,7 +16,7 @@ const MyPost = () => {
   const [myPosts, setMyPosts] = useState([]);
   const [openModalCreatePost, setOpenModalCreatePost] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
   const displayedPosts = myPosts.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
@@ -45,10 +45,18 @@ const MyPost = () => {
 
   const handleUpdatePost = (updatedPost) => {
     if (updatedPost.deleted) {
+      //trạng thái xóa
       setMyPosts((prevPosts) =>
         prevPosts.filter((post) => post._id !== updatedPost._id)
       );
+    } else if (
+      updatedPost._id &&
+      !myPosts.some((post) => post._id === updatedPost._id)
+    ) {
+      // Bài mới
+      setMyPosts((prevPosts) => [updatedPost, ...prevPosts]);
     } else {
+      //trạng thái update
       setMyPosts((prevPosts) =>
         prevPosts.map((post) =>
           post._id === updatedPost._id ? updatedPost : post
