@@ -59,7 +59,9 @@ const PostCard = ({
       </div>
 
       {/* Tiêu đề */}
-      <h2 className="text-xl font-semibold text-gray-800 mb-2">{post.title}</h2>
+      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+        {post?.title}
+      </h2>
 
       {/* Nội dung tuyển dụng (Mô tả) */}
       {showFullDescription && (
@@ -68,7 +70,7 @@ const PostCard = ({
           <div className="flex flex-col">
             <p className="font-semibold text-sm mb-1">Nội dung tuyển dụng:</p>
             <p className="scrollable-text text-sm text-gray-600 whitespace-pre-line">
-              {post.description}
+              {post?.description}
             </p>
           </div>
         </div>
@@ -80,7 +82,7 @@ const PostCard = ({
         <p className="flex items-center gap-2">
           <MapPin className="text-red-500 w-4 h-4" />
           <span>
-            {post.district}, {post.province}
+            {post?.district}, {post?.province}
           </span>
         </p>
 
@@ -89,20 +91,20 @@ const PostCard = ({
           <DollarSign className="text-green-500 w-4 h-4" />
           <strong>Mức lương:</strong>
           <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
-            {post.salary}
+            {post?.salary}
           </strong>
         </p>
 
         {/*hình thức làm việc */}
         <p className="flex items-center gap-2">
           <Briefcase className="text-blue-500 w-4 h-4" />
-          <span>Hình thức: {post.workingType}</span>
+          <span>Hình thức: {post?.workingType}</span>
         </p>
 
         {/*Thời gian làm việc */}
         <p className="flex items-center gap-2">
           <Clock className="text-yellow-500 w-4 h-4" />
-          <span>Thời gian: {post.timeType}</span>
+          <span>Thời gian: {post?.timeType}</span>
         </p>
 
         {/*Lượt xem */}
@@ -118,7 +120,7 @@ const PostCard = ({
         </p>
 
         {/* Trạng thái */}
-        {showOwnerActions && post.status && (
+        {showOwnerActions && post?.status && (
           <p className="flex items-center gap-2">
             <FaListAlt className="text-purple-500" />
             <span>
@@ -126,17 +128,17 @@ const PostCard = ({
               <span
                 className={`ml-1 px-2 py-0.5 rounded-md text-xs font-semibold
                   ${
-                    post.status === "approved"
+                    post?.status === "approved"
                       ? "bg-green-100 text-green-700"
-                      : post.status === "pending"
+                      : post?.status === "pending"
                       ? "bg-yellow-100 text-yellow-700"
                       : "bg-red-100 text-red-600"
                   }
                 `}
               >
-                {post.status === "approved"
+                {post?.status === "approved"
                   ? "Đã duyệt"
-                  : post.status === "pending"
+                  : post?.status === "pending"
                   ? "Đang chờ duyệt"
                   : "Đã từ chối"}
               </span>
@@ -146,10 +148,10 @@ const PostCard = ({
 
         {/* Lý do từ chối */}
         {showOwnerActions &&
-          post.status === "rejected" &&
-          post.rejectionReason && (
+          post?.status === "rejected" &&
+          post?.rejectionReason && (
             <p className="text-xs text-red-500 italic mt-1 ml-6">
-              Lý do bị từ chối: {post.rejectionReason}
+              Lý do bị từ chối: {post?.rejectionReason}
             </p>
           )}
       </div>
@@ -158,7 +160,7 @@ const PostCard = ({
       {!showFullDescription && !isAdmin && (
         <div className="pt-2 text-center border-t border-gray-100 mt-4">
           <Link
-            to={`/bai-viet/${post.slug}`}
+            to={`/bai-viet/${post?.slug}`}
             onClick={onViewDetail}
             className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 transition"
           >

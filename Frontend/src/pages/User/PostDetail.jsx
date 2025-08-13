@@ -59,7 +59,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     if (post?._id && currentUser?._id) {
-      recordView(post._id);
+      recordView(post?._id);
     }
   }, [post, currentUser]);
 
@@ -139,7 +139,7 @@ const PostDetail = () => {
                 <DollarSign className="text-green-500 w-4 h-4" />
                 <strong>Mức lương:</strong>
                 <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
-                  {post.salary}
+                  {post?.salary}
                 </strong>
               </p>
 
