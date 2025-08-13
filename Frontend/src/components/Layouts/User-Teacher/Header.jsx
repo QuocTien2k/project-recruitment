@@ -133,7 +133,7 @@ const Header = () => {
               <div
                 className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-50
     ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
-  `}
+  ${!openDropdown ? "pointer-events-none" : ""}`}
                 style={{ top: "100%" }}
               >
                 <div className="py-2">

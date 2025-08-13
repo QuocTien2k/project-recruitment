@@ -1,6 +1,7 @@
 import { getMyPosts } from "@/apiCalls/post";
 import Button from "@/components/Button";
 import Loading from "@/components/Loading";
+import Pagination from "@/components/Pagination";
 import PostCard from "@/components/Post/PostCard";
 import CreatePost from "@/Modals/CreatePost";
 import { setGlobalLoading } from "@/redux/loadingSlice";
@@ -14,6 +15,12 @@ const MyPost = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [myPosts, setMyPosts] = useState([]);
   const [openModalCreatePost, setOpenModalCreatePost] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 4;
+  const displayedPosts = myPosts.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
 
   const fetchMyPost = async () => {
     dispatch(setGlobalLoading(true));
@@ -80,7 +87,7 @@ const MyPost = () => {
 
           {/* List Posts */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {myPosts.map((post) => (
+            {displayedPosts.map((post) => (
               <PostCard
                 post={post}
                 key={post._id}
@@ -90,6 +97,14 @@ const MyPost = () => {
               />
             ))}
           </div>
+
+          {/* Pagination */}
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            totalItems={myPosts.length}
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
 
           {/* Modal Create Post */}
           {openModalCreatePost && (
