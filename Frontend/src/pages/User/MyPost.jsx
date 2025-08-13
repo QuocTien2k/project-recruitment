@@ -61,22 +61,15 @@ const MyPost = () => {
             {/* Placeholder cho Search */}
             <div className="flex-1">
               {/* sau này sẽ thay bằng component Search */}
-              <input
-                type="text"
-                placeholder="Tìm kiếm..."
-                className="w-full max-w-xs border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
-              />
             </div>
 
             {/* Create Post Button */}
             <div className="flex-shrink-0 ml-4">
               <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gray-100"
+                className="flex items-center justify-between"
                 onClick={() => setOpenModalCreatePost(true)}
               >
-                <FiFileText className="text-[16px]" />
+                <FiFileText className="text-[16px] mr-1" />
                 <span>Tạo bài tuyển dụng</span>
               </Button>
             </div>

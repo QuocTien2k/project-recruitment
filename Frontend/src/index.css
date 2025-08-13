@@ -11,6 +11,8 @@
         --color-text: #000000;
         --color-bg: #ffffff;
         --header-height: 72px;
+        --width-8xl: 90rem;
+        --width-9xl: 100rem;
     }
 
     html {
@@ -208,4 +210,38 @@
     justify-content: center;
     align-items: center;
     z-index: 50;
+}
+
+/* Container mạnh */
+.container-strong {
+    max-width: var(--width-8xl);
+    @apply mx-auto px-6 py-8;
+}
+
+/* Container nhẹ */
+.container-light {
+    @apply max-w-7xl mx-auto px-4 py-4;
+}
+
+/* Nội dung có thể cuộn dọc khi quá dài */
+.scrollable-text {
+    max-height: 120px;
+    /* bạn tùy chỉnh chiều cao giới hạn */
+    overflow-y: auto;
+    @apply pr-2;
+    /* chừa khoảng bên phải để thanh cuộn không đè chữ */
+}
+
+/* Thanh cuộn đẹp hơn một chút (WebKit) */
+.scrollable-text::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable-text::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.4);
+    border-radius: 3px;
+}
+
+.scrollable-text::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 100, 100, 0.6);
 }

@@ -39,7 +39,9 @@ const UserLayout = () => {
         className="flex-grow"
         style={{ paddingTop: "var(--header-height)" }}
       >
-        <Outlet />
+        <div className="container-strong">
+          <Outlet />
+        </div>
       </main>
 
       <Footer />

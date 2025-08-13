@@ -6,9 +6,17 @@ import { useChatContext } from "@/context/ChatContext";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FaEnvelope } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import dayjs from "dayjs";
+import {
+  Mail,
+  MapPin,
+  DollarSign,
+  Briefcase,
+  Clock,
+  CalendarDays,
+} from "lucide-react";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -71,7 +79,8 @@ const PostDetail = () => {
     await openChat(authorId);
   };
 
-  //console.log(post?.createdBy?._id);
+  const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
+  //console.log(post);
 
   return (
     <>
@@ -108,31 +117,44 @@ const PostDetail = () => {
               </p>
 
               <p className="flex items-center gap-2 text-sm text-gray-600">
-                <FaEnvelope className="text-blue-500" />{" "}
+                <Mail className="text-orange-500 w-4 h-4" />
                 {post?.createdBy?.email}
               </p>
 
-              <p className="text-gray-600">
-                <strong>Hình thức:</strong> {post?.workingType} /{" "}
-                {post?.timeType}
+              <p className="flex items-center gap-2 text-sm text-gray-600">
+                <Briefcase className="text-blue-500 w-4 h-4" />
+                <span>Hình thức: {post?.workingType}</span>
+                <Clock className="text-yellow-500 w-4 h-4" />
+                <span>{post?.timeType}</span>
               </p>
 
-              <p className="text-gray-600">
-                <strong>Khu vực:</strong> {post?.district}, {post?.province}
+              <p className="flex items-center gap-2 text-sm text-gray-600">
+                <MapPin className="text-red-500 w-4 h-4" />
+                <span>
+                  {post?.district}, {post?.province}
+                </span>
               </p>
 
-              <p className="text-gray-600">
-                <strong>Mức lương:</strong>{" "}
+              <p className="flex items-center gap-2 text-sm text-gray-600">
+                <DollarSign className="text-green-500 w-4 h-4" />
+                <strong>Mức lương:</strong>
                 <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
-                  {post?.salary}
+                  {post.salary}
                 </strong>
               </p>
 
-              <div className="pt-2 scroll-y-hidden max-h-[60px]">
+              <div className="pt-2 scroll-y-hidden max-h-[120px]">
                 <p className="font-semibold text-gray-700">Mô tả:</p>
                 <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
                   {post?.description}
                 </p>
+              </div>
+
+              <div className="mt-3 flex items-center text-xs text-gray-500">
+                <CalendarDays className="text-emerald-500 w-4 h-4" />
+                <span className="ml-1 font-medium text-gray-600">
+                  Ngày đăng: {formatted}
+                </span>
               </div>
             </div>
           </div>

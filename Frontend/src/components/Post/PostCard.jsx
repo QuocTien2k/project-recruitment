@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  FaMapMarkerAlt,
-  FaMoneyBillWave,
-  FaClock,
-  FaListAlt,
-  FaRegFileAlt,
-} from "react-icons/fa";
-import { MdWork } from "react-icons/md";
-import Button from "@components/Button";
+import { FaListAlt } from "react-icons/fa";
+import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import PostActionUser from "./PostActionUser";
 import PostActionAdmin from "./PostActionAdmin";
-import { FaEye } from "react-icons/fa";
 import { getPostViews } from "@/apiCalls/viewer";
+import {
+  Briefcase,
+  CalendarDays,
+  Clock,
+  DollarSign,
+  Eye,
+  MapPin,
+  FileText,
+} from "lucide-react";
 
 const PostCard = ({
   post,
@@ -39,6 +40,8 @@ const PostCard = ({
     }
   }, [post?._id]);
 
+  const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
+
   return (
     <div className="bg-white shadow-md rounded-lg border border-gray-200 p-5 mb-4 hover:shadow-lg transition-shadow duration-300">
       {/* Post actions (User hoặc Admin) */}
@@ -60,11 +63,11 @@ const PostCard = ({
 
       {/* Nội dung tuyển dụng (Mô tả) */}
       {showFullDescription && (
-        <div className="flex items-start gap-2 text-gray-700 mb-3">
-          <FaRegFileAlt className="text-blue-500 mt-1" />
-          <div>
+        <div className="flex gap-2 text-gray-700 mb-3">
+          <FileText className="text-purple-500 flex-shrink-0 mt-0.5 w-4 h-4" />
+          <div className="flex flex-col">
             <p className="font-semibold text-sm mb-1">Nội dung tuyển dụng:</p>
-            <p className="text-sm text-gray-600 whitespace-pre-line">
+            <p className="scrollable-text text-sm text-gray-600 whitespace-pre-line">
               {post.description}
             </p>
           </div>
@@ -73,35 +76,45 @@ const PostCard = ({
 
       {/* Nội dung chi tiết */}
       <div className="flex flex-col gap-2 text-sm text-gray-700">
+        {/*Địa điểm */}
         <p className="flex items-center gap-2">
-          <FaMapMarkerAlt className="text-red-400" />
+          <MapPin className="text-red-500 w-4 h-4" />
           <span>
             {post.district}, {post.province}
           </span>
         </p>
 
+        {/*Lương */}
         <p className="flex items-center gap-2">
-          <FaMoneyBillWave className="text-green-500" />
+          <DollarSign className="text-green-500 w-4 h-4" />
           <strong>Mức lương:</strong>
           <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
             {post.salary}
           </strong>
         </p>
 
+        {/*hình thức làm việc */}
         <p className="flex items-center gap-2">
-          <MdWork className="text-blue-500" />
+          <Briefcase className="text-blue-500 w-4 h-4" />
           <span>Hình thức: {post.workingType}</span>
         </p>
 
+        {/*Thời gian làm việc */}
         <p className="flex items-center gap-2">
-          <FaClock className="text-yellow-500" />
+          <Clock className="text-yellow-500 w-4 h-4" />
           <span>Thời gian: {post.timeType}</span>
         </p>
 
-        {/* Lượt xem */}
-        <p className="flex items-center gap-2 text-gray-600 text-sm mt-2">
-          <FaEye className="text-blue-500" />
+        {/*Lượt xem */}
+        <p className="flex items-center gap-2 mt-2 text-gray-600">
+          <Eye className="text-indigo-500 w-4 h-4" />
           <span>{views} lượt xem</span>
+        </p>
+
+        {/*Ngày tạo */}
+        <p className="flex items-center gap-2 mt-1 text-gray-600">
+          <CalendarDays className="text-emerald-500 w-4 h-4" />
+          <span>Ngày tạo: {formatted}</span>
         </p>
 
         {/* Trạng thái */}
