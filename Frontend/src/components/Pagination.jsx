@@ -22,14 +22,18 @@ const Pagination = ({
       <ReactPaginate
         breakLabel="..."
         nextLabel={
-          <div className="flex items-center justify-center w-8 h-8 rounded-md bg-emerald-500 text-white hover:bg-emerald-600 transition">
-            <ChevronRight size={16} />
-          </div>
+          currentPage < pageCount - 1 && (
+            <div className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-md bg-green-500 text-white hover:bg-green-600 transition">
+              <ChevronRight size={16} />
+            </div>
+          )
         }
         previousLabel={
-          <div className="flex items-center justify-center w-8 h-8 rounded-md bg-emerald-500 text-white hover:bg-emerald-600 transition">
-            <ChevronLeft size={16} />
-          </div>
+          currentPage > 0 && (
+            <div className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-md bg-green-500 text-white hover:bg-green-600 transition">
+              <ChevronLeft size={16} />
+            </div>
+          )
         }
         onPageChange={handlePageClick}
         pageRangeDisplayed={3}
@@ -37,8 +41,8 @@ const Pagination = ({
         pageCount={pageCount}
         forcePage={currentPage} // đảm bảo đồng bộ state bên ngoài
         containerClassName="flex items-center gap-2"
-        pageClassName="flex items-center justify-center w-8 h-8 rounded-md bg-gray-200 hover:bg-emerald-500 hover:text-white transition"
-        activeClassName="bg-emerald-500 text-white"
+        pageClassName="cursor-pointer flex items-center justify-center w-8 h-8 rounded-md bg-gray-200 hover:bg-green-500 hover:text-white transition"
+        activeClassName="bg-green-500 text-white"
         breakClassName="flex items-center justify-center w-8 h-8 rounded-md bg-gray-100"
       />
     </div>
