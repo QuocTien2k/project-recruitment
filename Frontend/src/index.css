@@ -113,7 +113,6 @@
     animation: fadeUp 0.2s ease-in forwards;
 }
 
-
 /* ring */
 @keyframes pulseRing {
     0% {
@@ -244,4 +243,18 @@
 
 .scrollable-text::-webkit-scrollbar-thumb:hover {
     background-color: rgba(100, 100, 100, 0.6);
+}
+
+
+
+
+
+
+@media (max-width: 640px) {
+
+    .form-select-custom,
+    input,
+    button {
+        width: 100% !important;
+    }
 }

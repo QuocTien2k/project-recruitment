@@ -2,6 +2,7 @@ import { getListTeacher } from "@/apiCalls/public";
 import useSearchFilter from "@/hooks/useSearchFilter";
 import React, { useEffect } from "react";
 import Button from "@components/Button";
+import InputField from "@components/Input";
 
 const ListTeacherSearch = ({ onResults }) => {
   const {
@@ -22,14 +23,12 @@ const ListTeacherSearch = ({ onResults }) => {
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-      {/* Input tìm theo môn học */}
-      <input
-        type="text"
+      {/* Input */}
+      <InputField
         name="subject"
         placeholder="Tìm theo môn học. Ví dụ: Toán, Sử..."
         value={form.subject}
         onChange={handleChange}
-        className="w-full sm:w-1/3 border border-gray-300 rounded px-3 py-2"
       />
 
       {/* Select kinh nghiệm */}
@@ -37,7 +36,7 @@ const ListTeacherSearch = ({ onResults }) => {
         name="experience"
         value={form.experience}
         onChange={handleChange}
-        className="form-select-custom"
+        className="form-select-custom w-[15%]"
       >
         <option value="">Kinh nghiệm</option>
         <option value="0-1">0-1 năm</option>
@@ -51,7 +50,7 @@ const ListTeacherSearch = ({ onResults }) => {
         name="provinceCode"
         value={form.provinceCode}
         onChange={handleChange}
-        className="form-select-custom"
+        className="form-select-custom w-[20%]"
       >
         <option value="">Tỉnh/Thành</option>
         {provinces.map((p) => (
@@ -66,7 +65,7 @@ const ListTeacherSearch = ({ onResults }) => {
         name="districtCode"
         value={form.districtCode}
         onChange={handleChange}
-        className="form-select-custom"
+        className="form-select-custom w-[15%]"
         disabled={!districts.length}
       >
         <option value="">Phường/Xã</option>
@@ -80,7 +79,7 @@ const ListTeacherSearch = ({ onResults }) => {
       {/* Reset button */}
       <Button
         onClick={handleResetFilter}
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
       >
         Reset
       </Button>

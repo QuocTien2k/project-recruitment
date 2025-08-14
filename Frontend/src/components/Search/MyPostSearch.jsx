@@ -3,6 +3,7 @@ import useSearchFilter from "@/hooks/useSearchFilter";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Button from "@components/Button";
+import InputField from "@components/Input";
 
 const MyPostSearch = ({ onResults }) => {
   const currentUser = useSelector((state) => state.currentUser.user);
@@ -20,13 +21,11 @@ const MyPostSearch = ({ onResults }) => {
   return (
     <div className="flex flex-col sm:flex-row gap-3">
       {/* Input search title */}
-      <input
-        type="text"
+      <InputField
         name="title"
         placeholder="Tìm theo tiêu đề..."
         value={form.title}
         onChange={handleChange}
-        className="w-[70%] border border-gray-300 rounded px-3 py-2"
       />
 
       {/* Select status */}
@@ -34,7 +33,7 @@ const MyPostSearch = ({ onResults }) => {
         name="status"
         value={form.status}
         onChange={handleChange}
-        className="form-select-custom"
+        className="form-select-custom w-[30%]"
       >
         <option value="">Tất cả</option>
         <option value="pending">Chờ duyệt</option>

@@ -41,12 +41,18 @@ const MyPost = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex-1">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+        {/* Search */}
+        <div className="flex-1 min-w-0">
           <MyPostSearch onResults={setMyPosts} />
         </div>
-        <div className="flex-shrink-0 ml-4">
-          <Button onClick={() => setOpenModalCreatePost(true)} size="sm">
+
+        {/* Button */}
+        <div className="flex-shrink-0">
+          <Button
+            onClick={() => setOpenModalCreatePost(true)}
+            className="flex items-center"
+          >
             <FiFileText className="mr-1" /> Tạo bài tuyển dụng
           </Button>
         </div>
