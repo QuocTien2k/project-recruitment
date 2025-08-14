@@ -39,3 +39,21 @@ export const getDistricts = async (provinceCode) => {
     return [];
   }
 };
+
+/**
+ * Lấy tên tỉnh từ code
+ */
+export const getProvinceName = async (provinceCode) => {
+  const provinces = await getProvinces();
+  const province = provinces.find((p) => p.code === provinceCode);
+  return province ? province.name : "";
+};
+
+/**
+ * Lấy tên quận/huyện từ code
+ */
+export const getDistrictName = async (provinceCode, districtCode) => {
+  const districts = await getDistricts(provinceCode);
+  const district = districts.find((d) => d.code === districtCode);
+  return district ? district.name : "";
+};
