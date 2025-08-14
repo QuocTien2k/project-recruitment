@@ -111,23 +111,39 @@ const getPostBySlug = async (req, res) => {
 //lấy 12 giáo viên đang hoạt động
 const getTeachersShortList = async (req, res) => {
   try {
-    // Lấy 12 teacher có userId.isActive = true
-    const teachers = await TeacherModel.find()
-      .populate({
-        path: "userId",
-        match: { isActive: true },
-        select: "middleName name email profilePic province district isActive",
-      })
-      .select("-degreeImages -__v")
-      .limit(12);
-
-    // Loại bỏ teacher không match userId.isActive
-    const activeTeachers = teachers.filter((t) => t.userId);
+    const teachers = await TeacherModel.aggregate([
+      // Chỉ lấy teacher có userId.isActive = true
+      {
+        $lookup: {
+          from: "users", // collection user
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+          pipeline: [
+            { $match: { isActive: true } }, // chỉ user đang active
+            {
+              $project: {
+                middleName: 1,
+                name: 1,
+                email: 1,
+                profilePic: 1,
+                province: 1,
+                district: 1,
+                isActive: 1,
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$user" }, // chỉ lấy teacher có user match
+      { $project: { degreeImages: 0, __v: 0 } }, // loại bỏ field không cần thiết
+      { $limit: 12 }, // lấy tối đa 12 giáo viên
+    ]);
 
     res.status(200).json({
       success: true,
-      total: activeTeachers.length,
-      data: activeTeachers,
+      total: teachers.length,
+      data: teachers,
     });
   } catch (error) {
     res.status(500).json({
@@ -144,32 +160,50 @@ const getListTeachers = async (req, res) => {
     const { experience, workingType, timeType, subject, province, district } =
       req.query;
 
-    // Query cho Teacher
-    const teacherQuery = {};
-    if (experience) teacherQuery.experience = experience;
-    if (workingType) teacherQuery.workingType = workingType;
-    if (timeType) teacherQuery.timeType = timeType;
-    if (subject) teacherQuery.subject = { $regex: subject, $options: "i" };
+    // Build teacher filters
+    const teacherMatch = {};
+    if (experience) teacherMatch.experience = experience;
+    if (workingType) teacherMatch.workingType = workingType;
+    if (timeType) teacherMatch.timeType = timeType;
+    if (subject) teacherMatch.subject = { $regex: subject, $options: "i" };
 
-    // Query cho User
+    // Build user filters
     const userMatch = { isActive: true };
     if (province) userMatch.province = province;
     if (district) userMatch.district = district;
 
-    const teachers = await TeacherModel.find(teacherQuery)
-      .populate({
-        path: "userId",
-        match: userMatch,
-        select: "middleName name email profilePic province district isActive",
-      })
-      .select("-degreeImages -__v");
-
-    const activeTeachers = teachers.filter((t) => t.userId);
+    const teachers = await TeacherModel.aggregate([
+      { $match: teacherMatch }, // filter teacher
+      {
+        $lookup: {
+          from: "users", // tên collection User trong MongoDB
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+          pipeline: [
+            { $match: userMatch }, // filter user
+            {
+              $project: {
+                middleName: 1,
+                name: 1,
+                email: 1,
+                profilePic: 1,
+                province: 1,
+                district: 1,
+                isActive: 1,
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$user" }, // chỉ lấy teacher có user thỏa match
+      { $project: { degreeImages: 0, __v: 0 } }, // loại bỏ field không cần thiết
+    ]);
 
     res.status(200).json({
       success: true,
-      total: activeTeachers.length,
-      data: activeTeachers,
+      total: teachers.length,
+      data: teachers,
     });
   } catch (error) {
     res.status(500).json({
