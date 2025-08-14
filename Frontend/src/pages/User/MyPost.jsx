@@ -4,7 +4,7 @@ import Pagination from "@/components/Pagination";
 import PostCard from "@/components/Post/PostCard";
 import MyPostSearch from "@/components/Search/MyPostSearch";
 import CreatePost from "@/Modals/CreatePost";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiFileText } from "react-icons/fi";
 import { useSelector } from "react-redux";
 
@@ -34,6 +34,10 @@ const MyPost = () => {
       );
     }
   };
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [myPosts]);
 
   return (
     <>
