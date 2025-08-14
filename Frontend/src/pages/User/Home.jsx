@@ -1,4 +1,4 @@
-import ShortListTeacher from "@/section/ListTeacher";
+import ShortListTeacher from "@/section/ShortListTeacher";
 import Post from "@/section/Post";
 import React from "react";
 
