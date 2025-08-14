@@ -1,4 +1,4 @@
-import { listTeachers } from "@/apiCalls/public";
+import { getTeacherShortList } from "@/apiCalls/public";
 import CardTeacher from "@/components/CardTeacher";
 import Loading from "@/components/Loading";
 import { setTeacherLoading } from "@/redux/loadingSlice";
@@ -14,7 +14,7 @@ const ListTeacher = () => {
   const fetchTeacher = async () => {
     dispatch(setTeacherLoading(true));
     try {
-      const res = await listTeachers();
+      const res = await getTeacherShortList();
 
       if (res?.success) {
         setListTeacher(res?.data);

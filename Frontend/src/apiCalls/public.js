@@ -1,8 +1,21 @@
 import { axiosInstance } from "./index";
 
-export const listTeachers = async () => {
+export const getTeacherShortList = async () => {
   try {
-    const res = await axiosInstance.get("/api/public/get-lists-teacher");
+    const res = await axiosInstance.get("/api/public/get-teacher-short-list");
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
+export const getListTeacher = async (filters = {}) => {
+  try {
+    const res = await axiosInstance.get("/api/public/get-list-teachers", {
+      params: filters,
+    });
 
     return res?.data;
   } catch (err) {
