@@ -23,6 +23,7 @@ import BannedTeachers from "@pages-admin/teachers/BannedTeachers";
 import PendingPosts from "@pages-admin/posts/PendingPosts";
 import ApprovedPosts from "@pages-admin/posts/ApprovedPosts";
 import ContactAdminButton from "@components/ContactAdmin";
+import ListTeachers from "@pages-user/ListTeachers";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/giao-vien/:teacherId" element={<TeacherDetail />} />
             <Route path="/bai-viet/:slug" element={<PostDetail />} />
             <Route path="/bai-viet-cua-toi" element={<MyPost />} />
+            <Route path="/danh-sach-giao-vien" element={<ListTeachers />} />
           </Route>
 
           <Route path="dang-nhap" element={<Login />} />

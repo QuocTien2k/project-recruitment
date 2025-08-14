@@ -5,6 +5,7 @@ import { setTeacherLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const ShortListTeacher = () => {
   const [listTeacher, setListTeacher] = useState([]);
@@ -41,6 +42,13 @@ const ShortListTeacher = () => {
           {listTeacher.map((teacher) => (
             <CardTeacher key={teacher._id} teacher={teacher} />
           ))}
+
+          <Link
+            to="/danh-sach-giao-vien"
+            className="col-span-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-center"
+          >
+            Xem tất cả giáo viên
+          </Link>
         </div>
       )}
     </>

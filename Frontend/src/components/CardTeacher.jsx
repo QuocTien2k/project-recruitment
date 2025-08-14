@@ -16,12 +16,12 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
     subject,
     timeType,
     workingType,
-    userId,
+    user,
   } = teacher || {};
 
-  if (!userId) return null;
+  if (!user) return null;
 
-  const fullName = `${userId.middleName || ""} ${userId.name || ""}`.trim();
+  const fullName = `${user.middleName || ""} ${user.name || ""}`.trim();
 
   const handleToggleActive = () => {
     // Gọi API đổi trạng thái isActive
@@ -39,7 +39,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
       {showActions && currentUser?.role === "admin" && (
         <div className="absolute top-4 left-4 right-4 flex justify-between">
           <Button variant="default" size="sm" onClick={handleToggleActive}>
-            {userId.isActive ? "Khóa" : "Mở khóa"}
+            {user.isActive ? "Khóa" : "Mở khóa"}
           </Button>
           <Button variant="danger" size="sm" onClick={handleDelete}>
             Xóa
@@ -49,7 +49,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
 
       {/* Avatar */}
       <img
-        src={userId?.profilePic?.url || avatarDefault}
+        src={user?.profilePic?.url || avatarDefault}
         alt={fullName}
         className="w-24 h-24 object-cover rounded-full border-2 border-gray-200"
       />
@@ -59,7 +59,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
         <h2 className="text-xl font-semibold text-gray-800">{fullName}</h2>
         <p className="text-sm text-gray-600 mt-1 flex items-center justify-center gap-2">
           <FaEnvelope className="text-blue-500" />
-          <span className="truncate">{userId.email}</span>
+          <span className="truncate">{user.email}</span>
         </p>
       </div>
 
@@ -91,7 +91,7 @@ const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
         <p className="flex items-center gap-2 col-span-full justify-center sm:justify-start overflow-hidden">
           <FaMapMarkerAlt className="text-red-400 flex-shrink-0" />
           <span className="truncate whitespace-nowrap">
-            Khu vực: {userId.district}, {userId.province}
+            Khu vực: {user.district}, {user.province}
           </span>
         </p>
       </div>
