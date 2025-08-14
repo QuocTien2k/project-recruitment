@@ -77,10 +77,7 @@ const ListTeacherSearch = ({ onResults }) => {
       </select>
 
       {/* Reset button */}
-      <Button
-        onClick={handleResetFilter}
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-      >
+      <Button onClick={handleResetFilter} variant="reset">
         Reset
       </Button>
     </div>

@@ -38,18 +38,30 @@ const ShortListTeacher = () => {
       {isTeacherLoading ? (
         <Loading size="md" />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {listTeacher.map((teacher) => (
-            <CardTeacher key={teacher._id} teacher={teacher} />
-          ))}
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {listTeacher.map((teacher) => (
+              <CardTeacher key={teacher._id} teacher={teacher} />
+            ))}
+          </div>
 
-          <Link
-            to="/danh-sach-giao-vien"
-            className="col-span-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-center"
-          >
-            Xem tất cả giáo viên
-          </Link>
-        </div>
+          {/* Nút Xem tất cả */}
+          <div className="flex justify-center mt-6">
+            <Link
+              to="/danh-sach-giao-vien"
+              className="
+            py-2 px-6 
+            bg-green-100 text-green-600
+            rounded-lg 
+            shadow-sm 
+            hover:bg-green-200 hover:text-black
+            transition 
+            font-medium duration-300 transform hover:scale-95"
+            >
+              Xem tất cả giáo viên
+            </Link>
+          </div>
+        </>
       )}
     </>
   );

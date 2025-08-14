@@ -42,7 +42,9 @@ const MyPostSearch = ({ onResults }) => {
       </select>
 
       {/* Reset button */}
-      <Button onClick={handleResetFilter}>Reset</Button>
+      <Button variant="reset" onClick={handleResetFilter}>
+        Reset
+      </Button>
     </div>
   );
 };
