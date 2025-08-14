@@ -108,20 +108,21 @@ const getPostBySlug = async (req, res) => {
   }
 };
 
-// Lấy danh sách giáo viên đang hoạt động (isActive = true)
-const getPublicTeachers = async (req, res) => {
+//lấy 12 giáo viên đang hoạt động
+const getTeachersShortList = async (req, res) => {
   try {
+    // Lấy 12 teacher có userId.isActive = true
     const teachers = await TeacherModel.find()
-      .populate(
-        "userId",
-        "middleName name email profilePic province district isActive"
-      )
-      .select("-degreeImages -__v");
+      .populate({
+        path: "userId",
+        match: { isActive: true },
+        select: "middleName name email profilePic province district isActive",
+      })
+      .select("-degreeImages -__v")
+      .limit(12);
 
-    // Lọc những giáo viên có userId.isActive === true
-    const activeTeachers = teachers.filter(
-      (teacher) => teacher.userId && teacher.userId.isActive
-    );
+    // Loại bỏ teacher không match userId.isActive
+    const activeTeachers = teachers.filter((t) => t.userId);
 
     res.status(200).json({
       success: true,
@@ -131,7 +132,49 @@ const getPublicTeachers = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Lỗi khi lấy danh sách giáo viên",
+      message: "Lỗi khi lấy danh sách giáo viên rút gọn",
+      error: error.message,
+    });
+  }
+};
+
+//lấy danh sách giáo viên + search
+const getListTeachers = async (req, res) => {
+  try {
+    const { experience, workingType, timeType, subject, province, district } =
+      req.query;
+
+    // Query cho Teacher
+    const teacherQuery = {};
+    if (experience) teacherQuery.experience = experience;
+    if (workingType) teacherQuery.workingType = workingType;
+    if (timeType) teacherQuery.timeType = timeType;
+    if (subject) teacherQuery.subject = { $regex: subject, $options: "i" };
+
+    // Query cho User
+    const userMatch = { isActive: true };
+    if (province) userMatch.province = province;
+    if (district) userMatch.district = district;
+
+    const teachers = await TeacherModel.find(teacherQuery)
+      .populate({
+        path: "userId",
+        match: userMatch,
+        select: "middleName name email profilePic province district isActive",
+      })
+      .select("-degreeImages -__v");
+
+    const activeTeachers = teachers.filter((t) => t.userId);
+
+    res.status(200).json({
+      success: true,
+      total: activeTeachers.length,
+      data: activeTeachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi tìm kiếm danh sách giáo viên",
       error: error.message,
     });
   }
@@ -200,7 +243,8 @@ module.exports = {
   getAllApprovedPosts,
   getDetailPost,
   getPostBySlug,
-  getPublicTeachers,
+  getTeachersShortList,
+  getListTeachers,
   getPublicTeacherDetail,
   countViews,
 };
