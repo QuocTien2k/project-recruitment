@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-const ListTeacher = () => {
+const ShortListTeacher = () => {
   const [listTeacher, setListTeacher] = useState([]);
   const dispatch = useDispatch();
   const isTeacherLoading = useSelector((state) => state.loading.teacher);
@@ -47,4 +47,4 @@ const ListTeacher = () => {
   );
 };
 
-export default ListTeacher;
+export default ShortListTeacher;

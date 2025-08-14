@@ -1,11 +1,11 @@
-import ListTeacher from "@/section/ListTeacher";
+import ShortListTeacher from "@/section/ListTeacher";
 import Post from "@/section/Post";
 import React from "react";
 
 const Home = () => {
   return (
     <>
-      <ListTeacher />
+      <ShortListTeacher />
 
       <Post />
     </>
