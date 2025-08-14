@@ -10,9 +10,11 @@ export const createPost = async (formData) => {
   }
 };
 
-export const getMyPosts = async () => {
+export const getMyPosts = async (filters = {}) => {
   try {
-    const res = await axiosInstance.get("/api/post/my-posts");
+    const res = await axiosInstance.get("/api/post/my-posts", {
+      params: filters, // truyền filters lên query
+    });
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);

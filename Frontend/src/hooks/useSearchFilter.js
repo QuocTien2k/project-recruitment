@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
 import { getDistricts, getProvinces } from "@/utils/vnLocation";
@@ -78,6 +78,7 @@ export default function useSearchFilter({
   // ===== 3. Handle Change =====
   const handleChange = (e) => {
     const { name, value } = e.target;
+    //console.log("[DEBUG] Change field:", name, value);
     setForm((prev) => ({
       ...prev,
       [name]: value,
@@ -85,8 +86,8 @@ export default function useSearchFilter({
     }));
   };
 
-  // ===== 4. Build Filters (sync lookup) =====
-  const buildFilters = useCallback(() => {
+  // ===== 4. Build Filters =====
+  const buildFilters = () => {
     const filters = {};
     const getProvinceNameSync = (code) =>
       provincesData.find((p) => p.code === code)?.name || "";
@@ -142,30 +143,35 @@ export default function useSearchFilter({
         break;
     }
     return filters;
-  }, [form, provincesData, districts, searchType, currentUser]);
+  };
 
-  // ===== 5. Debounce fetch =====
-  const debouncedFetch = useRef(
-    debounce(async () => {
+  // ===== 5. Debounced fetch khi form thay đổi =====
+  useEffect(() => {
+    const runFetch = debounce(async () => {
       dispatch(setGlobalLoading(true));
       try {
         const filters = buildFilters();
-        const res = await fetchFunctionRef.current(filters);
+        //console.log("[DEBUG] Filters gửi lên API:", filters);
+
+        const res = await fetchFunction(filters);
+        //console.log("[DEBUG] Dữ liệu trả về:", res);
+
         setResults(res?.data || []);
       } catch (error) {
         console.error("Search Filter Error:", error);
       } finally {
         dispatch(setGlobalLoading(false));
       }
-    }, debounceTime)
-  ).current;
+    }, debounceTime);
 
-  // ===== 6. Auto fetch khi form thay đổi =====
-  useEffect(() => {
-    debouncedFetch();
-  }, [form, buildFilters, debouncedFetch]);
+    runFetch();
 
-  // ===== 7. Reset filter =====
+    return () => {
+      runFetch.cancel(); // hủy debounce khi unmount hoặc form thay đổi
+    };
+  }, [form, provincesData, districts, searchType, currentUser, debounceTime]);
+
+  // ===== 6. Reset filter =====
   const handleResetFilter = () => {
     setForm(initialForms[searchType] || {});
     setDistricts([]);
