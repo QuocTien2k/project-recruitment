@@ -146,9 +146,23 @@ const getMyPosts = async (req, res) => {
       });
     }
 
-    const posts = await PostModel.find({ createdBy: userId }).sort({
-      createdAt: -1,
-    });
+    // Lấy params lọc từ query
+    const { title, status } = req.query;
+
+    const filters = { createdBy: userId };
+
+    if (title) {
+      filters.title = { $regex: title, $options: "i" }; // tìm gần đúng
+    }
+
+    if (status) {
+      filters.status = status;
+    }
+
+    //console.log("[DEBUG] Query params:", req.query);
+    //console.log("[DEBUG] Filters áp dụng:", filters);
+
+    const posts = await PostModel.find(filters).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
