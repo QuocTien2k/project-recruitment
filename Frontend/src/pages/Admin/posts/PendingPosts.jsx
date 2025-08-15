@@ -1,8 +1,11 @@
+import { postApproved, postDelete } from "@/apiCalls/admin";
+import { showCustomConfirm } from "@/components/Confirm";
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import PostCard from "@/components/Post/PostCard";
 import PendingPostSearch from "@/components/Search/PendingPostSearch";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
 const PendingPosts = () => {
@@ -17,29 +20,74 @@ const PendingPosts = () => {
   );
 
   const handleUpdatePost = (updatedPost) => {
-    if (updatedPost.deleted) {
-      setListPost((prev) => prev.filter((p) => p._id !== updatedPost._id));
-    } else if (
-      updatedPost._id &&
-      !listPost.some((p) => p._id === updatedPost._id)
+    // Nếu bài bị xóa hoặc đã được duyệt / từ chối thì remove khỏi danh sách
+    if (
+      updatedPost.deleted ||
+      updatedPost.status === "approved" ||
+      updatedPost.status === "rejected"
     ) {
-      setListPost((prev) => [updatedPost, ...prev]);
-    } else {
-      setListPost((prev) =>
-        prev.map((p) => (p._id === updatedPost._id ? updatedPost : p))
-      );
+      setListPost((prev) => prev.filter((p) => p._id !== updatedPost._id));
+      return;
     }
+
+    // Nếu vẫn pending mà chưa có trong danh sách thì thêm vào
+    if (updatedPost._id && !listPost.some((p) => p._id === updatedPost._id)) {
+      setListPost((prev) => [updatedPost, ...prev]);
+      return;
+    }
+
+    // Nếu pending và đã có trong danh sách thì update
+    setListPost((prev) =>
+      prev.map((p) => (p._id === updatedPost._id ? updatedPost : p))
+    );
   };
 
   useEffect(() => {
     setCurrentPage(0);
   }, [listPost]);
 
-  const handleApprove = async (postId) => {};
+  const handleApprove = async (postId) => {
+    try {
+      const res = await postApproved(postId);
+      if (res.success) {
+        toast.success(res.message || "Duyệt bài thành công");
+        handleUpdatePost(res.data); // cập nhật state listPost
+      } else {
+        toast.error(res.message || "Không thể duyệt bài");
+      }
+    } catch (err) {
+      console.error("Lỗi khi duyệt bài:", err);
+      toast.error(
+        err?.response?.data?.message || "Có lỗi xảy ra khi duyệt bài"
+      );
+    }
+  };
 
   const handleReject = async (postId, reason) => {};
 
-  const handleDelete = async (postId) => {};
+  const handleDelete = (postId) => {
+    showCustomConfirm({
+      title: "Xóa bài tuyển dụng",
+      message: "Bạn có chắc chắn muốn xóa bài tuyển dụng này không?",
+      onConfirm: async () => {
+        try {
+          const res = await postDelete(postId);
+          if (res.success) {
+            toast.success(res.message);
+            // Cập nhật state bằng handleUpdatePost
+            handleUpdatePost({ _id: res.deletedId, deleted: true });
+          } else {
+            toast.error(res.message || "Không thể xóa bài");
+          }
+        } catch (err) {
+          toast.error(err?.response?.data?.message || "Lỗi khi xóa bài");
+        }
+      },
+      onCancel: () => {
+        console.log("Người dùng đã hủy xóa");
+      },
+    });
+  };
 
   return (
     <>

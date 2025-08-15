@@ -24,3 +24,23 @@ export const getPostApproved = async (filters = {}) => {
     throw err;
   }
 };
+
+export const postApproved = async (postId) => {
+  try {
+    const res = await axiosInstance.patch(`/api/admin/approve-post/${postId}`);
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
+export const postDelete = async (postId) => {
+  try {
+    const res = await axiosInstance.delete(`/api/admin/delete-post/${postId}`);
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
