@@ -21,6 +21,7 @@ const PostCard = ({
   showOwnerActions = false,
   onApprove,
   onReject,
+  onDelete,
   onViewDetail,
   showFullDescription = false,
   handleUpdatePost,
@@ -45,7 +46,7 @@ const PostCard = ({
   return (
     <div className="bg-white shadow-md rounded-lg border border-gray-200 p-5 mb-4 hover:shadow-lg transition-shadow duration-300">
       {/* Post actions (User hoặc Admin) */}
-      <div className="flex justify-end mb-2">
+      <div className="w-full flex justify-center mb-2">
         {isPostOwner && showOwnerActions && (
           <PostActionUser post={post} handleUpdatePost={handleUpdatePost} />
         )}
@@ -53,7 +54,7 @@ const PostCard = ({
           <PostActionAdmin
             onApprove={onApprove}
             onReject={onReject}
-            // onDelete={onDelete}
+            onDelete={onDelete}
           />
         )}
       </div>
