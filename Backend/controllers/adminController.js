@@ -345,7 +345,11 @@ const deletePostByAdmin = async (req, res) => {
 
     await PostModel.findByIdAndDelete(postId);
 
-    res.status(200).json({ message: "Xóa bài tuyển dụng thành công." });
+    res.status(200).json({
+      success: true,
+      message: "Xóa bài tuyển dụng thành công.",
+      deletedId: postId,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
