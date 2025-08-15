@@ -26,7 +26,6 @@ const initialForms = {
   },
   "admin-post": {
     title: "",
-    status: "",
     provinceCode: "",
     districtCode: "",
   },
@@ -124,7 +123,6 @@ export default function useSearchFilter({
 
       case "admin-post":
         if (form.title) filters.title = form.title;
-        if (form.status) filters.status = form.status;
         if (form.provinceCode)
           filters.province = getProvinceNameSync(form.provinceCode);
         if (form.districtCode)
