@@ -5,7 +5,7 @@ const PostActionAdmin = ({ onApprove, onReject, onDelete }) => {
   return (
     <div className="flex gap-2">
       <Button onClick={onApprove}>Duyệt bài</Button>
-      <Button onClick={onReject} variant="ghost">
+      <Button onClick={onReject} variant="reject">
         Từ chối
       </Button>
       <Button onClick={onDelete} variant="danger">

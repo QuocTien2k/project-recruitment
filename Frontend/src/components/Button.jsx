@@ -20,7 +20,8 @@ const Button = ({
   const variantClasses = {
     default: "bg-green-500 text-white hover:bg-green-600",
     danger: "bg-red-500 text-white hover:bg-red-600",
-    ghost: "bg-amber-400 text-white hover:bg-amber-500",
+    ghost: "bg-transparent text-black hover:bg-gray-100",
+    reject: "bg-amber-400 text-white hover:bg-amber-500",
     reset: "bg-gray-300 text-gray-800 hover:bg-gray-400",
   };
 
