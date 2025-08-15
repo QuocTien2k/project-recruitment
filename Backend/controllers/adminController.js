@@ -172,12 +172,31 @@ const deleteAccount = async (req, res) => {
 };
 
 /********************* Bài Post ************************** */
-//lấy danh sách bài đang chờ duyệt
+// Lấy danh sách bài đang chờ duyệt (có filter)
 const getPendingPost = async (req, res) => {
   try {
-    const pendingPosts = await PostModel.find({ status: "pending" }).sort({
-      createdAt: -1,
-    });
+    const { title, province, district } = req.query;
+
+    // Bắt đầu với điều kiện mặc định
+    const filters = { status: "pending" };
+
+    // Nếu có filter tiêu đề
+    if (title && title.trim() !== "") {
+      filters.title = { $regex: title.trim(), $options: "i" };
+    }
+
+    // Nếu có filter tỉnh
+    if (province && province.trim() !== "") {
+      filters.province = province.trim();
+    }
+
+    // Nếu có filter quận/huyện
+    if (district && district.trim() !== "") {
+      filters.district = district.trim();
+    }
+
+    // Query dữ liệu
+    const pendingPosts = await PostModel.find(filters).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -192,12 +211,27 @@ const getPendingPost = async (req, res) => {
   }
 };
 
-//lấy danh sách bài đã duyệt
+// Lấy danh sách bài đã duyệt (có filter)
 const getApprovedPostByAdmin = async (req, res) => {
   try {
-    const approvedPosts = await PostModel.find({ status: "approved" }).sort({
-      createdAt: -1,
-    });
+    const { title, province, district } = req.query;
+
+    // Điều kiện mặc định
+    const filters = { status: "approved" };
+
+    if (title && title.trim() !== "") {
+      filters.title = { $regex: title.trim(), $options: "i" };
+    }
+
+    if (province && province.trim() !== "") {
+      filters.province = province.trim();
+    }
+
+    if (district && district.trim() !== "") {
+      filters.district = district.trim();
+    }
+
+    const approvedPosts = await PostModel.find(filters).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
