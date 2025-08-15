@@ -14,6 +14,8 @@ import {
   Eye,
   MapPin,
   FileText,
+  User,
+  Hash,
 } from "lucide-react";
 
 const PostCard = ({
@@ -40,6 +42,8 @@ const PostCard = ({
       });
     }
   }, [post?._id]);
+
+  console.log(post);
 
   const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
 
@@ -119,6 +123,19 @@ const PostCard = ({
           <CalendarDays className="text-emerald-500 w-4 h-4" />
           <span>Ngày tạo: {formatted}</span>
         </p>
+
+        {isAdmin && (
+          <div className="flex items-center gap-4 mt-1 text-gray-600">
+            <span className="flex items-center gap-1">
+              <User className="text-blue-500 w-4 h-4" />
+              {post?.createdByName}
+            </span>
+            <span className="flex items-center gap-1">
+              <Hash className="text-gray-500 w-4 h-4" />
+              {post?.createdBy}
+            </span>
+          </div>
+        )}
 
         {/* Trạng thái */}
         {showOwnerActions && post?.status && (
