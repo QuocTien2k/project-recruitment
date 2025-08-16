@@ -16,7 +16,9 @@ import {
   FileText,
   User,
   Hash,
+  AlertCircle,
 } from "lucide-react";
+import RejectPost from "@/Modals/RejectPost";
 
 const PostCard = ({
   post,
@@ -29,6 +31,7 @@ const PostCard = ({
   handleUpdatePost,
 }) => {
   const currentUser = useSelector((state) => state.currentUser.user);
+  const [showFullReason, setShowFullReason] = useState(false);
   const isAdmin = currentUser?.role === "admin";
   const isPostOwner = currentUser?._id === post.createdBy;
   const [views, setViews] = useState(0);
@@ -168,10 +171,22 @@ const PostCard = ({
         {showOwnerActions &&
           post?.status === "rejected" &&
           post?.rejectionReason && (
-            <p className="text-xs text-red-500 italic mt-1 ml-6">
-              Lý do bị từ chối: {post?.rejectionReason}
-            </p>
+            <div
+              className="flex gap-2 text-red-600 mb-3 cursor-pointer"
+              onClick={() => setShowFullReason(true)}
+            >
+              <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5 w-4 h-4" />
+              <p className="font-semibold text-sm text-blink">
+                Bài viết này đã bị từ chối — Xem lý do
+              </p>
+            </div>
           )}
+        {showFullReason && (
+          <RejectPost
+            reason={post?.rejectionReason}
+            onClose={() => setShowFullReason(false)}
+          />
+        )}
       </div>
 
       {/* Xem chi tiết nếu không hiển thị toàn bộ mô tả */}
