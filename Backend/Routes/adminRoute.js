@@ -30,7 +30,7 @@ router.delete("/delete-account/:userId", protect, isAdmin, deleteAccount);
 router.get("/get-pending-post", protect, isAdmin, getPendingPost);
 router.get("/get-approved-post", protect, isAdmin, getApprovedPostByAdmin);
 router.patch("/approve-post/:postId", protect, isAdmin, approvePostByAdmin);
-router.patch("/reject-post", protect, isAdmin, rejectPost);
+router.patch("/reject-post/:postId", protect, isAdmin, rejectPost);
 router.delete("/delete-post/:postId", protect, isAdmin, deletePostByAdmin);
 
 module.exports = router;
