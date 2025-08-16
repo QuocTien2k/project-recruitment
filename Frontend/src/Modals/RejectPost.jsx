@@ -17,7 +17,7 @@ const RejectPost = ({ reason, onClose }) => {
             <X className="w-5 h-5 text-gray-600 hover:text-red-600" />
           </button>
         </div>
-        <div className="text-gray-700 whitespace-pre-line border border-red-200 rounded-md bg-red-50 p-3 text-sm max-h-60 overflow-y-auto">
+        <div className="text-gray-700 whitespace-pre-line text-justify border border-red-200 rounded-md bg-red-50 p-3 text-sm max-h-60 overflow-y-auto">
           {reason}
         </div>
       </div>

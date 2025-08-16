@@ -19,6 +19,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import RejectPost from "@/Modals/RejectPost";
+import Button from "@components/Button";
 
 const PostCard = ({
   post,
@@ -58,11 +59,21 @@ const PostCard = ({
           <PostActionUser post={post} handleUpdatePost={handleUpdatePost} />
         )}
         {isAdmin && (
-          <PostActionAdmin
-            onApprove={onApprove}
-            onReject={onReject}
-            onDelete={onDelete}
-          />
+          <>
+            {post?.status === "pending" ? (
+              <PostActionAdmin
+                onApprove={onApprove}
+                onReject={onReject}
+                onDelete={onDelete}
+              />
+            ) : (
+              <div className="flex justify-center">
+                <Button onClick={onDelete} variant="danger">
+                  Xóa
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </div>
 

@@ -5,9 +5,11 @@ import React from "react";
 const Home = () => {
   return (
     <>
-      <ShortListTeacher />
+      <div className="space-y-8">
+        <ShortListTeacher />
 
-      <Post />
+        <Post />
+      </div>
     </>
   );
 };
