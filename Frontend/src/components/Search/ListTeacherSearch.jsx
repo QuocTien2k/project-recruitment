@@ -29,6 +29,7 @@ const ListTeacherSearch = ({ onResults }) => {
         placeholder="Tìm theo môn học. Ví dụ: Toán, Sử..."
         value={form.subject}
         onChange={handleChange}
+        className="w-[25%]"
       />
 
       {/* Select kinh nghiệm */}
@@ -36,7 +37,7 @@ const ListTeacherSearch = ({ onResults }) => {
         name="experience"
         value={form.experience}
         onChange={handleChange}
-        className="form-select-custom w-[15%]"
+        className="form-select-custom w-[10%]"
       >
         <option value="">Kinh nghiệm</option>
         <option value="0-1">0-1 năm</option>
@@ -45,12 +46,37 @@ const ListTeacherSearch = ({ onResults }) => {
         <option value="5+">5 năm trở lên</option>
       </select>
 
+      {/* Select hình thức làm việc */}
+      <select
+        name="workingType"
+        value={form.workingType}
+        onChange={handleChange}
+        className="form-select-custom w-[15%]"
+      >
+        <option value="">Hình thức làm việc</option>
+        <option value="offline">Offline</option>
+        <option value="online">Online</option>
+        <option value="both">Cả hai</option>
+      </select>
+
+      {/* Select thời gian làm việc */}
+      <select
+        name="timeType"
+        value={form.timeType}
+        onChange={handleChange}
+        className="form-select-custom w-[15%]"
+      >
+        <option value="">Thời gian làm việc</option>
+        <option value="full-time">full-time</option>
+        <option value="part-time">Part-time</option>
+      </select>
+
       {/* Select tỉnh/thành */}
       <select
         name="provinceCode"
         value={form.provinceCode}
         onChange={handleChange}
-        className="form-select-custom w-[20%]"
+        className="form-select-custom w-[15%]"
       >
         <option value="">Tỉnh/Thành</option>
         {provinces.map((p) => (

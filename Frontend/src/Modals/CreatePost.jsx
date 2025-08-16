@@ -244,6 +244,7 @@ const CreatePost = ({ onClose, handleUpdatePost }) => {
                 <option value="">Chọn hình thức</option>
                 <option value="online">Online</option>
                 <option value="offline">Offline</option>
+                <option value="both">Cả hai</option>
               </select>
               {errors.workingType && (
                 <span className="text-red-500 text-sm">
