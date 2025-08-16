@@ -28,6 +28,7 @@ const ApprovePostSearch = ({ onResults }) => {
         placeholder="Tìm theo tiêu đề..."
         value={form.title}
         onChange={handleChange}
+        className="w-[25%]"
       />
 
       {/* Select tỉnh/thành */}

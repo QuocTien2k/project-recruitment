@@ -20,6 +20,7 @@ const PendingPostSearch = ({ onResults }) => {
   useEffect(() => {
     onResults(results);
   }, [results, onResults]);
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       {/* Input */}
@@ -28,6 +29,7 @@ const PendingPostSearch = ({ onResults }) => {
         placeholder="Tìm theo tiêu đề..."
         value={form.title}
         onChange={handleChange}
+        className="w-[25%]"
       />
 
       {/* Select tỉnh/thành */}
