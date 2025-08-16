@@ -162,7 +162,26 @@ const getListTeachers = async (req, res) => {
 
     // Build teacher filters
     const teacherMatch = {};
-    if (experience) teacherMatch.experience = experience;
+    if (experience) {
+      // Trường hợp dạng "0-1", "2-3"
+      if (experience.includes("-")) {
+        const parts = experience.split("-"); // "2-3" -> ["2", "3"]
+        const min = Number(parts[0]);
+        const max = Number(parts[1]);
+
+        // Tìm teacher có số năm kinh nghiệm >= min và <= max
+        teacherMatch.experience = { $gte: min, $lte: max };
+      }
+      // Trường hợp dạng "5+" (từ 5 năm trở lên)
+      else if (experience.endsWith("+")) {
+        const min = Number(experience.replace("+", "")); // "5+" -> 5
+        teacherMatch.experience = { $gte: min };
+      }
+      // Trường hợp chỉ có một số (fallback)
+      else {
+        teacherMatch.experience = Number(experience);
+      }
+    }
     if (workingType) teacherMatch.workingType = workingType;
     if (timeType) teacherMatch.timeType = timeType;
     if (subject) teacherMatch.subject = { $regex: subject, $options: "i" };
@@ -176,7 +195,7 @@ const getListTeachers = async (req, res) => {
       { $match: teacherMatch }, // filter teacher
       {
         $lookup: {
-          from: "users", // tên collection User trong MongoDB
+          from: "users", // tên collection
           localField: "userId",
           foreignField: "_id",
           as: "user",
