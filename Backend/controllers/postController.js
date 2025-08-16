@@ -119,6 +119,7 @@ const updatePost = async (req, res) => {
     post.workingType = workingType || post.workingType;
     post.timeType = timeType || post.timeType;
     post.status = "pending"; // reset lại trạng thái duyệt sau khi sửa
+    post.rejectionReason = null;
 
     await post.save();
 
