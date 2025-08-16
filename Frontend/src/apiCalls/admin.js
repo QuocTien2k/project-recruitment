@@ -35,6 +35,18 @@ export const postApproved = async (postId) => {
   }
 };
 
+export const postReject = async (postId, reason) => {
+  try {
+    const res = await axiosInstance.patch(`/api/admin/reject-post/${postId}`, {
+      reason,
+    });
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
 export const postDelete = async (postId) => {
   try {
     const res = await axiosInstance.delete(`/api/admin/delete-post/${postId}`);

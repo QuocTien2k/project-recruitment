@@ -1,8 +1,9 @@
-import { postApproved, postDelete } from "@/apiCalls/admin";
+import { postApproved, postDelete, postReject } from "@/apiCalls/admin";
 import { showCustomConfirm } from "@/components/Confirm";
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import PostCard from "@/components/Post/PostCard";
+import RejectConfirm from "@/components/RejectConfirm";
 import PendingPostSearch from "@/components/Search/PendingPostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -11,6 +12,8 @@ import { useSelector } from "react-redux";
 const PendingPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listPost, setListPost] = useState([]);
+  const [showRejectPopup, setShowRejectPopup] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
 
@@ -63,7 +66,27 @@ const PendingPosts = () => {
     }
   };
 
-  const handleReject = async (postId, reason) => {};
+  const handleReject = (postId) => {
+    setSelectedPostId(postId);
+    setShowRejectPopup(true);
+  };
+
+  const confirmReject = async (reason) => {
+    try {
+      const res = await postReject(selectedPostId, reason);
+      if (res.success) {
+        toast.success(res.message || "Từ chối bài thành công");
+        handleUpdatePost(res.data);
+      } else {
+        toast.error(res.message || "Không thể từ chối bài");
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Lỗi khi từ chối bài");
+    } finally {
+      setShowRejectPopup(false);
+      setSelectedPostId(null);
+    }
+  };
 
   const handleDelete = (postId) => {
     showCustomConfirm({
@@ -108,11 +131,21 @@ const PendingPosts = () => {
               key={post._id}
               showFullDescription
               onApprove={() => handleApprove(post._id)}
-              onReject={(reason) => handleReject(post._id, reason)}
+              onReject={() => handleReject(post._id)}
               onDelete={() => handleDelete(post._id)}
             />
           ))}
         </div>
+      )}
+
+      {showRejectPopup && (
+        <RejectConfirm
+          title="Từ chối bài tuyển dụng"
+          message="Bạn có chắc chắn muốn từ chối bài tuyển dụng này?"
+          postId={selectedPostId}
+          onConfirm={confirmReject}
+          onCancel={() => setShowRejectPopup(false)}
+        />
       )}
 
       <Pagination
