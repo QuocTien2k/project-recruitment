@@ -8,7 +8,11 @@ const teacherSchema = new mongoose.Schema(
       required: true,
     },
     experience: { type: Number, required: true },
-    workingType: { type: String, enum: ["online", "offline"], required: true },
+    workingType: {
+      type: String,
+      enum: ["online", "offline", "both"],
+      required: true,
+    },
     timeType: {
       type: String,
       enum: ["full-time", "part-time"],
