@@ -305,17 +305,17 @@ const SignupTeacher = () => {
           )}
         </div>
 
-        {/* Quận/Huyện */}
+        {/* Phường/Xã */}
         {districtList.length > 0 && (
           <div>
-            <label className="block font-medium">Quận / Huyện</label>
+            <label className="block font-medium">Phường / Xã</label>
             <select
               name="district"
               value={formData.district}
               onChange={handleChange}
               className="form-select-custom"
             >
-              <option value="">Chọn quận / huyện</option>
+              <option value="">Chọn phường / xã</option>
               {districtList.map((dist) => (
                 <option key={dist.code} value={dist.name}>
                   {dist.name}
