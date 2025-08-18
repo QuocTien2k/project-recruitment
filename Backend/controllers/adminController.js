@@ -3,42 +3,71 @@ const TeacherModel = require("../models/Teacher");
 const PostModel = require("../models/Post");
 
 /********************* Account ************************** */
-//lấy danh sách user hoạt động
+// lấy danh sách user hoạt động
 const getActiveUsers = async (req, res) => {
   try {
-    const users = await UserModel.find({ role: "user", isActive: true }).select(
+    const { id, name, email, province, district } = req.query;
+
+    const query = { role: "user", isActive: true };
+
+    if (id) query._id = id;
+    if (name) {
+      query.$or = [
+        { name: { $regex: name, $options: "i" } },
+        { middleName: { $regex: name, $options: "i" } },
+      ];
+    }
+    if (email) query.email = { $regex: email, $options: "i" };
+    if (province) query.province = province;
+    if (district) query.district = district;
+
+    const users = await UserModel.find(query).select(
       "-password -resetPasswordToken"
     );
 
     res.status(200).json({
       success: true,
       total: users.length,
-      users,
+      data: users,
     });
   } catch (error) {
     res.status(400).json({
-      message: "Lấy danh sách người dùng thất bại!" + error.message,
+      message: "Lấy danh sách người dùng thất bại! " + error.message,
       success: false,
     });
   }
 };
 
-//lấy danh sách user tạm khóa
+// lấy danh sách user tạm khóa
 const getInActiveUsers = async (req, res) => {
   try {
-    const users = await UserModel.find({
-      role: "user",
-      isActive: false,
-    }).select("-password -resetPasswordToken");
+    const { id, name, email, province, district } = req.query;
+
+    const query = { role: "user", isActive: false };
+
+    if (id) query._id = id;
+    if (name) {
+      query.$or = [
+        { name: { $regex: name, $options: "i" } },
+        { middleName: { $regex: name, $options: "i" } },
+      ];
+    }
+    if (email) query.email = { $regex: email, $options: "i" };
+    if (province) query.province = province;
+    if (district) query.district = district;
+
+    const users = await UserModel.find(query).select(
+      "-password -resetPasswordToken"
+    );
 
     res.status(200).json({
       success: true,
       total: users.length,
-      users,
+      data: users,
     });
   } catch (error) {
     res.status(400).json({
-      message: "Lấy danh sách người dùng thất bại!" + error.message,
+      message: "Lấy danh sách người dùng thất bại! " + error.message,
       success: false,
     });
   }
