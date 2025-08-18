@@ -30,10 +30,9 @@ const initialForms = {
     districtCode: "",
   },
   "admin-user": {
+    id: "",
     name: "",
     email: "",
-    role: "",
-    isActive: "",
     provinceCode: "",
     districtCode: "",
   },
@@ -130,10 +129,9 @@ export default function useSearchFilter({
         break;
 
       case "admin-user":
+        if (form.id) filters.id = form.id;
         if (form.name) filters.name = form.name;
         if (form.email) filters.email = form.email;
-        if (form.role) filters.role = form.role;
-        if (form.isActive) filters.isActive = form.isActive;
         if (form.provinceCode)
           filters.province = getProvinceNameSync(form.provinceCode);
         if (form.districtCode)
