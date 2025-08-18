@@ -19,9 +19,9 @@ const MessageNotification = () => {
     const users = [];
 
     allChats.forEach((chat) => {
-      chat.members.forEach((member) => {
+      chat?.members.forEach((member) => {
         if (
-          member._id !== user._id &&
+          member?._id !== user._id &&
           !users.some((u) => u._id === member._id)
         ) {
           users.push(member);
