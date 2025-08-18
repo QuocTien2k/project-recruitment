@@ -207,11 +207,11 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
             )}
           </div>
 
-          {/* Quận / Huyện */}
+          {/* Phường / Xã */}
           {districtList.length > 0 && (
             <div className="space-y-1">
               <label htmlFor="district" className="block text-sm text-gray-700">
-                Quận / Huyện
+                Phường / Xã
               </label>
               <select
                 id="district"
@@ -220,7 +220,7 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
                 onChange={handleChange}
                 className="form-select-custom"
               >
-                <option value="">Chọn quận / huyện</option>
+                <option value="">Chọn phường / xã</option>
                 {districtList.map((dist) => (
                   <option key={dist.code} value={dist.name}>
                     {dist.name}

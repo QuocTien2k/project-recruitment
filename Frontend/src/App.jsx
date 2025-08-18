@@ -24,6 +24,7 @@ import PendingPosts from "@pages-admin/posts/PendingPosts";
 import ApprovedPosts from "@pages-admin/posts/ApprovedPosts";
 import ContactAdminButton from "@components/ContactAdmin";
 import ListTeachers from "@pages-user/ListTeachers";
+import ScrollToTop from "@components/ScrollToTop";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <Toaster position="top-center" reverseOrder={false} />
       <Router>
         <DynamicTitle />
+        <ScrollToTop duration={1200} />
         <Routes>
           {/* Layout User dùng chung cho user + teacher */}
           <Route element={<UserLayout />}>
