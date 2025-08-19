@@ -1,7 +1,7 @@
 import useSearchFilter from "@/hooks/useSearchFilter";
 import React, { useEffect } from "react";
-import InputField from "@components/Input";
-import Button from "@components/Button";
+import InputField from "@/components/UI/Input";
+import Button from "@/components/UI/Button";
 import { getPostApproved } from "@/apiCalls/admin";
 
 const ApprovePostSearch = ({ onResults }) => {

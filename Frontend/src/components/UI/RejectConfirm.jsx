@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "@components/Button";
+import Button from "@/components/UI/Button";
 
 const RejectConfirm = ({ title, message, postId, onConfirm, onCancel }) => {
   const [reason, setReason] = useState("");

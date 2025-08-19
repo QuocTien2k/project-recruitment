@@ -1,8 +1,8 @@
 import { getPostPending } from "@/apiCalls/admin";
 import useSearchFilter from "@/hooks/useSearchFilter";
 import React, { useEffect } from "react";
-import InputField from "@components/Input";
-import Button from "@components/Button";
+import InputField from "@/components/UI/Input";
+import Button from "@/components/UI/Button";
 
 const PendingPostSearch = ({ onResults }) => {
   const {

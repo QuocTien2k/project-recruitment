@@ -1,6 +1,6 @@
 import { getTeacherShortList } from "@/apiCalls/public";
-import CardTeacher from "@/components/CardTeacher";
-import Loading from "@/components/Loading";
+import CardTeacher from "@/components/Cards/CardTeacher";
+import Loading from "@/components/UI/Loading";
 import { setTeacherLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";

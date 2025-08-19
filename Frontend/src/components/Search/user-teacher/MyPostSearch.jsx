@@ -2,8 +2,8 @@ import { getMyPosts } from "@/apiCalls/post";
 import useSearchFilter from "@/hooks/useSearchFilter";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import Button from "@components/Button";
-import InputField from "@components/Input";
+import Button from "@/components/UI/Button";
+import InputField from "@/components/UI/Input";
 
 const MyPostSearch = ({ onResults }) => {
   const currentUser = useSelector((state) => state.currentUser.user);

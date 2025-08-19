@@ -1,7 +1,7 @@
 import { postDelete } from "@/apiCalls/admin";
-import { showCustomConfirm } from "@/components/Confirm";
-import Loading from "@/components/Loading";
-import Pagination from "@/components/Pagination";
+import { showCustomConfirm } from "@/components/UI/Confirm";
+import Loading from "@/components/UI/Loading";
+import Pagination from "@/components/UI/Pagination";
 import PostCard from "@/components/Post/PostCard";
 import ApprovePostSearch from "@/components/Search/admin/ApprovePostSearch";
 import React, { useEffect, useState } from "react";

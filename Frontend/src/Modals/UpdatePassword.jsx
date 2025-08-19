@@ -1,5 +1,5 @@
 import { changePassword } from "@/apiCalls/user";
-import Button from "@/components/Button";
+import Button from "@/components/UI/Button";
 import { setUserLoading } from "@/redux/loadingSlice";
 import React, { useState } from "react";
 import toast from "react-hot-toast";

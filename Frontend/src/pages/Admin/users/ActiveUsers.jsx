@@ -1,6 +1,6 @@
-import CardUser from "@/components/CardUser";
-import Loading from "@/components/Loading";
-import Pagination from "@/components/Pagination";
+import CardUser from "@/components/Cards/CardUser";
+import Loading from "@/components/UI/Loading";
+import Pagination from "@/components/UI/Pagination";
 import ActiveUserSearch from "@/components/Search/admin/ActiveUserSearch";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

@@ -5,8 +5,8 @@ import { MdWork } from "react-icons/md";
 import { getTeacherDetail } from "@/apiCalls/public";
 import { useDispatch, useSelector } from "react-redux";
 import { setTeacherLoading } from "@/redux/loadingSlice";
-import Loading from "@/components/Loading";
-import Button from "@/components/Button";
+import Loading from "@/components/UI/Loading";
+import Button from "@/components/UI/Button";
 import { useChatContext } from "@context/ChatContext";
 import toast from "react-hot-toast";
 

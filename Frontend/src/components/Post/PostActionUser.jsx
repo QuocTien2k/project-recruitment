@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Button from "@components/Button";
+import Button from "@/components/UI/Button";
 import EditPost from "@/Modals/EditPost";
 import { useSelector } from "react-redux";
-import { showCustomConfirm } from "@components/Confirm";
+import { showCustomConfirm } from "@/components/UI/Confirm";
 import toast from "react-hot-toast";
 import { deletePost } from "@/apiCalls/post";
 

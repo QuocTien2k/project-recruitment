@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getDistricts, getProvinces } from "@utils/vnLocation";
-import Button from "@components/Button";
+import Button from "@/components/UI/Button";
 import toast from "react-hot-toast";
 import { signupUser } from "@api/auth";
 import { useNavigate } from "react-router-dom";

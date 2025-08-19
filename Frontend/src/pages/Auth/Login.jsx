@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import Button from "@/components/Button";
+import Button from "@/components/UI/Button";
 import { login } from "@/apiCalls/auth";
 import { jwtDecode } from "jwt-decode";
 

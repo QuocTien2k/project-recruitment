@@ -1,5 +1,5 @@
 import { createPost } from "@/apiCalls/post";
-import Button from "@/components/Button";
+import Button from "@/components/UI/Button";
 import { setUserLoading } from "@/redux/loadingSlice";
 import { getDistricts, getProvinces } from "@/utils/vnLocation";
 import React, { useEffect, useState } from "react";
