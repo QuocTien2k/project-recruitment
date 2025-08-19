@@ -184,12 +184,10 @@ const deleteAccount = async (req, res) => {
       await TeacherModel.findOneAndDelete({ userId: user.id });
     }
 
-    //xóa trong bảng user
-    await UserModel.findOneAndDelete(userId);
-
     res.status(200).json({
       message: "Xóa tài khoản thành công",
       success: true,
+      deletedUser: user,
     });
   } catch (error) {
     res.status(500).json({
