@@ -1,7 +1,12 @@
+import Title from "@/components/UI/Title";
 import React from "react";
 
 const ActiveTeachers = () => {
-  return <div>ActiveTeachers</div>;
+  return (
+    <>
+      <Title text="Danh sách giáo viên hoạt động" className="mb-6" />
+    </>
+  );
 };
 
 export default ActiveTeachers;
