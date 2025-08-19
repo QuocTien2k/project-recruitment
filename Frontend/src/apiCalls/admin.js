@@ -25,6 +25,30 @@ export const getUserInActive = async (filters = {}) => {
   }
 };
 
+export const changeStatusUser = async (userId) => {
+  try {
+    const res = await axiosInstance.patch(
+      `/api/admin/account-status/${userId}`
+    );
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
+export const deleteUser = async (userId) => {
+  try {
+    const res = await axiosInstance.delete(
+      `/api/admin/delete-account/${userId}`
+    );
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
 /**** Post **** */
 export const getPostPending = async (filters = {}) => {
   try {
