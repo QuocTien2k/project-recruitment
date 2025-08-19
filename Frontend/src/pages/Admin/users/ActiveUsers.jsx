@@ -5,6 +5,9 @@ import ActiveUserSearch from "@/components/Search/admin/ActiveUserSearch";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Title from "@/components/UI/Title";
+import { showCustomConfirm } from "@/components/UI/Confirm";
+import toast from "react-hot-toast";
+import { changeStatusUser, deleteUser } from "@/apiCalls/admin";
 
 const ActiveUsers = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -29,9 +32,67 @@ const ActiveUsers = () => {
     }
   };
 
-  const handleToggleStatus = async (id) => {};
+  const handleToggleStatus = (user, action) => {
+    const isLock = action === "lock";
 
-  const handleDeleteUser = async (id) => {};
+    showCustomConfirm({
+      title: isLock ? "Khóa tài khoản" : "Mở khóa tài khoản",
+      message: `Bạn có chắc chắn muốn ${
+        isLock ? "khóa" : "mở khóa"
+      } tài khoản này không?`,
+      onConfirm: async () => {
+        try {
+          const res = await changeStatusUser(user._id);
+          if (res.success) {
+            toast.success(res.message);
+            if (res.user?.isActive) {
+              // Nếu user vẫn active → update trong list
+              handleUpdateUser(res.user, "update");
+            } else {
+              // Nếu user bị khóa → remove khỏi list (vì đang ở trang "hoạt động")
+              handleUpdateUser({ _id: res.user._id }, "delete");
+            }
+          } else {
+            toast.error(
+              res.message || "Không thể thay đổi trạng thái tài khoản"
+            );
+          }
+        } catch (err) {
+          toast.error(
+            err?.response?.data?.message ||
+              "Lỗi khi thay đổi trạng thái tài khoản"
+          );
+        }
+      },
+      onCancel: () => {
+        console.log("Admin đã hủy thao tác");
+      },
+    });
+  };
+
+  const handleDeleteUser = (id) => {
+    showCustomConfirm({
+      title: "Xóa tài khoản",
+      message: "Bạn có chắc chắn muốn xóa tài khoản này không?",
+      onConfirm: async () => {
+        try {
+          const res = await deleteUser(id);
+          if (res.success) {
+            toast.success(res.message);
+            // Cập nhật state bằng handleUpdateUser
+            handleUpdateUser({ _id: res.deletedId }, "delete");
+          } else {
+            toast.error(res.message || "Không thể xóa tài khoản");
+          }
+        } catch (err) {
+          toast.error(err?.response?.data?.message || "Lỗi khi xóa tài khoản");
+        }
+      },
+      onCancel: () => {
+        console.log("Admin đã hủy xóa");
+      },
+    });
+  };
 
   useEffect(() => {
     setCurrentPage(0);

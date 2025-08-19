@@ -18,7 +18,9 @@ const CardUser = ({ user, onToggleStatus, onDelete, showActions = true }) => {
           <Button
             variant="default"
             size="sm"
-            onClick={() => onToggleStatus?.(id)}
+            onClick={() =>
+              onToggleStatus?.(user, user.isActive ? "lock" : "unlock")
+            }
           >
             {user.isActive ? "Khóa" : "Mở khóa"}
           </Button>
