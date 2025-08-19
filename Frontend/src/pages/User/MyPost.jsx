@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import PostCard from "@/components/Post/PostCard";
-import MyPostSearch from "@/components/Search/MyPostSearch";
+import MyPostSearch from "@/components/Search/user-teacher/MyPostSearch";
 import CreatePost from "@/Modals/CreatePost";
 import React, { useEffect, useState } from "react";
 import { FiFileText } from "react-icons/fi";

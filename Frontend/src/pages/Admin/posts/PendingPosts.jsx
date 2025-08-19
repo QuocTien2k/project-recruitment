@@ -4,7 +4,7 @@ import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import PostCard from "@/components/Post/PostCard";
 import RejectConfirm from "@/components/RejectConfirm";
-import PendingPostSearch from "@/components/Search/PendingPostSearch";
+import PendingPostSearch from "@/components/Search/admin/PendingPostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";

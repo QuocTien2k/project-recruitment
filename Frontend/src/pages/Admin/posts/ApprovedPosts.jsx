@@ -3,7 +3,7 @@ import { showCustomConfirm } from "@/components/Confirm";
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import PostCard from "@/components/Post/PostCard";
-import ApprovePostSearch from "@/components/Search/ApprovePostSearch";
+import ApprovePostSearch from "@/components/Search/admin/ApprovePostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";

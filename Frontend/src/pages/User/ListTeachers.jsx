@@ -1,7 +1,7 @@
 import CardTeacher from "@/components/CardTeacher";
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
-import ListTeacherSerach from "@/components/Search/ListTeacherSearch";
+import ListTeacherSerach from "@/components/Search/user-teacher/ListTeacherSearch";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
