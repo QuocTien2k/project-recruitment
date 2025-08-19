@@ -1,10 +1,10 @@
+import { getUserActive } from "@/apiCalls/admin";
+import Button from "@/components/Button";
+import InputField from "@/components/Input";
 import useSearchFilter from "@/hooks/useSearchFilter";
 import React, { useEffect } from "react";
-import InputField from "@components/Input";
-import Button from "@components/Button";
-import { getPostApproved } from "@/apiCalls/admin";
 
-const ApprovePostSearch = ({ onResults }) => {
+const ActiveUserSearch = ({ onResults }) => {
   const {
     form,
     handleChange,
@@ -13,8 +13,8 @@ const ApprovePostSearch = ({ onResults }) => {
     districts,
     results,
   } = useSearchFilter({
-    searchType: "admin-post",
-    fetchFunction: getPostApproved,
+    searchType: "admin-user",
+    fetchFunction: getUserActive,
   });
 
   useEffect(() => {
@@ -25,11 +25,27 @@ const ApprovePostSearch = ({ onResults }) => {
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       {/* Input */}
       <InputField
-        name="title"
-        placeholder="Tìm theo tiêu đề..."
-        value={form.title}
+        name="id"
+        placeholder="Tìm theo id..."
+        value={form.id}
         onChange={handleChange}
-        className="w-[25%]"
+        className="w-[20%]"
+      />
+
+      <InputField
+        name="name"
+        placeholder="Tìm theo name..."
+        value={form.name}
+        onChange={handleChange}
+        className="w-[20%]"
+      />
+
+      <InputField
+        name="email"
+        placeholder="Tìm theo email..."
+        value={form.email}
+        onChange={handleChange}
+        className="w-[20%]"
       />
 
       {/* Select tỉnh/thành */}
@@ -71,4 +87,4 @@ const ApprovePostSearch = ({ onResults }) => {
   );
 };
 
-export default ApprovePostSearch;
+export default ActiveUserSearch;
