@@ -13,7 +13,7 @@ import Login from "@pages-auth/Login";
 import Signup from "@pages-auth/Signup";
 import DynamicTitle from "@context/DynamicTitle";
 import TeacherDetail from "@pages-user/TeacherDetail";
-import ChatArea from "@/components/chat/ChatArea";
+import ChatArea from "@/components/Chat/ChatArea";
 import PostDetail from "@pages-user/PostDetail";
 import MyPost from "@pages-user/MyPost";
 import ActiveUsers from "@pages-admin/users/ActiveUsers";

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Button from "@/components/UI/Button";
-import MessageNotification from "@/components/chat/MessageNotification";
+import MessageNotification from "@/components/Chat/MessageNotification";
 import { FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
