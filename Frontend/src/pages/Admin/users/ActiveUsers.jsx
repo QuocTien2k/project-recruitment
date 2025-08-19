@@ -4,6 +4,7 @@ import Pagination from "@/components/UI/Pagination";
 import ActiveUserSearch from "@/components/Search/admin/ActiveUserSearch";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Title from "@/components/UI/Title";
 
 const ActiveUsers = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -38,6 +39,7 @@ const ActiveUsers = () => {
 
   return (
     <>
+      <Title text="Danh sách User hoạt động" className="mb-6" />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">

@@ -7,6 +7,7 @@ import CreatePost from "@/Modals/CreatePost";
 import React, { useEffect, useState } from "react";
 import { FiFileText } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import Title from "@/components/UI/Title";
 
 const MyPost = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -41,6 +42,8 @@ const MyPost = () => {
 
   return (
     <>
+      <Title text="Bài viết của bạn" className="mb-6" />
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">

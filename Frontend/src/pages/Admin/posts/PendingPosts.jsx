@@ -8,6 +8,7 @@ import PendingPostSearch from "@/components/Search/admin/PendingPostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import Title from "@/components/UI/Title";
 
 const PendingPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -114,6 +115,7 @@ const PendingPosts = () => {
 
   return (
     <>
+      <Title text="Danh sách bài viết chưa duyệt" className="mb-6" />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">

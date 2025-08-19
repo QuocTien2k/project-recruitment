@@ -7,6 +7,7 @@ import ApprovePostSearch from "@/components/Search/admin/ApprovePostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import Title from "@/components/UI/Title";
 
 const ApprovedPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -72,6 +73,8 @@ const ApprovedPosts = () => {
 
   return (
     <>
+      <Title text="Danh sách bài viết đã duyệt" className="mb-6" />
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">
