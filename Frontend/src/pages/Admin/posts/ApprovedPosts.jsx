@@ -82,10 +82,8 @@ const ApprovedPosts = () => {
         {/* Search */}
         <div className="flex-1 min-w-0">
           <ApprovePostSearch
-            onResults={(results) => {
-              setListPost(results);
-              setHasSearched(true);
-            }}
+            onResults={setListPost}
+            onUserAction={() => setHasSearched(true)}
           />
         </div>
       </div>
