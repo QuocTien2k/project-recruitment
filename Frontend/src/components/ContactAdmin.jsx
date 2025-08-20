@@ -1,7 +1,6 @@
 import { useChatContext } from "@/context/ChatContext";
 import { useSelector } from "react-redux";
 import { MessageCircle } from "lucide-react"; // icon chat
-import toast from "react-hot-toast";
 
 export default function ContactAdminButton() {
   const { openChat } = useChatContext();
@@ -11,14 +10,10 @@ export default function ContactAdminButton() {
   const ADMIN_ID = "68946f57455a4c49bda694ed";
 
   const handleClick = () => {
-    if (!currentUser) {
-      toast.error("Vui lòng đăng nhập để trò chuyện!");
-      return;
-    }
     openChat(ADMIN_ID);
   };
 
-  if (currentUser && currentUser._id === ADMIN_ID) {
+  if (!currentUser || currentUser._id === ADMIN_ID) {
     return null;
   }
 
