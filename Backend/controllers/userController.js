@@ -23,6 +23,7 @@ const getLogged = async (req, res) => {
       province: user.province,
       district: user.district,
       role: user.role,
+      isActive: user.isActive,
       profilePic: user.profilePic,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
