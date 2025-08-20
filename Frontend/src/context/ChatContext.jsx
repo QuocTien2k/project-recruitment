@@ -1,10 +1,10 @@
-import { createNewChat, getAllChats } from "@/apiCalls/chat";
+import { createNewChat, getAllChats } from "@api/chat";
 import {
   addNotification,
   removeNotificationsByChatId,
   setAllChats,
   setSelectedChat,
-} from "@/redux/currentUserSlice";
+} from "@redux/currentUserSlice";
 import React, {
   createContext,
   useContext,

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "@components/UI/Button";
+import Button from "@components-ui/Button";
 import { forgotPassword } from "@api/auth";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";

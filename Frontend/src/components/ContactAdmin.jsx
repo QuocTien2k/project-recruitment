@@ -1,4 +1,4 @@
-import { useChatContext } from "@/context/ChatContext";
+import { useChatContext } from "@context/ChatContext";
 import { useSelector } from "react-redux";
 import { MessageCircle } from "lucide-react"; // icon chat
 

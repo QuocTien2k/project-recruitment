@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { FaEnvelope, FaMapMarkerAlt, FaUserTie } from "react-icons/fa";
 import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
-import Button from "@components/UI/Button";
+import Button from "@components-ui/Button";
 
 const CardTeacher = ({ teacher, showDegree = false, showActions = false }) => {
   const avatarDefault =

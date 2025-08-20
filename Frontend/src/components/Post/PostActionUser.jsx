@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Button from "@components/UI/Button";
-import EditPost from "@/Modals/EditPost";
+import Button from "@components-ui/Button";
+import EditPost from "@modals/EditPost";
 import { useSelector } from "react-redux";
-import { showCustomConfirm } from "@components/UI/Confirm";
+import { showCustomConfirm } from "@components-ui/Confirm";
 import toast from "react-hot-toast";
-import { deletePost } from "@/apiCalls/post";
+import { deletePost } from "@api/post";
 
 const PostActionUser = ({ post, handleUpdatePost }) => {
   const [openModalEdit, setOpenModalEdit] = useState(false);

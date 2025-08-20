@@ -1,13 +1,13 @@
-import { changeStatusUser, deleteUser } from "@/apiCalls/admin";
-import CardUser from "@components/Cards/CardUser";
-import Loading from "@components/UI/Loading";
-import Pagination from "@components/UI/Pagination";
-import { showCustomConfirm } from "@components/UI/Confirm";
-import Title from "@components/UI/Title";
+import { changeStatusUser, deleteUser } from "@api/admin";
+import CardUser from "@components-cards/CardUser";
+import Loading from "@components-ui/Loading";
+import Pagination from "@components-ui/Pagination";
+import { showCustomConfirm } from "@components-ui/Confirm";
+import Title from "@components-ui/Title";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import InActiveUserSearch from "@components/Search/admin/InActiveUserSearch";
+import InActiveUserSearch from "@components-search/admin/InActiveUserSearch";
 
 const BannedUsers = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);

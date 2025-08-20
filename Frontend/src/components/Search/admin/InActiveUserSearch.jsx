@@ -1,8 +1,8 @@
-import Button from "@components/UI/Button";
-import InputField from "@components/UI/Input";
-import useSearchFilter from "@/hooks/useSearchFilter";
+import Button from "@components-ui/Button";
+import InputField from "@components-ui/Input";
+import useSearchFilter from "@hooks/useSearchFilter";
 import React, { useEffect } from "react";
-import { getUserInActive } from "@/apiCalls/admin";
+import { getUserInActive } from "@api/admin";
 
 const InActiveUserSearch = ({ onResults }) => {
   const {

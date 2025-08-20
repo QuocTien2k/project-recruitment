@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@components/UI/Button";
+import Button from "@components-ui/Button";
 
 const PostActionAdmin = ({ onApprove, onReject, onDelete }) => {
   return (

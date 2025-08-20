@@ -1,17 +1,20 @@
-import { postDelete } from "@/apiCalls/admin";
-import { showCustomConfirm } from "@components/UI/Confirm";
-import Loading from "@components/UI/Loading";
-import Pagination from "@components/UI/Pagination";
-import PostCard from "@components/Post/PostCard";
-import ApprovePostSearch from "@components/Search/admin/ApprovePostSearch";
+import { postDelete } from "@api/admin";
+import { showCustomConfirm } from "@components-ui/Confirm";
+import Loading from "@components-ui/Loading";
+import Pagination from "@components-ui/Pagination";
+import PostCard from "@components-post/PostCard";
+import ApprovePostSearch from "@components-search/admin/ApprovePostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import Title from "@components/UI/Title";
+import Title from "@components-ui/Title";
+import NoResult from "@components-states/NoResult";
+import EmptyState from "@components-states/EmptyState";
 
 const ApprovedPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listPost, setListPost] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
 
@@ -78,12 +81,23 @@ const ApprovedPosts = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">
-          <ApprovePostSearch onResults={setListPost} />
+          <ApprovePostSearch
+            onResults={(results) => {
+              setListPost(results);
+              setHasSearched(true);
+            }}
+          />
         </div>
       </div>
 
       {isGlobalLoading ? (
         <Loading size="md" />
+      ) : displayedPosts.length === 0 ? (
+        hasSearched ? (
+          <NoResult />
+        ) : (
+          <EmptyState />
+        )
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {displayedPosts.map((post) => (

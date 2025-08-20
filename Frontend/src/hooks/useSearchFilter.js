@@ -1,8 +1,8 @@
 // import { useState, useEffect, useRef } from "react";
 // import { useDispatch } from "react-redux";
 // import debounce from "lodash.debounce";
-// import { getDistricts, getProvinces } from "@/utils/vnLocation";
-// import { setGlobalLoading } from "@/redux/loadingSlice";
+// import { getDistricts, getProvinces } from "@utils/vnLocation";
+// import { setGlobalLoading } from "@redux/loadingSlice";
 
 // const initialForms = {
 //   teacher: {
@@ -186,8 +186,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
-import { getDistricts, getProvinces } from "@/utils/vnLocation";
-import { setGlobalLoading } from "@/redux/loadingSlice";
+import { getDistricts, getProvinces } from "@utils/vnLocation";
+import { setGlobalLoading } from "@redux/loadingSlice";
 
 const initialForms = {
   teacher: {

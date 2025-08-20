@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Button from "@components/UI/Button";
-import MessageNotification from "@components/Chat/MessageNotification";
+import Button from "@components-ui/Button";
+import MessageNotification from "@components-chat/MessageNotification";
 import { FiPower } from "react-icons/fi";
-import { setGlobalLoading } from "@/redux/loadingSlice";
+import { setGlobalLoading } from "@redux/loadingSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { clearUser, setSelectedChat, setUser } from "@/redux/currentUserSlice";
-import UpdateAvatar from "@/Modals/UpdateAvatar";
-import UpdatePassword from "@/Modals/UpdatePassword";
-import UpdateInfo from "@/Modals/UpdateInfo";
+import { clearUser, setSelectedChat, setUser } from "@redux/currentUserSlice";
+import UpdateAvatar from "@modals/UpdateAvatar";
+import UpdatePassword from "@modals/UpdatePassword";
+import UpdateInfo from "@modals/UpdateInfo";
 import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
 
 const avatarDefault =

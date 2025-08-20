@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaEnvelope, FaUserTie, FaMapMarkerAlt } from "react-icons/fa";
 import { MdWork } from "react-icons/md";
-import { getTeacherDetail } from "@/apiCalls/public";
+import { getTeacherDetail } from "@api/public";
 import { useDispatch, useSelector } from "react-redux";
-import { setTeacherLoading } from "@/redux/loadingSlice";
-import Loading from "@components/UI/Loading";
-import Button from "@components/UI/Button";
+import { setTeacherLoading } from "@redux/loadingSlice";
+import Loading from "@components-ui/Loading";
+import Button from "@components-ui/Button";
 import { useChatContext } from "@context/ChatContext";
 import toast from "react-hot-toast";
 

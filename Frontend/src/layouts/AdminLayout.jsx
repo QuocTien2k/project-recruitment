@@ -1,7 +1,7 @@
-import { getLogged } from "@/apiCalls/user";
-import Navbar from "@components/Layouts/Admin/Navbar";
-import Sidebar from "@components/Layouts/Admin/Sidebar";
-import { setUser } from "@/redux/currentUserSlice";
+import { getLogged } from "@api/user";
+import Navbar from "@components-layouts/Admin/Navbar";
+import Sidebar from "@components-layouts/Admin/Sidebar";
+import { setUser } from "@redux/currentUserSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";

@@ -1,7 +1,7 @@
-import { updateInfo } from "@/apiCalls/user";
-import Button from "@components/UI/Button";
-import { setUserLoading } from "@/redux/loadingSlice";
-import { getDistricts, getProvinces } from "@/utils/vnLocation";
+import { updateInfo } from "@api/user";
+import Button from "@components-ui/Button";
+import { setUserLoading } from "@redux/loadingSlice";
+import { getDistricts, getProvinces } from "@utils/vnLocation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdClose } from "react-icons/md";

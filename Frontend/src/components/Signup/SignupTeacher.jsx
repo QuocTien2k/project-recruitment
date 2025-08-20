@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getDistricts, getProvinces } from "@utils/vnLocation";
 import { signupTeacher } from "@api/auth";
 import toast from "react-hot-toast";
-import Button from "@components/UI/Button";
+import Button from "@components-ui/Button";
 
 const SignupTeacher = () => {
   const [formData, setFormData] = useState({

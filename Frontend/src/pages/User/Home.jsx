@@ -1,5 +1,5 @@
-import ShortListTeacher from "@/section/ShortListTeacher";
-import Post from "@/section/Post";
+import ShortListTeacher from "@sections/ShortListTeacher";
+import Post from "@sections/Post";
 import React from "react";
 
 const Home = () => {

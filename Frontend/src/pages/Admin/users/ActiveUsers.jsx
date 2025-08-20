@@ -1,13 +1,13 @@
-import CardUser from "@components/Cards/CardUser";
-import Loading from "@components/UI/Loading";
-import Pagination from "@components/UI/Pagination";
-import ActiveUserSearch from "@components/Search/admin/ActiveUserSearch";
+import CardUser from "@components-cards/CardUser";
+import Loading from "@components-ui/Loading";
+import Pagination from "@components-ui/Pagination";
+import ActiveUserSearch from "@components-search/admin/ActiveUserSearch";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Title from "@components/UI/Title";
-import { showCustomConfirm } from "@components/UI/Confirm";
+import Title from "@components-ui/Title";
+import { showCustomConfirm } from "@components-ui/Confirm";
 import toast from "react-hot-toast";
-import { changeStatusUser, deleteUser } from "@/apiCalls/admin";
+import { changeStatusUser, deleteUser } from "@api/admin";
 
 const ActiveUsers = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);

@@ -1,9 +1,9 @@
-import { getPostDetail } from "@/apiCalls/public";
-import { recordPostView } from "@/apiCalls/viewer";
-import Button from "@components/UI/Button";
-import Loading from "@components/UI/Loading";
-import { useChatContext } from "@/context/ChatContext";
-import { setGlobalLoading } from "@/redux/loadingSlice";
+import { getPostDetail } from "@api/public";
+import { recordPostView } from "@api/viewer";
+import Button from "@components-ui/Button";
+import Loading from "@components-ui/Loading";
+import { useChatContext } from "@context/ChatContext";
+import { setGlobalLoading } from "@redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";

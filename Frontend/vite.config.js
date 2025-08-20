@@ -8,33 +8,35 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@layout": path.resolve(__dirname, "./src/layouts"),
-      "@components-ui": path.resolve(__dirname, "./src/components/UI"),
-      "@components-states": path.resolve(__dirname, "./src/components/States"),
-      "@components-signup": path.resolve(__dirname, "./src/components/Signup"),
-      "@components-search": path.resolve(__dirname, "./src/components/Search"),
-      "@components-post": path.resolve(__dirname, "./src/components/Post"),
+      //"@": path.resolve(__dirname, "./src/"),
+      // "@components": path.resolve(__dirname, "./src/components/"),
+      "@hooks": path.resolve(__dirname, "./src/hooks/"),
+      "@layouts": path.resolve(__dirname, "./src/layouts/"),
+      "@sections": path.resolve(__dirname, "./src/section/"),
+      "@components-ui": path.resolve(__dirname, "./src/components/UI/"),
+      "@components-states": path.resolve(__dirname, "./src/components/States/"),
+      "@components-signup": path.resolve(__dirname, "./src/components/Signup/"),
+      "@components-search": path.resolve(__dirname, "./src/components/Search/"),
+      "@components-post": path.resolve(__dirname, "./src/components/Post/"),
       "@components-layouts": path.resolve(
         __dirname,
-        "./src/components/Layouts"
+        "./src/components/Layouts/"
       ),
-      "@components-chats": path.resolve(__dirname, "./src/components/Chat"),
-      "@components-cards": path.resolve(__dirname, "./src/components/Cards"),
-      "@pages": path.resolve(__dirname, "./src/pages"),
-      "@pages-admin": path.resolve(__dirname, "./src/pages/Admin"),
-      "@pages-user": path.resolve(__dirname, "./src/pages/User"),
-      "@pages-auth": path.resolve(__dirname, "./src/pages/Auth"),
-      "@api": path.resolve(__dirname, "./src/apiCalls"),
-      "@utils": path.resolve(__dirname, "./src/utils"),
-      "@redux": path.resolve(__dirname, "./src/redux"),
-      "@context": path.resolve(__dirname, "./src/context"),
-      "@modal": path.resolve(__dirname, "./src/Modals"),
+      "@components-chat": path.resolve(__dirname, "./src/components/Chat/"),
+      "@components-cards": path.resolve(__dirname, "./src/components/Cards/"),
+      "@pages": path.resolve(__dirname, "./src/pages/"),
+      "@pages-admin": path.resolve(__dirname, "./src/pages/Admin/"),
+      "@pages-user": path.resolve(__dirname, "./src/pages/User/"),
+      "@pages-auth": path.resolve(__dirname, "./src/pages/Auth/"),
+      "@api": path.resolve(__dirname, "./src/apiCalls/"),
+      "@utils": path.resolve(__dirname, "./src/utils/"),
+      "@redux": path.resolve(__dirname, "./src/redux/"),
+      "@context": path.resolve(__dirname, "./src/context/"),
+      "@modals": path.resolve(__dirname, "./src/Modals/"),
     },
   },
 });

@@ -1,8 +1,8 @@
-import { getListTeacher } from "@/apiCalls/public";
-import useSearchFilter from "@/hooks/useSearchFilter";
+import { getListTeacher } from "@api/public";
+import useSearchFilter from "@hooks/useSearchFilter";
 import React, { useEffect } from "react";
-import Button from "@components/UI/Button";
-import InputField from "@components/UI/Input";
+import Button from "@components-ui/Button";
+import InputField from "@components-ui/Input";
 
 const ListTeacherSearch = ({ onResults }) => {
   const {

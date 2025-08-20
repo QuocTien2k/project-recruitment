@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Button from "@components/UI/Button";
+import Button from "@components-ui/Button";
 import { MdClose } from "react-icons/md";
-import { updateAvatar } from "@/apiCalls/user";
+import { updateAvatar } from "@api/user";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserLoading } from "@/redux/loadingSlice";
+import { setUserLoading } from "@redux/loadingSlice";
 
 const UpdateAvatar = ({ onClose, currentUserAvatar, onUpdateSuccess }) => {
   const defaultAvatar =

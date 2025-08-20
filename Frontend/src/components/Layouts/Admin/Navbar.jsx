@@ -1,17 +1,12 @@
-import Button from "@components/UI/Button";
-import { clearUser } from "@/redux/currentUserSlice";
-import { setGlobalLoading } from "@/redux/loadingSlice";
+import Button from "@components-ui/Button";
+import { clearUser } from "@redux/currentUserSlice";
+import { setGlobalLoading } from "@redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import { FiPower } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  HiChevronLeft,
-  HiChevronRight,
-  HiMenuAlt2,
-  HiOutlineX,
-} from "react-icons/hi";
-import MessageNotification from "@components/Chat/MessageNotification";
+import { useLocation, useNavigate } from "react-router-dom";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import MessageNotification from "@components-chat/MessageNotification";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";

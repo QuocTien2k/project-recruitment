@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import AdminLayout from "@layout/AdminLayout";
-import UserLayout from "@layout/UserLayout";
 import Home from "@pages-user/Home";
 import Unauthorized from "@pages/Unauthorized";
 import NotFound from "@pages/NotFound";
@@ -13,7 +11,6 @@ import Login from "@pages-auth/Login";
 import Signup from "@pages-auth/Signup";
 import DynamicTitle from "@context/DynamicTitle";
 import TeacherDetail from "@pages-user/TeacherDetail";
-import ChatArea from "@components/Chat/ChatArea";
 import PostDetail from "@pages-user/PostDetail";
 import MyPost from "@pages-user/MyPost";
 import ActiveUsers from "@pages-admin/users/ActiveUsers";
@@ -22,9 +19,12 @@ import ActiveTeachers from "@pages-admin/teachers/ActiveTeachers";
 import BannedTeachers from "@pages-admin/teachers/BannedTeachers";
 import PendingPosts from "@pages-admin/posts/PendingPosts";
 import ApprovedPosts from "@pages-admin/posts/ApprovedPosts";
-import ContactAdminButton from "@components/ContactAdmin";
 import ListTeachers from "@pages-user/ListTeachers";
-import ScrollToTop from "@components/UI/ScrollToTop";
+import ScrollToTop from "@components-ui/ScrollToTop";
+import ChatArea from "@components-chat/ChatArea";
+import UserLayout from "@layouts/UserLayout";
+import AdminLayout from "@layouts/AdminLayout";
+import ContactAdminButton from "./components/ContactAdmin";
 
 function App() {
   return (

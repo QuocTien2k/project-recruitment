@@ -1,6 +1,6 @@
-import { changePassword } from "@/apiCalls/user";
-import Button from "@components/UI/Button";
-import { setUserLoading } from "@/redux/loadingSlice";
+import { changePassword } from "@api/user";
+import Button from "@components-ui/Button";
+import { setUserLoading } from "@redux/loadingSlice";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { MdClose } from "react-icons/md";

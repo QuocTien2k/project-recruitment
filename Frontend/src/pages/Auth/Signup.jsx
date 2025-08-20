@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SignupTeacher from "@components/Signup/SignupTeacher";
-import SignupUser from "@components/Signup/SignupUser";
+import SignupTeacher from "@components-signup/SignupTeacher";
+import SignupUser from "@components-signup/SignupUser";
 import { Link } from "react-router-dom";
 
 const Signup = () => {

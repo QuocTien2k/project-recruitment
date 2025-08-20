@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import { FaListAlt } from "react-icons/fa";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
-import PostActionUser from "./PostActionUser";
-import PostActionAdmin from "./PostActionAdmin";
-import { getPostViews } from "@/apiCalls/viewer";
+import { getPostViews } from "@api/viewer";
 import {
   Briefcase,
   CalendarDays,
@@ -18,9 +16,11 @@ import {
   Hash,
   AlertCircle,
 } from "lucide-react";
-import RejectPost from "@/Modals/RejectPost";
-import Button from "@components/UI/Button";
+import RejectPost from "@modals/RejectPost";
+import Button from "@components-ui/Button";
 import toast from "react-hot-toast";
+import PostActionUser from "./PostActionUser";
+import PostActionAdmin from "./PostActionAdmin";
 
 const PostCard = ({
   post,

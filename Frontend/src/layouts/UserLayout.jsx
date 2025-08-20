@@ -1,7 +1,7 @@
-import { getLogged } from "@/apiCalls/user";
-import Footer from "@components/Layouts/User-Teacher/Footer";
-import Header from "@components/Layouts/User-Teacher/Header";
-import { setUser } from "@/redux/currentUserSlice";
+import { getLogged } from "@api/user";
+import Footer from "@components-layouts/User-Teacher/Footer";
+import Header from "@components-layouts/User-Teacher/Header";
+import { setUser } from "@redux/currentUserSlice";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
