@@ -107,7 +107,7 @@ const Header = () => {
       </Link>
 
       {/* Phần phải */}
-      {currentUser ? (
+      {currentUser && currentUser?.isActive ? (
         <>
           <div className="flex items-center gap-4 relative">
             {/* Icon message */}

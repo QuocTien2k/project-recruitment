@@ -47,7 +47,7 @@ const PostCard = ({
     }
   }, [post?._id]);
 
-  console.log(post);
+  //console.log(post);
 
   const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
 
