@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import RejectPost from "@/Modals/RejectPost";
 import Button from "@components/UI/Button";
+import toast from "react-hot-toast";
 
 const PostCard = ({
   post,
@@ -46,6 +47,17 @@ const PostCard = ({
       });
     }
   }, [post?._id]);
+
+  const handleCopyId = () => {
+    navigator.clipboard
+      .writeText(post?.createdBy)
+      .then(() => {
+        toast.success("Đã copy ID!");
+      })
+      .catch(() => {
+        toast.error("Copy thất bại!");
+      });
+  };
 
   //console.log(post);
 
@@ -144,7 +156,11 @@ const PostCard = ({
               <User className="text-blue-500 w-4 h-4" />
               {post?.createdByName}
             </span>
-            <span className="flex items-center gap-1">
+            <span
+              onClick={handleCopyId}
+              title="Click để copy ID"
+              className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors"
+            >
               <Hash className="text-gray-500 w-4 h-4" />
               {post?.createdBy}
             </span>
