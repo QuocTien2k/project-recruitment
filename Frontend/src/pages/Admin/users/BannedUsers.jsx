@@ -45,11 +45,11 @@ const BannedUsers = () => {
           const res = await changeStatusUser(user._id);
           if (res.success) {
             toast.success(res.message);
-            if (res.user?.isActive) {
-              // Nếu user vẫn active → update trong list
+            if (!res.user?.isActive) {
+              // Nếu user bị khóa → update trong list
               handleUpdateUser(res.user, "update");
             } else {
-              // Nếu user bị khóa → remove khỏi list (vì đang ở trang "hoạt động")
+              // Nếu user bị khóa → remove khỏi list (vì đang ở trang "khóa")
               handleUpdateUser({ _id: res.user._id }, "delete");
             }
           } else {
