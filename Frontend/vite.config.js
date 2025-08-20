@@ -15,8 +15,17 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@layout": path.resolve(__dirname, "./src/layouts"),
-      "@components": path.resolve(__dirname, "./src/components"),
+      "@components-ui": path.resolve(__dirname, "./src/components/UI"),
+      "@components-states": path.resolve(__dirname, "./src/components/States"),
       "@components-signup": path.resolve(__dirname, "./src/components/Signup"),
+      "@components-search": path.resolve(__dirname, "./src/components/Search"),
+      "@components-post": path.resolve(__dirname, "./src/components/Post"),
+      "@components-layouts": path.resolve(
+        __dirname,
+        "./src/components/Layouts"
+      ),
+      "@components-chats": path.resolve(__dirname, "./src/components/Chat"),
+      "@components-cards": path.resolve(__dirname, "./src/components/Cards"),
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@pages-admin": path.resolve(__dirname, "./src/pages/Admin"),
       "@pages-user": path.resolve(__dirname, "./src/pages/User"),
