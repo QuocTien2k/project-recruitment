@@ -19,7 +19,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import RejectPost from "@/Modals/RejectPost";
-import Button from "@/components/UI/Button";
+import Button from "@components/UI/Button";
 
 const PostCard = ({
   post,

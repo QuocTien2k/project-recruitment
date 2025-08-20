@@ -1,7 +1,7 @@
 import { getPostDetail } from "@/apiCalls/public";
 import { recordPostView } from "@/apiCalls/viewer";
-import Button from "@/components/UI/Button";
-import Loading from "@/components/UI/Loading";
+import Button from "@components/UI/Button";
+import Loading from "@components/UI/Loading";
 import { useChatContext } from "@/context/ChatContext";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";

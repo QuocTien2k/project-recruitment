@@ -1,13 +1,13 @@
 import { postDelete } from "@/apiCalls/admin";
-import { showCustomConfirm } from "@/components/UI/Confirm";
-import Loading from "@/components/UI/Loading";
-import Pagination from "@/components/UI/Pagination";
-import PostCard from "@/components/Post/PostCard";
-import ApprovePostSearch from "@/components/Search/admin/ApprovePostSearch";
+import { showCustomConfirm } from "@components/UI/Confirm";
+import Loading from "@components/UI/Loading";
+import Pagination from "@components/UI/Pagination";
+import PostCard from "@components/Post/PostCard";
+import ApprovePostSearch from "@components/Search/admin/ApprovePostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import Title from "@/components/UI/Title";
+import Title from "@components/UI/Title";
 
 const ApprovedPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);

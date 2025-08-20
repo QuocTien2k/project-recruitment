@@ -1,6 +1,6 @@
 import { getUserActive } from "@/apiCalls/admin";
-import Button from "@/components/UI/Button";
-import InputField from "@/components/UI/Input";
+import Button from "@components/UI/Button";
+import InputField from "@components/UI/Input";
 import useSearchFilter from "@/hooks/useSearchFilter";
 import React, { useEffect } from "react";
 

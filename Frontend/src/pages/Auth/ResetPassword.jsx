@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { resetPassword } from "@api/auth";
 import toast from "react-hot-toast";
-import Button from "@/components/UI/Button";
+import Button from "@components/UI/Button";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();

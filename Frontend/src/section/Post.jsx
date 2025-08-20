@@ -1,6 +1,6 @@
 import { getApprovedPost } from "@/apiCalls/public";
-import Loading from "@/components/UI/Loading";
-import PostCard from "@/components/Post/PostCard";
+import Loading from "@components/UI/Loading";
+import PostCard from "@components/Post/PostCard";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";

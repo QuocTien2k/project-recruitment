@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "@/components/UI/Button";
+import Button from "@components/UI/Button";
 import { MdClose } from "react-icons/md";
 import { updateAvatar } from "@/apiCalls/user";
 import toast from "react-hot-toast";

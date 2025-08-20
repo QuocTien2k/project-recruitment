@@ -1,4 +1,4 @@
-import Button from "@/components/UI/Button";
+import Button from "@components/UI/Button";
 import { clearUser } from "@/redux/currentUserSlice";
 import { setGlobalLoading } from "@/redux/loadingSlice";
 import React, { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import {
   HiMenuAlt2,
   HiOutlineX,
 } from "react-icons/hi";
-import MessageNotification from "@/components/Chat/MessageNotification";
+import MessageNotification from "@components/Chat/MessageNotification";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";

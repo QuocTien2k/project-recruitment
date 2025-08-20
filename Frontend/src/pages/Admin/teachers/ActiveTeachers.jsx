@@ -1,4 +1,4 @@
-import Title from "@/components/UI/Title";
+import Title from "@components/UI/Title";
 import React from "react";
 
 const ActiveTeachers = () => {

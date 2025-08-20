@@ -1,11 +1,11 @@
-import CardUser from "@/components/Cards/CardUser";
-import Loading from "@/components/UI/Loading";
-import Pagination from "@/components/UI/Pagination";
-import ActiveUserSearch from "@/components/Search/admin/ActiveUserSearch";
+import CardUser from "@components/Cards/CardUser";
+import Loading from "@components/UI/Loading";
+import Pagination from "@components/UI/Pagination";
+import ActiveUserSearch from "@components/Search/admin/ActiveUserSearch";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Title from "@/components/UI/Title";
-import { showCustomConfirm } from "@/components/UI/Confirm";
+import Title from "@components/UI/Title";
+import { showCustomConfirm } from "@components/UI/Confirm";
 import toast from "react-hot-toast";
 import { changeStatusUser, deleteUser } from "@/apiCalls/admin";
 

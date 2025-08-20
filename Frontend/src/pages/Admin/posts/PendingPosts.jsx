@@ -1,14 +1,14 @@
 import { postApproved, postDelete, postReject } from "@/apiCalls/admin";
-import { showCustomConfirm } from "@/components/UI/Confirm";
-import Loading from "@/components/UI/Loading";
-import Pagination from "@/components/UI/Pagination";
-import PostCard from "@/components/Post/PostCard";
-import RejectConfirm from "@/components/UI/RejectConfirm";
-import PendingPostSearch from "@/components/Search/admin/PendingPostSearch";
+import { showCustomConfirm } from "@components/UI/Confirm";
+import Loading from "@components/UI/Loading";
+import Pagination from "@components/UI/Pagination";
+import PostCard from "@components/Post/PostCard";
+import RejectConfirm from "@components/UI/RejectConfirm";
+import PendingPostSearch from "@components/Search/admin/PendingPostSearch";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import Title from "@/components/UI/Title";
+import Title from "@components/UI/Title";
 
 const PendingPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);

@@ -1,5 +1,5 @@
 import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
-import Button from "@/components/UI/Button";
+import Button from "@components/UI/Button";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";

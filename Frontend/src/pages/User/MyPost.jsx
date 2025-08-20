@@ -1,13 +1,13 @@
-import Button from "@/components/UI/Button";
-import Loading from "@/components/UI/Loading";
-import Pagination from "@/components/UI/Pagination";
-import PostCard from "@/components/Post/PostCard";
-import MyPostSearch from "@/components/Search/user-teacher/MyPostSearch";
+import Button from "@components/UI/Button";
+import Loading from "@components/UI/Loading";
+import Pagination from "@components/UI/Pagination";
+import PostCard from "@components/Post/PostCard";
+import MyPostSearch from "@components/Search/user-teacher/MyPostSearch";
 import CreatePost from "@/Modals/CreatePost";
 import React, { useEffect, useState } from "react";
 import { FiFileText } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import Title from "@/components/UI/Title";
+import Title from "@components/UI/Title";
 
 const MyPost = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
