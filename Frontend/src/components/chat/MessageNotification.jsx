@@ -1,4 +1,4 @@
-import { ChatContext } from "@/context/ChatContext";
+import { ChatContext } from "@context/ChatContext";
 import { useContext, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { MdBlock } from "react-icons/md";

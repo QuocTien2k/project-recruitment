@@ -2,10 +2,10 @@ import {
   clearUnreadMessageCount,
   createNewMessage,
   getMessages,
-} from "@/apiCalls/message";
-import { getUserById } from "@/apiCalls/user";
-import { ChatContext } from "@/context/ChatContext";
-import { setAllChats, setSelectedChat } from "@/redux/currentUserSlice";
+} from "@api/message";
+import { getUserById } from "@api/user";
+import { ChatContext } from "@context/ChatContext";
+import { setAllChats, setSelectedChat } from "@redux/currentUserSlice";
 import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
