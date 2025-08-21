@@ -24,16 +24,20 @@ const ActiveTeachers = () => {
     (currentPage + 1) * itemsPerPage
   );
 
-  const handleUpdateUser = (updatedTeacher, action) => {
+  const handleUpdateTeacher = (updatedTeacher, action) => {
     if (action === "delete") {
       // xoá khỏi danh sách
       setListTeacher((prev) =>
-        prev.filter((u) => u._id !== updatedTeacher._id)
+        prev.filter((t) => t.userId._id !== updatedTeacher._id)
       );
     } else if (action === "update") {
       // cập nhật lại trạng thái hoặc dữ liệu mới
       setListTeacher((prev) =>
-        prev.map((u) => (u._id === updatedTeacher._id ? updatedTeacher : u))
+        prev.map((t) =>
+          t.userId._id === updatedTeacher._id
+            ? { ...t, userId: updatedTeacher }
+            : t
+        )
       );
     }
   };
@@ -53,10 +57,10 @@ const ActiveTeachers = () => {
             toast.success(res.message);
             if (res.user?.isActive) {
               // Nếu user vẫn active → update trong list
-              handleUpdateUser(res.user, "update");
+              handleUpdateTeacher(res.user, "update");
             } else {
               // Nếu user bị khóa → remove khỏi list (vì đang ở trang "hoạt động")
-              handleUpdateUser({ _id: res.user._id }, "delete");
+              handleUpdateTeacher({ _id: res.user._id }, "delete");
             }
           } else {
             toast.error(
@@ -85,8 +89,8 @@ const ActiveTeachers = () => {
           const res = await deleteUser(id);
           if (res.success) {
             toast.success(res.message);
-            // Cập nhật state bằng handleUpdateUser
-            handleUpdateUser({ _id: res.deletedId }, "delete");
+            // Cập nhật state bằng handleUpdateTeacher
+            handleUpdateTeacher({ _id: res.deletedId }, "delete");
           } else {
             toast.error(res.message || "Không thể xóa tài khoản");
           }
@@ -114,7 +118,7 @@ const ActiveTeachers = () => {
     return () => clearTimeout(timer);
   }, [isGlobalLoading]);
 
-  console.log(listTeacher);
+  //console.log(listTeacher);
 
   return (
     <>

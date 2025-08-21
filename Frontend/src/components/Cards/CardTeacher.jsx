@@ -3,6 +3,11 @@ import { FaEnvelope, FaMapMarkerAlt, FaUserTie } from "react-icons/fa";
 import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Button from "@components-ui/Button";
+import { useState } from "react";
+import { FiX } from "react-icons/fi";
+
+const avatarDefault =
+  "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
 
 const CardTeacher = ({
   teacher,
@@ -11,10 +16,8 @@ const CardTeacher = ({
   onToggleStatus,
   onDelete,
 }) => {
-  const avatarDefault =
-    "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
   const currentUser = useSelector((state) => state.currentUser.user);
-
+  const [selectedImg, setSelectedImg] = useState(null);
   const {
     _id, // id teacher document
     experience,
@@ -38,7 +41,10 @@ const CardTeacher = ({
             variant="default"
             size="sm"
             onClick={() =>
-              onToggleStatus?.(userId, userId.isActive ? "lock" : "unlock")
+              onToggleStatus?.(
+                teacher.userId,
+                teacher.userId.isActive ? "lock" : "unlock"
+              )
             }
           >
             {userId.isActive ? "Khóa" : "Mở khóa"}
@@ -46,7 +52,7 @@ const CardTeacher = ({
           <Button
             variant="danger"
             size="sm"
-            onClick={() => onDelete?.(userId._id)}
+            onClick={() => onDelete?.(teacher.userId._id)}
           >
             Xóa
           </Button>
@@ -114,10 +120,34 @@ const CardTeacher = ({
                 key={img?._id || index}
                 src={img?.url}
                 alt={`degree-${index}`}
-                className="w-16 h-16 object-cover rounded border shadow-sm"
+                onClick={() => setSelectedImg(img?.url)}
+                className="w-16 h-16 object-cover rounded border shadow-sm cursor-pointer"
               />
             ))}
           </div>
+        </div>
+      )}
+      {/* Modal xem ảnh lớn */}
+      {selectedImg && (
+        <div
+          className="bg-modal backdrop-blur-sm"
+          onClick={() => setSelectedImg(null)} // click nền để đóng
+        >
+          {/* Nút đóng */}
+          <button
+            onClick={() => setSelectedImg(null)}
+            className="cursor-pointer absolute top-4 right-4 text-white bg-red-500/80 hover:bg-red-600 p-2 rounded-full transition"
+          >
+            <FiX size={20} />
+          </button>
+
+          {/* Ảnh */}
+          <img
+            src={selectedImg}
+            alt="degree-full"
+            className="max-w-[70%] max-h-[70%] rounded shadow-lg"
+            onClick={(e) => e.stopPropagation()} // chặn đóng khi click vào ảnh
+          />
         </div>
       )}
 
