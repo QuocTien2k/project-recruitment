@@ -4,7 +4,7 @@ import InputField from "@components-ui/Input";
 import Button from "@components-ui/Button";
 import { getPostPending } from "@api/admin";
 
-const PendingPostSearch = ({ onResults }) => {
+const PendingPostSearch = ({ onResults, onUserAction }) => {
   const {
     form,
     handleChange,
@@ -21,6 +21,17 @@ const PendingPostSearch = ({ onResults }) => {
     onResults(results);
   }, [results, onResults]);
 
+  // wrapper nhỏ để gắn cờ user action
+  const handleChangeWithFlag = (e) => {
+    onUserAction?.();
+    handleChange(e);
+  };
+
+  const handleResetWithFlag = () => {
+    onUserAction?.();
+    handleResetFilter();
+  };
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       {/* Input */}
@@ -28,7 +39,7 @@ const PendingPostSearch = ({ onResults }) => {
         name="title"
         placeholder="Tìm theo tiêu đề..."
         value={form.title}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="w-[25%]"
       />
 
@@ -36,7 +47,7 @@ const PendingPostSearch = ({ onResults }) => {
       <select
         name="provinceCode"
         value={form.provinceCode}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="form-select-custom w-[20%]"
       >
         <option value="">Tỉnh/Thành</option>
@@ -51,7 +62,7 @@ const PendingPostSearch = ({ onResults }) => {
       <select
         name="districtCode"
         value={form.districtCode}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="form-select-custom w-[15%]"
         disabled={!districts.length}
       >
@@ -64,7 +75,7 @@ const PendingPostSearch = ({ onResults }) => {
       </select>
 
       {/* Reset button */}
-      <Button onClick={handleResetFilter} variant="reset">
+      <Button onClick={handleResetWithFlag} variant="reset">
         Reset
       </Button>
     </div>

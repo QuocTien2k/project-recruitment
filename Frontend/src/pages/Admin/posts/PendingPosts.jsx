@@ -1,6 +1,8 @@
 import { postApproved, postDelete, postReject } from "@api/admin";
 import PostCard from "@components-post/PostCard";
 import PendingPostSearch from "@components-search/admin/PendingPostSearch";
+import EmptyState from "@components-states/EmptyState";
+import NoResult from "@components-states/NoResult";
 import { showCustomConfirm } from "@components-ui/Confirm";
 import Loading from "@components-ui/Loading";
 import Pagination from "@components-ui/Pagination";
@@ -14,6 +16,8 @@ const PendingPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listPost, setListPost] = useState([]);
   const [showRejectPopup, setShowRejectPopup] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
@@ -113,18 +117,37 @@ const PendingPosts = () => {
     });
   };
 
+  useEffect(() => {
+    let timer;
+    if (isGlobalLoading) {
+      timer = setTimeout(() => setShowLoader(true), 300); // chỉ hiển thị sau 300ms
+    } else {
+      setShowLoader(false);
+    }
+    return () => clearTimeout(timer);
+  }, [isGlobalLoading]);
+
   return (
     <>
       <Title text="Danh sách bài viết chưa duyệt" className="mb-6" />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">
-          <PendingPostSearch onResults={setListPost} />
+          <PendingPostSearch
+            onResults={setListPost}
+            onUserAction={() => setHasSearched(true)}
+          />
         </div>
       </div>
 
-      {isGlobalLoading ? (
+      {showLoader ? (
         <Loading size="md" />
+      ) : displayedPosts.length === 0 ? (
+        hasSearched ? (
+          <NoResult message="Không tìm thấy bài viết nào 😢" />
+        ) : (
+          <EmptyState message="Hiện tại chưa có bài viết nào ✍️" />
+        )
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {displayedPosts.map((post) => (

@@ -8,10 +8,14 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import InActiveUserSearch from "@components-search/admin/InActiveUserSearch";
+import NoResult from "@components-states/NoResult";
+import EmptyState from "@components-states/EmptyState";
 
 const BannedUsers = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listUser, setListUser] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
 
@@ -98,6 +102,16 @@ const BannedUsers = () => {
     setCurrentPage(0);
   }, [listUser]);
 
+  useEffect(() => {
+    let timer;
+    if (isGlobalLoading) {
+      timer = setTimeout(() => setShowLoader(true), 300); // chỉ hiển thị sau 300ms
+    } else {
+      setShowLoader(false);
+    }
+    return () => clearTimeout(timer);
+  }, [isGlobalLoading]);
+
   return (
     <>
       <Title text="Danh sách User bị khóa" className="mb-6" />
@@ -105,12 +119,21 @@ const BannedUsers = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">
-          <InActiveUserSearch onResults={setListUser} />
+          <InActiveUserSearch
+            onResults={setListUser}
+            onUserAction={() => setHasSearched(true)}
+          />
         </div>
       </div>
 
-      {isGlobalLoading ? (
+      {showLoader ? (
         <Loading size="md" />
+      ) : displayedUsers.length === 0 ? (
+        hasSearched ? (
+          <NoResult message="Rất tiếc, không tìm thấy người dùng nào phù hợp 😢" />
+        ) : (
+          <EmptyState message="Hiện tại không có người dùng nào bị khóa 🔒" />
+        )
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {displayedUsers.map((user) => (

@@ -4,7 +4,7 @@ import InputField from "@components-ui/Input";
 import useSearchFilter from "@hooks/useSearchFilter";
 import React, { useEffect } from "react";
 
-const ActiveUserSearch = ({ onResults }) => {
+const ActiveUserSearch = ({ onResults, onUserAction }) => {
   const {
     form,
     handleChange,
@@ -21,6 +21,17 @@ const ActiveUserSearch = ({ onResults }) => {
     onResults(results);
   }, [results, onResults]);
 
+  // wrapper nhỏ để gắn cờ user action
+  const handleChangeWithFlag = (e) => {
+    onUserAction?.();
+    handleChange(e);
+  };
+
+  const handleResetWithFlag = () => {
+    onUserAction?.();
+    handleResetFilter();
+  };
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       {/* Input */}
@@ -28,7 +39,7 @@ const ActiveUserSearch = ({ onResults }) => {
         name="id"
         placeholder="Tìm theo id..."
         value={form.id}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="w-[20%]"
       />
 
@@ -36,7 +47,7 @@ const ActiveUserSearch = ({ onResults }) => {
         name="name"
         placeholder="Tìm theo name..."
         value={form.name}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="w-[20%]"
       />
 
@@ -44,7 +55,7 @@ const ActiveUserSearch = ({ onResults }) => {
         name="email"
         placeholder="Tìm theo email..."
         value={form.email}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="w-[20%]"
       />
 
@@ -52,7 +63,7 @@ const ActiveUserSearch = ({ onResults }) => {
       <select
         name="provinceCode"
         value={form.provinceCode}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="form-select-custom w-[20%]"
       >
         <option value="">Tỉnh/Thành</option>
@@ -67,7 +78,7 @@ const ActiveUserSearch = ({ onResults }) => {
       <select
         name="districtCode"
         value={form.districtCode}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="form-select-custom w-[15%]"
         disabled={!districts.length}
       >
@@ -80,7 +91,7 @@ const ActiveUserSearch = ({ onResults }) => {
       </select>
 
       {/* Reset button */}
-      <Button onClick={handleResetFilter} variant="reset">
+      <Button onClick={handleResetWithFlag} variant="reset">
         Reset
       </Button>
     </div>
