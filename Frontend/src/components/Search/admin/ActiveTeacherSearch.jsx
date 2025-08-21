@@ -1,10 +1,10 @@
-import { getUserActive } from "@api/admin";
+import { getTeacherActive } from "@api/admin";
 import Button from "@components-ui/Button";
 import InputField from "@components-ui/Input";
 import useSearchFilter from "@hooks/useSearchFilter";
 import React, { useEffect } from "react";
 
-const ActiveUserSearch = ({ onResults, onUserAction }) => {
+const ActiveTeacherSearch = ({ onResults, onUserAction }) => {
   const {
     form,
     handleChange,
@@ -13,8 +13,8 @@ const ActiveUserSearch = ({ onResults, onUserAction }) => {
     districts,
     results,
   } = useSearchFilter({
-    searchType: "admin-user",
-    fetchFunction: getUserActive,
+    searchType: "admin-teacher",
+    fetchFunction: getTeacherActive,
   });
 
   useEffect(() => {
@@ -36,9 +36,9 @@ const ActiveUserSearch = ({ onResults, onUserAction }) => {
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       {/* Input */}
       <InputField
-        name="id"
+        name="userId"
         placeholder="Tìm theo id..."
-        value={form.id}
+        value={form.userId}
         onChange={handleChangeWithFlag}
         className="w-[20%]"
       />
@@ -98,4 +98,4 @@ const ActiveUserSearch = ({ onResults, onUserAction }) => {
   );
 };
 
-export default ActiveUserSearch;
+export default ActiveTeacherSearch;
