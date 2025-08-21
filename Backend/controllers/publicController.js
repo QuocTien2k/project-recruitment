@@ -118,7 +118,7 @@ const getTeachersShortList = async (req, res) => {
           from: "users", // collection user
           localField: "userId",
           foreignField: "_id",
-          as: "user",
+          as: "userId",
           pipeline: [
             { $match: { isActive: true } }, // chỉ user đang active
             {
@@ -135,7 +135,7 @@ const getTeachersShortList = async (req, res) => {
           ],
         },
       },
-      { $unwind: "$user" }, // chỉ lấy teacher có user match
+      { $unwind: "$userId" }, // chỉ lấy teacher có user match
       { $project: { degreeImages: 0, __v: 0 } }, // loại bỏ field không cần thiết
       { $limit: 12 }, // lấy tối đa 12 giáo viên
     ]);

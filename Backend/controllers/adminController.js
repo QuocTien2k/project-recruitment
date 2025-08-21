@@ -107,7 +107,7 @@ const getActiveTeachers = async (req, res) => {
     res.status(200).json({
       success: true,
       total: activeTeachers.length,
-      teachers: activeTeachers,
+      data: activeTeachers,
     });
   } catch (error) {
     res.status(500).json({
