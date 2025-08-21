@@ -221,6 +221,13 @@ const initialForms = {
     provinceCode: "",
     districtCode: "",
   },
+  "admin-teacher": {
+    userId: "",
+    name: "",
+    email: "",
+    provinceCode: "",
+    districtCode: "",
+  },
 };
 
 export default function useSearchFilter({
@@ -312,6 +319,16 @@ export default function useSearchFilter({
 
       case "admin-user":
         if (form.id) filters.id = form.id;
+        if (form.name) filters.name = form.name;
+        if (form.email) filters.email = form.email;
+        if (form.provinceCode)
+          filters.province = getProvinceNameSync(form.provinceCode);
+        if (form.districtCode)
+          filters.district = getDistrictNameSync(form.districtCode);
+        break;
+
+      case "admin-teacher":
+        if (form.userId) filters.userId = form.userId;
         if (form.name) filters.name = form.name;
         if (form.email) filters.email = form.email;
         if (form.provinceCode)
