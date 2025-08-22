@@ -54,7 +54,7 @@ const BannedUsers = () => {
               handleUpdateUser(res.user, "update");
             } else {
               // Nếu user bị khóa → remove khỏi list
-              handleUpdateUser({ _id: res.user._id }, "delete");
+              handleUpdateUser({ _id: res.deletedUser._id }, "delete");
             }
           } else {
             toast.error(

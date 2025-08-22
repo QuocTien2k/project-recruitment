@@ -7,12 +7,17 @@ import { showCustomConfirm } from "@components-ui/Confirm";
 import Loading from "@components-ui/Loading";
 import Pagination from "@components-ui/Pagination";
 import Title from "@components-ui/Title";
+import {
+  removeUserFromChats,
+  updateUserStatusInChats,
+} from "@redux/currentUserSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const BannedTeacher = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
+  const dispatch = useDispatch();
   const [listTeacher, setListTeacher] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -55,6 +60,17 @@ const BannedTeacher = () => {
           const res = await changeStatusUser(user._id);
           if (res.success) {
             toast.success(res.message);
+            // console.log("[TOGGLE] res.user =>", {
+            //   id: res?.user?._id,
+            //   isActive: res?.user?.isActive,
+            // });
+            // Cập nhật redux ngay lập tức
+            dispatch(
+              updateUserStatusInChats({
+                userId: res.user._id,
+                isActive: res.user.isActive,
+              })
+            );
             if (!res.user?.isActive) {
               // Nếu user vẫn active → update trong list
               handleUpdateTeacher(res.user, "update");
@@ -89,8 +105,11 @@ const BannedTeacher = () => {
           const res = await deleteUser(id);
           if (res.success) {
             toast.success(res.message);
+
+            // Cập nhật redux ngay lập tức
+            dispatch(removeUserFromChats(res.deletedUser._id));
             // Cập nhật state bằng handleUpdateTeacher
-            handleUpdateTeacher({ _id: res.deletedId }, "delete");
+            handleUpdateTeacher({ _id: res.deletedUser._id }, "delete");
           } else {
             toast.error(res.message || "Không thể xóa tài khoản");
           }

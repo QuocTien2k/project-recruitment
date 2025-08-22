@@ -84,7 +84,7 @@ const ActiveUsers = () => {
           if (res.success) {
             toast.success(res.message);
             // Cập nhật state bằng handleUpdateUser
-            handleUpdateUser({ _id: res.deletedId }, "delete");
+            handleUpdateUser({ _id: res.deletedUser._id }, "delete");
           } else {
             toast.error(res.message || "Không thể xóa tài khoản");
           }
