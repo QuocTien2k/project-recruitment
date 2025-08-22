@@ -121,21 +121,38 @@ const getActiveTeachers = async (req, res) => {
 //lấy danh sách teacher tạm khóa
 const getInActiveTeachers = async (req, res) => {
   try {
-    const teachers = await TeacherModel.find()
-      .populate(
-        "userId",
-        "middleName name email phone profilePic province district isActive"
-      ) // Lấy info cơ bản từ bảng User
+    const { userId, name, email, province, district } = req.query;
+
+    let teacherQuery = {};
+    if (userId) teacherQuery.userId = userId;
+
+    let userQuery = { isActive: false, role: "teacher" };
+
+    if (name) {
+      userQuery.$or = [
+        { name: { $regex: name, $options: "i" } },
+        { middleName: { $regex: name, $options: "i" } },
+      ];
+    }
+    if (email) userQuery.email = { $regex: email, $options: "i" };
+    if (province) userQuery.province = province;
+    if (district) userQuery.district = district;
+
+    const teachers = await TeacherModel.find(teacherQuery)
+      .populate({
+        path: "userId",
+        match: userQuery, // lọc user theo điều kiện
+        select:
+          "middleName name email phone profilePic province district isActive",
+      })
       .select("-__v");
 
-    const activeTeachers = teachers.filter(
-      (teacher) => teacher.userId && !teacher.userId.isActive
-    );
+    const inActiveTeachers = teachers.filter((teacher) => teacher.userId);
 
     res.status(200).json({
       success: true,
-      total: activeTeachers.length,
-      teachers: activeTeachers,
+      total: inActiveTeachers.length,
+      data: inActiveTeachers,
     });
   } catch (error) {
     res.status(500).json({
