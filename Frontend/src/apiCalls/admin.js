@@ -61,6 +61,21 @@ export const getTeacherActive = async (filters = {}) => {
   }
 };
 
+export const getTeacherInActive = async (filters = {}) => {
+  try {
+    const res = await axiosInstance.get(
+      "/api/admin/get-lists-teacher-inactive",
+      {
+        params: filters, // truyền filters lên query
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
 /**** Post **** */
 export const getPostPending = async (filters = {}) => {
   try {

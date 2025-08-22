@@ -53,7 +53,7 @@ const BannedUsers = () => {
               // Nếu user bị khóa → update trong list
               handleUpdateUser(res.user, "update");
             } else {
-              // Nếu user bị khóa → remove khỏi list (vì đang ở trang "khóa")
+              // Nếu user bị khóa → remove khỏi list
               handleUpdateUser({ _id: res.user._id }, "delete");
             }
           } else {
