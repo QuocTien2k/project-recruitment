@@ -80,7 +80,7 @@ const BannedTeacher = () => {
     });
   };
 
-  const handleDeleteUser = (id) => {
+  const handleDeleteTeacher = (id) => {
     showCustomConfirm({
       title: "Xóa tài khoản",
       message: "Bạn có chắc chắn muốn xóa tài khoản này không?",
@@ -151,7 +151,7 @@ const BannedTeacher = () => {
               showActions
               showDegree
               onToggleStatus={handleToggleStatus}
-              onDelete={handleDeleteUser}
+              onDelete={handleDeleteTeacher}
             />
           ))}
         </div>

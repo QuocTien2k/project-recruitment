@@ -132,6 +132,7 @@ export const ChatProvider = ({ children }) => {
 
     try {
       const res = await createNewChat([user._id, targetUserId]);
+      console.log(res);
       if (res?.success) {
         const newChat = res.data;
         const exists = allChats.some((chat) => chat._id === newChat._id);
@@ -143,7 +144,8 @@ export const ChatProvider = ({ children }) => {
       }
     } catch (err) {
       console.log("Lỗi: ", err);
-      toast.error("Không thể tạo chat mới!");
+      const msg = err.response?.data?.message || "Không thể tạo chat mới!";
+      toast.error(msg);
       return null;
     }
   };
