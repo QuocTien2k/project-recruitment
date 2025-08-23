@@ -8,10 +8,14 @@ import React, { useEffect, useState } from "react";
 import { FiFileText } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import Title from "@components-ui/Title";
+import NoResult from "@components-states/NoResult";
+import EmptyState from "@components-states/EmptyState";
 
 const MyPost = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [myPosts, setMyPosts] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [openModalCreatePost, setOpenModalCreatePost] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
@@ -40,6 +44,16 @@ const MyPost = () => {
     setCurrentPage(0);
   }, [myPosts]);
 
+  useEffect(() => {
+    let timer;
+    if (isGlobalLoading) {
+      timer = setTimeout(() => setShowLoader(true), 300); // chỉ hiển thị sau 300ms
+    } else {
+      setShowLoader(false);
+    }
+    return () => clearTimeout(timer);
+  }, [isGlobalLoading]);
+
   return (
     <>
       <Title text="Bài viết của bạn" className="mb-6" />
@@ -47,7 +61,10 @@ const MyPost = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
         <div className="flex-1 min-w-0">
-          <MyPostSearch onResults={setMyPosts} />
+          <MyPostSearch
+            onResults={setMyPosts}
+            onUserAction={() => setHasSearched(true)}
+          />
         </div>
 
         {/* Button */}
@@ -63,8 +80,14 @@ const MyPost = () => {
 
       <hr className="border-gray-300 mb-4" />
 
-      {isGlobalLoading ? (
+      {showLoader ? (
         <Loading size="md" />
+      ) : displayedPosts.length === 0 ? (
+        hasSearched ? (
+          <NoResult message="Không tìm thấy bài viết nào 😢" />
+        ) : (
+          <EmptyState message="Hiện tại chưa có bài viết nào ✍️" />
+        )
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {displayedPosts.map((post) => (
