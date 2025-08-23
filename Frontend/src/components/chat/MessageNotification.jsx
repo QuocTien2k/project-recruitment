@@ -6,7 +6,14 @@ import { MessageCircle } from "lucide-react";
 
 const MessageNotification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { allChats, user } = useSelector((state) => state.currentUser);
+  const { allChats, user, __debugBump } = useSelector(
+    (state) => state.currentUser
+  );
+
+  // useEffect(() => {
+  //   console.log("[MN] __debugBump =", __debugBump);
+  // }, [__debugBump]);
+
   const { openChat, getLastMessage, getUnreadMessageCount } =
     useContext(ChatContext);
 

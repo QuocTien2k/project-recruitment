@@ -27,7 +27,9 @@ const ActiveUsers = () => {
   const handleUpdateUser = (updatedUser, action) => {
     if (action === "delete") {
       // xoá khỏi danh sách
-      setListUser((prev) => prev.filter((u) => u._id !== updatedUser._id));
+      setListUser((prev) =>
+        prev.filter((u) => u.userId._id !== updatedUser._id)
+      );
     } else if (action === "update") {
       // cập nhật lại trạng thái hoặc dữ liệu mới
       setListUser((prev) =>
