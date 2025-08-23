@@ -1,6 +1,7 @@
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 const PostModel = require("../models/Post");
+const deleteImage = require("../utils/deleteFromCloudinary");
 
 /********************* Account ************************** */
 // lấy danh sách user hoạt động
@@ -213,10 +214,32 @@ const deleteAccount = async (req, res) => {
       });
     }
 
-    //xóa trong bảng teacher
-    if (user.role === "teacher") {
-      await TeacherModel.findOneAndDelete({ userId: user.id });
+    // 1. Xóa profilePic nếu có
+    if (user.profilePic?.public_id) {
+      await deleteImage(user.profilePic.public_id);
     }
+
+    // 2. Nếu user là teacher
+    if (user.role === "teacher") {
+      const teacher = await TeacherModel.findOne({ userId: user._id });
+
+      if (teacher) {
+        // Xóa degreeImages
+        if (teacher.degreeImages?.length > 0) {
+          for (const img of teacher.degreeImages) {
+            if (img.public_id) {
+              await deleteImage(img.public_id);
+            }
+          }
+        }
+
+        // Xóa document teacher
+        await TeacherModel.findOneAndDelete({ userId: user._id });
+      }
+    }
+
+    // 3. Cuối cùng xóa user
+    await UserModel.findByIdAndDelete(user._id);
 
     res.status(200).json({
       message: "Xóa tài khoản thành công",
