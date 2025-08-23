@@ -6,14 +6,19 @@ import { showCustomConfirm } from "@components-ui/Confirm";
 import Title from "@components-ui/Title";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InActiveUserSearch from "@components-search/admin/InActiveUserSearch";
 import NoResult from "@components-states/NoResult";
 import EmptyState from "@components-states/EmptyState";
+import {
+  removeUserFromChats,
+  updateUserStatusInChats,
+} from "@redux/currentUserSlice";
 
 const BannedUsers = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listUser, setListUser] = useState([]);
+  const dispatch = useDispatch();
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -27,9 +32,7 @@ const BannedUsers = () => {
   const handleUpdateUser = (updatedUser, action) => {
     if (action === "delete") {
       // xoá khỏi danh sách
-      setListUser((prev) =>
-        prev.filter((u) => u.userId._id !== updatedUser._id)
-      );
+      setListUser((prev) => prev.filter((u) => u?._id !== updatedUser?._id));
     } else if (action === "update") {
       // cập nhật lại trạng thái hoặc dữ liệu mới
       setListUser((prev) =>
@@ -51,12 +54,19 @@ const BannedUsers = () => {
           const res = await changeStatusUser(user._id);
           if (res.success) {
             toast.success(res.message);
-            if (!res.user?.isActive) {
-              // Nếu user bị khóa → update trong list
-              handleUpdateUser(res.user, "update");
+            // Cập nhật redux ngay lập tức
+            dispatch(
+              updateUserStatusInChats({
+                userId: res.user._id,
+                isActive: res.user.isActive,
+              })
+            );
+            if (res.user?.isActive) {
+              // User đã được mở khóa → remove khỏi danh sách bị khóa
+              handleUpdateUser({ _id: res.user._id }, "delete");
             } else {
-              // Nếu user bị khóa → remove khỏi list
-              handleUpdateUser({ _id: res.deletedUser._id }, "delete");
+              // Vẫn còn bị khóa → update thông tin trong list
+              handleUpdateUser(res.user, "update");
             }
           } else {
             toast.error(
@@ -85,6 +95,8 @@ const BannedUsers = () => {
           const res = await deleteUser(id);
           if (res.success) {
             toast.success(res.message);
+            // Cập nhật redux ngay lập tức
+            dispatch(removeUserFromChats(res.deletedUser._id));
             // Cập nhật state bằng handleUpdateUser
             handleUpdateUser({ _id: res.deletedId }, "delete");
           } else {

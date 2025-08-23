@@ -33,13 +33,13 @@ const BannedTeacher = () => {
     if (action === "delete") {
       // xoá khỏi danh sách
       setListTeacher((prev) =>
-        prev.filter((t) => t.userId._id !== updatedTeacher._id)
+        prev.filter((t) => t?.userId?._id !== updatedTeacher?._id)
       );
     } else if (action === "update") {
       // cập nhật lại trạng thái hoặc dữ liệu mới
       setListTeacher((prev) =>
         prev.map((t) =>
-          t.userId._id === updatedTeacher._id
+          t?.userId?._id === updatedTeacher?._id
             ? { ...t, userId: updatedTeacher }
             : t
         )
@@ -159,7 +159,7 @@ const BannedTeacher = () => {
         hasSearched ? (
           <NoResult message="Rất tiếc, không tìm thấy giáo viên nào phù hợp 😢" />
         ) : (
-          <EmptyState message="Hiện tại chưa có giáo viên nào đang hoạt động 😢" />
+          <EmptyState message="Hiện tại chưa có giáo viên nào bị khóa 😢" />
         )
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

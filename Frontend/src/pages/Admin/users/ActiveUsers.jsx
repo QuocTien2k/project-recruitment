@@ -3,17 +3,22 @@ import Loading from "@components-ui/Loading";
 import Pagination from "@components-ui/Pagination";
 import ActiveUserSearch from "@components-search/admin/ActiveUserSearch";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Title from "@components-ui/Title";
 import { showCustomConfirm } from "@components-ui/Confirm";
 import toast from "react-hot-toast";
 import { changeStatusUser, deleteUser } from "@api/admin";
 import NoResult from "@components-states/NoResult";
 import EmptyState from "@components-states/EmptyState";
+import {
+  removeUserFromChats,
+  updateUserStatusInChats,
+} from "@redux/currentUserSlice";
 
 const ActiveUsers = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listUser, setListUser] = useState([]);
+  const dispatch = useDispatch();
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -27,9 +32,7 @@ const ActiveUsers = () => {
   const handleUpdateUser = (updatedUser, action) => {
     if (action === "delete") {
       // xoá khỏi danh sách
-      setListUser((prev) =>
-        prev.filter((u) => u.userId._id !== updatedUser._id)
-      );
+      setListUser((prev) => prev.filter((u) => u?._id !== updatedUser?._id));
     } else if (action === "update") {
       // cập nhật lại trạng thái hoặc dữ liệu mới
       setListUser((prev) =>
@@ -51,6 +54,13 @@ const ActiveUsers = () => {
           const res = await changeStatusUser(user._id);
           if (res.success) {
             toast.success(res.message);
+            // Cập nhật redux ngay lập tức
+            dispatch(
+              updateUserStatusInChats({
+                userId: res.user._id,
+                isActive: res.user.isActive,
+              })
+            );
             if (res.user?.isActive) {
               // Nếu user vẫn active → update trong list
               handleUpdateUser(res.user, "update");
@@ -85,6 +95,9 @@ const ActiveUsers = () => {
           const res = await deleteUser(id);
           if (res.success) {
             toast.success(res.message);
+            // Cập nhật redux ngay lập tức
+            dispatch(removeUserFromChats(res.deletedUser._id));
+
             // Cập nhật state bằng handleUpdateUser
             handleUpdateUser({ _id: res.deletedUser._id }, "delete");
           } else {

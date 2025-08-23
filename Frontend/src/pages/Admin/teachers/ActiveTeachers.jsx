@@ -33,13 +33,13 @@ const ActiveTeachers = () => {
     if (action === "delete") {
       // xoá khỏi danh sách
       setListTeacher((prev) =>
-        prev.filter((t) => t.userId._id !== updatedTeacher._id)
+        prev.filter((t) => t?.userId?._id !== updatedTeacher?._id)
       );
     } else if (action === "update") {
       // cập nhật lại trạng thái hoặc dữ liệu mới
       setListTeacher((prev) =>
         prev.map((t) =>
-          t.userId._id === updatedTeacher._id
+          t?.userId?._id === updatedTeacher?._id
             ? { ...t, userId: updatedTeacher }
             : t
         )
@@ -101,7 +101,7 @@ const ActiveTeachers = () => {
           const res = await deleteUser(id);
           if (res.success) {
             toast.success(res.message);
-            console.log("[DELETE] dispatch removeUserFromChats", res.deletedId);
+            //console.log("[DELETE] dispatch removeUserFromChats", res.deletedId);
             // Cập nhật redux ngay lập tức
             dispatch(removeUserFromChats(res.deletedUser._id));
             // Cập nhật state bằng handleUpdateTeacher
