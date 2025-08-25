@@ -20,7 +20,9 @@
         background-color: var(--color-bg);
         color: var(--color-text);
         scroll-behavior: smooth;
-        overflow-y: scroll;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+        height: 100%;
     }
 }
 
@@ -60,6 +62,38 @@
         appearance: none;
     }
 }
+
+/* Class riêng cho sidebar */
+.sidebar-scroll {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: #4b5563 transparent;
+    /* màu thanh cuộn */
+}
+
+/* Webkit browsers (Chrome, Edge, Safari) */
+.sidebar-scroll::-webkit-scrollbar {
+    width: 6px;
+    /* độ rộng scrollbar */
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background-color: #4b5563;
+    /* màu thanh kéo (slate-600) */
+    border-radius: 6px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #2563eb;
+    /* hover -> xanh dương (blue-600) */
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    /* nền track trong suốt */
+}
+
 
 /* loading */
 @keyframes spin {
@@ -163,35 +197,31 @@
 /* ping */
 .ping-effect {
     position: relative;
-    overflow: visible;
-    /* cho hiệu ứng vẽ ra ngoài mà không ảnh hưởng bố cục */
+    isolation: isolate;
+    /* tạo stacking context riêng */
 }
 
 .ping-effect::before {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     border-radius: 9999px;
     background-color: rgba(34, 197, 94, 0.6);
-    /* xanh nhẹ */
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
     animation: pingAnimation 1.5s ease-out infinite;
     z-index: -1;
     pointer-events: none;
-    /* không chặn click */
 }
 
 @keyframes pingAnimation {
     0% {
-        transform: translate(-50%, -50%) scale(1);
+        transform: scale(1);
         opacity: 0.6;
     }
 
     70% {
-        transform: translate(-50%, -50%) scale(2.2);
+        transform: scale(2.2);
+        /* lan rộng nhưng vẫn trong context */
         opacity: 0;
     }
 
@@ -199,6 +229,7 @@
         opacity: 0;
     }
 }
+
 
 /* Animation blink cho text */
 @keyframes blink {

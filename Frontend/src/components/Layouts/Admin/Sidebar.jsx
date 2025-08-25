@@ -80,7 +80,7 @@ const Sidebar = ({ isOpen }) => {
       </div>
 
       {/* Menu render bằng map */}
-      <div className="mt-6 px-3 flex flex-col gap-2">
+      <div className="mt-6 px-3 flex flex-col gap-2 sidebar-scroll h-[calc(100vh-100px)]">
         {menuItems
           .filter((item) => item.roles.includes(currentUser?.role)) // lọc theo role
           .map(({ label, icon: Icon, to }) => (
