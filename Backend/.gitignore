@@ -4,6 +4,9 @@
 # Node modules
 node_modules/
 
+#file
+seedEditor.js
+
 # Logs
 logs/
 *.log

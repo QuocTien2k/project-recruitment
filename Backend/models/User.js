@@ -22,7 +22,11 @@ const userSchema = new mongoose.Schema(
       default: null,
       select: false, // không cần trả về khi query user
     },
-    role: { type: String, enum: ["user", "teacher", "admin"], default: "user" },
+    role: {
+      type: String,
+      enum: ["user", "teacher", "admin", "editor"],
+      default: "user",
+    },
     district: { type: String, required: true },
     province: { type: String, required: true },
     isActive: {

@@ -5,11 +5,11 @@ const {
   getMyPosts,
   deletePost,
 } = require("../controllers/postController");
-const { protect, isUser } = require("../middlewares/authMiddleware");
+const { protect, authorize } = require("../middlewares/authMiddleware");
 
-router.post("/create-post", protect, isUser, createPost);
-router.patch("/update-post/:postId", protect, isUser, updatePost);
-router.get("/my-posts", protect, isUser, getMyPosts);
-router.delete("/delete-post/:postId", protect, isUser, deletePost);
+router.post("/create-post", protect, authorize("user"), createPost);
+router.patch("/update-post/:postId", protect, authorize("user"), updatePost);
+router.get("/my-posts", protect, authorize("user"), getMyPosts);
+router.delete("/delete-post/:postId", protect, authorize("user"), deletePost);
 
 module.exports = router;

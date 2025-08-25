@@ -30,7 +30,7 @@ const protect = async (req, res, next) => {
     }
 
     //kiểm tra trạng thái tài khoản
-    if (user.isActive === false) {
+    if (!user.isActive) {
       return res.status(401).send({
         message: "Tài khoản đã bị khóa!",
         success: false,
@@ -60,32 +60,35 @@ const protect = async (req, res, next) => {
   }
 };
 
-// Middleware kiểm tra vai trò cụ thể
-const isAdmin = (req, res, next) => {
-  if (req.user?.role !== "admin") {
-    return res
-      .status(403)
-      .json({ message: "Không có quyền admin", success: false });
-  }
-  next();
+// Middleware kiểm tra role động
+const authorize = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        message: "Không có quyền truy cập",
+        success: false,
+      });
+    }
+    next();
+  };
 };
 
-const isTeacher = (req, res, next) => {
-  if (req.user?.role !== "teacher") {
-    return res
-      .status(403)
-      .json({ message: "Không có quyền teacher", success: false });
-  }
-  next();
-};
+// const isTeacher = (req, res, next) => {
+//   if (req.user?.role !== "teacher") {
+//     return res
+//       .status(403)
+//       .json({ message: "Không có quyền teacher", success: false });
+//   }
+//   next();
+// };
 
-const isUser = (req, res, next) => {
-  if (req.user?.role !== "user") {
-    return res
-      .status(403)
-      .json({ message: "Không có quyền user", success: false });
-  }
-  next();
-};
+// const isUser = (req, res, next) => {
+//   if (req.user?.role !== "user") {
+//     return res
+//       .status(403)
+//       .json({ message: "Không có quyền user", success: false });
+//   }
+//   next();
+// };
 
-module.exports = { protect, isAdmin, isTeacher, isUser };
+module.exports = { protect, authorize };
