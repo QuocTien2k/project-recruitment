@@ -68,7 +68,13 @@ const Login = () => {
       }
 
       // Điều hướng theo role
-      if (role === "admin") {
+      // if (role === "admin" || role === "editor") {
+      //   navigate("/admin");
+      // } else {
+      //   navigate("/");
+      // }
+
+      if (["admin", "editor"].includes(role)) {
         navigate("/admin");
       } else {
         navigate("/");

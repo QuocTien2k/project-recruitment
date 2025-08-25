@@ -75,9 +75,15 @@ const Navbar = ({ isOpen, toggleSidebar }) => {
 
       <div className="flex-1"></div>
 
-      <div className="flex gap-2 justify-around items-center">
-        <MessageNotification />
+      <div className="flex gap-4 items-center relative">
+        {/* Notification cho các role được phép */}
+        {["admin", "editor"].includes(currentUser?.role) && (
+          <div className="relative">
+            <MessageNotification />
+          </div>
+        )}
 
+        {/* Avatar + Dropdown */}
         <div
           className="relative flex items-center gap-3 cursor-pointer group"
           onClick={openDropdown ? handleCloseDropdown : handleOpenDropdown}
@@ -96,10 +102,10 @@ const Navbar = ({ isOpen, toggleSidebar }) => {
         {showDropdown && (
           <div
             className={`
-      absolute top-16 right-4 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-30
-      transition-all duration-200 ease-out
-      ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
-    `}
+        absolute top-14 right-0 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-30
+        transition-all duration-200 ease-out
+        ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
+      `}
           >
             <div className="flex justify-center px-4 py-3">
               <Button
