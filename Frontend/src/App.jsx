@@ -51,7 +51,7 @@ function App() {
           {/* Layout Admin riêng biệt */}
           <Route
             path="/admin"
-            element={<ProtectedRoutes allowedRoles={["admin"]} />}
+            element={<ProtectedRoutes allowedRoles={["admin", "editor"]} />}
           >
             <Route element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
