@@ -100,4 +100,27 @@ const getBlockedUsers = async (req, res) => {
   }
 };
 
-module.exports = { blockUser, unblockUser, getBlockedUsers };
+//kiểm tra trạng thái chặn
+const getBlockStatus = async (req, res) => {
+  try {
+    const currentUserId = req.user.userId;
+    const { receiverId } = req.params;
+
+    const block = await BlockModel.findOne({
+      blockedBy: currentUserId,
+      blockedUser: receiverId,
+    });
+
+    res.json({
+      success: true,
+      isBlocked: !!block,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Không thể kiểm tra trạng thái chặn: " + error.message,
+    });
+  }
+};
+
+module.exports = { blockUser, unblockUser, getBlockedUsers, getBlockStatus };

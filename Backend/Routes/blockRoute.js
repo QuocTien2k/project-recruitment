@@ -3,8 +3,12 @@ const {
   blockUser,
   unblockUser,
   getBlockedUsers,
+  getBlockStatus,
 } = require("../controllers/blockController");
 const { protect, authorize } = require("../middlewares/authMiddleware");
+
+//
+router.get("/block/status/:receiverId", protect, getBlockStatus);
 
 // Chặn user
 router.post("/block", protect, authorize("user", "teacher"), blockUser);

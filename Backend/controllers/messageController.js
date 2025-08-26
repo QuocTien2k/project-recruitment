@@ -43,8 +43,15 @@ const createNewMessage = async (req, res) => {
     });
 
     if (isBlocked) {
+      let msg = "Không thể gửi tin nhắn vì đã bị chặn!";
+
+      // Nếu mình là người chặn => thông báo khác
+      if (isBlocked.blockedBy.toString() === userId.toString()) {
+        msg = "Bạn đã chặn người này. Không thể gửi tin nhắn!";
+      }
+
       return res.status(403).json({
-        message: "Không thể gửi tin nhắn vì một trong hai người đã chặn!",
+        message: msg,
         success: false,
       });
     }
