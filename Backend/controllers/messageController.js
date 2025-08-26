@@ -1,5 +1,6 @@
 const ChatModel = require("../models/Chat");
 const MessageModel = require("../models/Message");
+const BlockModel = require("../models/Block");
 
 // Tạo tin nhắn mới
 const createNewMessage = async (req, res) => {
@@ -15,26 +16,56 @@ const createNewMessage = async (req, res) => {
       });
     }
 
-    // 1. Lưu tin nhắn vào collection messages
+    // --- 1. Lấy thông tin chat để biết 2 thành viên ---
+    const chat = await ChatModel.findById(chatId).populate("members", "_id");
+    if (!chat) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy chat!", success: false });
+    }
+
+    // Xác định người nhận (receiver)
+    const receiverId = chat.members.find(
+      (m) => m._id.toString() !== userId.toString()
+    );
+    if (!receiverId) {
+      return res
+        .status(400)
+        .json({ message: "Chat không hợp lệ!", success: false });
+    }
+
+    // --- 2. Kiểm tra block (cả 2 chiều) ---
+    const isBlocked = await BlockModel.findOne({
+      $or: [
+        { blockedBy: userId, blockedUser: receiverId }, // mình chặn họ
+        { blockedBy: receiverId, blockedUser: userId }, // họ chặn mình
+      ],
+    });
+
+    if (isBlocked) {
+      return res.status(403).json({
+        message: "Không thể gửi tin nhắn vì một trong hai người đã chặn!",
+        success: false,
+      });
+    }
+
+    // --- 3. Lưu tin nhắn ---
     const newMessage = new MessageModel({ chatId, sender: userId, text });
     let savedMessage = await newMessage.save();
 
-    // 2. Populate người gửi để FE hiển thị được ngay
+    // Populate người gửi để FE hiển thị
     savedMessage = await savedMessage.populate(
       "sender",
       "middleName name email"
     );
 
-    // 3. Cập nhật tin nhắn cuối cùng & tăng số tin chưa đọc
-    await ChatModel.findOneAndUpdate(
-      { _id: chatId },
-      {
-        lastMessage: savedMessage._id,
-        $inc: { unreadMessageCount: 1 },
-      }
-    );
+    // --- 4. Cập nhật chat ---
+    await ChatModel.findByIdAndUpdate(chatId, {
+      lastMessage: savedMessage._id,
+      $inc: { [`unreadCounts.${receiverId}`]: 1 }, // chỉ tăng cho receiver
+    });
 
-    // 4. Trả về message đầy đủ (có sender) cho FE đẩy lên UI
+    // --- 5. Trả về ---
     res.status(201).json({
       message: "Tạo tin nhắn thành công!",
       success: true,
@@ -51,6 +82,7 @@ const createNewMessage = async (req, res) => {
 // cập nhật số lượng tin nhắn chưa đọc
 const clearUnreadMessageCount = async (req, res) => {
   try {
+    const userId = req.user.userId;
     const chatId = req.body.chatId;
 
     //1.tin nhắn chưa đọc
@@ -62,16 +94,20 @@ const clearUnreadMessageCount = async (req, res) => {
       });
     }
 
+    // Reset số tin chưa đọc cho user hiện tại
     const updatedChat = await ChatModel.findByIdAndUpdate(
       chatId,
-      { unreadMessageCount: 0 },
+      { $set: { [`unreadCounts.${userId}`]: 0 } },
       { new: true }
     )
       .populate("members")
       .populate("lastMessage");
 
-    //2. cập nhật tin đã đọc false -> true
-    await MessageModel.updateMany({ chatId, read: false }, { read: true });
+    // Cập nhật tin nhắn read=false -> true (của user hiện tại)
+    await MessageModel.updateMany(
+      { chatId, read: false, sender: { $ne: userId } },
+      { read: true }
+    );
 
     res.status(200).json({
       message: "Đánh dấu tất cả tin nhắn là đã đọc thành công!",

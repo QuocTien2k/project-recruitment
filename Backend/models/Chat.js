@@ -15,9 +15,10 @@ const chatSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
     },
-    unreadMessageCount: {
-      type: Number,
-      default: 0,
+    unreadCounts: {
+      type: Map,
+      of: Number, // key là userId, value là số tin chưa đọc
+      default: {},
     },
   },
   { timestamps: true }
