@@ -25,6 +25,7 @@ import ChatArea from "@components-chat/ChatArea";
 import UserLayout from "@layouts/UserLayout";
 import AdminLayout from "@layouts/AdminLayout";
 import ContactAdminButton from "./components/ContactAdmin";
+import MyBlock from "@pages/User/MyBlock";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/giao-vien/:teacherId" element={<TeacherDetail />} />
             <Route path="/bai-viet/:slug" element={<PostDetail />} />
             <Route path="/bai-viet-cua-toi" element={<MyPost />} />
+            <Route path="/danh-sach-chan" element={<MyBlock />} />
             <Route path="/danh-sach-giao-vien" element={<ListTeachers />} />
           </Route>
 
