@@ -10,6 +10,7 @@ import UpdateAvatar from "@modals/UpdateAvatar";
 import UpdatePassword from "@modals/UpdatePassword";
 import UpdateInfo from "@modals/UpdateInfo";
 import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
+import { Ban } from "lucide-react";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -128,15 +129,14 @@ const Header = () => {
               </span>
             </div>
 
-            {/* Dropdown */}
             {showDropdown && (
               <div
                 className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-50
-    ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
-  ${!openDropdown ? "pointer-events-none" : ""}`}
+      ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
+      ${!openDropdown ? "pointer-events-none" : ""}`}
                 style={{ top: "100%" }}
               >
-                <div className="py-2">
+                <div className="py-2 max-h-[220px] overflow-y-auto">
                   <div className="flex flex-col px-2">
                     {/*Avatar */}
                     <Button
@@ -171,6 +171,17 @@ const Header = () => {
                       <span>Thông tin</span>
                     </Button>
 
+                    {/*Danh sách chặn */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                      onClick={() => navigate("/danh-sach-chan")}
+                    >
+                      <Ban className="w-4 h-4" />
+                      <span>Danh sách chặn</span>
+                    </Button>
+
                     {currentUser?.role === "user" && (
                       <>
                         {/*My post */}
@@ -197,21 +208,20 @@ const Header = () => {
                       </>
                     )}
                   </div>
-
-                  {/*Logout */}
-                  <div className="flex justify-center">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-2 px-4 py-2 w-[65%] text-left text-red-500 hover:bg-red-50 border-t border-gray-200 mt-1"
-                      onClick={handleLogout}
-                    >
-                      <span className="text-lg">
-                        <FiPower />
-                      </span>
-                      <span>Đăng xuất</span>
-                    </Button>
-                  </div>
+                </div>
+                {/*Logout */}
+                <div className="flex justify-center sticky bottom-0 bg-white border-t border-gray-200">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-2 px-4 py-2 w-[65%] text-left text-red-500 hover:bg-red-50"
+                    onClick={handleLogout}
+                  >
+                    <span className="text-lg">
+                      <FiPower />
+                    </span>
+                    <span>Đăng xuất</span>
+                  </Button>
                 </div>
               </div>
             )}
