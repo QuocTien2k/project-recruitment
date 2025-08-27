@@ -69,7 +69,7 @@ const unblockUser = async (req, res) => {
     res.status(200).json({
       message: "Đã mở chặn thành công!",
       success: true,
-      data: blockedList, // FE có thể cập nhật ngay danh sách mới
+      data: result.blockedUser, // FE có thể cập nhật ngay danh sách mới
     });
   } catch (error) {
     res
@@ -82,23 +82,22 @@ const unblockUser = async (req, res) => {
 const getBlockedUsers = async (req, res) => {
   try {
     const blockedBy = req.user.userId;
-    const { search } = req.query;
+    const { name, email } = req.query;
 
-    // Regex để tìm kiếm không phân biệt hoa thường
-    const searchRegex = search ? { $regex: search, $options: "i" } : undefined;
+    // Tạo điều kiện match cho populate
+    let match = {};
+    if (name) {
+      const nameRegex = new RegExp(name, "i"); // không phân biệt hoa/thường
+      match.$or = [{ name: nameRegex }, { middleName: nameRegex }];
+    }
+    if (email) {
+      match.email = new RegExp(email, "i");
+    }
 
     const blockedList = await BlockModel.find({ blockedBy }).populate({
       path: "blockedUser",
       select: "middleName name email profilePic",
-      match: search
-        ? {
-            $or: [
-              { name: searchRegex },
-              { middleName: searchRegex },
-              { email: searchRegex },
-            ],
-          }
-        : {},
+      match,
     });
 
     // lọc bỏ record nào populate không match (null)

@@ -14,7 +14,7 @@ router.get("/block/status/:receiverId", protect, getBlockStatus);
 router.post("/block", protect, authorize("user", "teacher"), blockUser);
 
 // Mở chặn user
-router.post("/unblock", protect, authorize("user", "teacher"), unblockUser);
+router.delete("/unblock", protect, authorize("user", "teacher"), unblockUser);
 
 // Lấy danh sách đã chặn
 router.get("/blocked", protect, authorize("user", "teacher"), getBlockedUsers);
