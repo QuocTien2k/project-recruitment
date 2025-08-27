@@ -14,9 +14,7 @@ export const getBlockList = async (filters = {}) => {
 
 export const getBlockStatus = async (receiverId) => {
   try {
-    const res = await axiosInstance.get(
-      `/api/block/block/status/${receiverId}`
-    );
+    const res = await axiosInstance.get(`/api/block/status/${receiverId}`);
     return res.data;
   } catch (err) {
     console.log("Có lỗi khi check block status:", err?.message);
@@ -38,9 +36,9 @@ export const actionBlock = async (blockedUserId) => {
 
 export const actionUnBlock = async (blockedUserId) => {
   try {
-    const res = await axiosInstance.post("/api/block/unblock", {
-      blockedUser: blockedUserId,
-    });
+    const res = await axiosInstance.delete(
+      `/api/block/unblock/${blockedUserId}`
+    );
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);
