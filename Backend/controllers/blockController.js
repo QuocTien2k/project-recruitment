@@ -78,19 +78,36 @@ const unblockUser = async (req, res) => {
   }
 };
 
-// Lấy danh sách user mình đã chặn
+// Lấy danh sách user mình đã chặn + filter
 const getBlockedUsers = async (req, res) => {
   try {
     const blockedBy = req.user.userId;
-    const blockedList = await BlockModel.find({ blockedBy }).populate(
-      "blockedUser",
-      "name email"
-    );
+    const { search } = req.query;
+
+    // Regex để tìm kiếm không phân biệt hoa thường
+    const searchRegex = search ? { $regex: search, $options: "i" } : undefined;
+
+    const blockedList = await BlockModel.find({ blockedBy }).populate({
+      path: "blockedUser",
+      select: "middleName name email profilePic",
+      match: search
+        ? {
+            $or: [
+              { name: searchRegex },
+              { middleName: searchRegex },
+              { email: searchRegex },
+            ],
+          }
+        : {},
+    });
+
+    // lọc bỏ record nào populate không match (null)
+    const filteredList = blockedList.filter((item) => item.blockedUser);
 
     res.status(200).json({
       message: "Danh sách user đã chặn",
       success: true,
-      data: blockedList,
+      data: filteredList,
     });
   } catch (error) {
     res.status(500).json({
