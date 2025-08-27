@@ -1,8 +1,10 @@
 import { axiosInstance } from "./index";
 
-export const getBlockList = async () => {
+export const getBlockList = async (filters = {}) => {
   try {
-    const res = await axiosInstance.get("/api/block/blocked");
+    const res = await axiosInstance.get("/api/block/blocked", {
+      params: filters,
+    });
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);
