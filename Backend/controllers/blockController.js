@@ -42,7 +42,7 @@ const blockUser = async (req, res) => {
 const unblockUser = async (req, res) => {
   try {
     const blockedBy = req.user.userId;
-    const { blockedUser } = req.body;
+    const blockedUser = req.params.blockedUserId;
 
     if (!blockedUser) {
       return res

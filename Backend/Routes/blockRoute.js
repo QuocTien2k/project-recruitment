@@ -8,13 +8,18 @@ const {
 const { protect, authorize } = require("../middlewares/authMiddleware");
 
 //
-router.get("/block/status/:receiverId", protect, getBlockStatus);
+router.get("/status/:receiverId", protect, getBlockStatus);
 
 // Chặn user
 router.post("/block", protect, authorize("user", "teacher"), blockUser);
 
 // Mở chặn user
-router.delete("/unblock", protect, authorize("user", "teacher"), unblockUser);
+router.delete(
+  "/unblock/:blockedUserId",
+  protect,
+  authorize("user", "teacher"),
+  unblockUser
+);
 
 // Lấy danh sách đã chặn
 router.get("/blocked", protect, authorize("user", "teacher"), getBlockedUsers);
