@@ -53,18 +53,12 @@ const unblockUser = async (req, res) => {
     const result = await BlockModel.findOneAndDelete({
       blockedBy,
       blockedUser,
-    });
+    }).populate("blockedUser", "name email");
     if (!result) {
       return res
         .status(404)
         .json({ message: "Bạn chưa chặn user này!", success: false });
     }
-
-    // Lấy lại danh sách đã chặn sau khi xóa
-    const blockedList = await BlockModel.find({ blockedBy }).populate(
-      "blockedUser",
-      "name email"
-    );
 
     res.status(200).json({
       message: "Đã mở chặn thành công!",
