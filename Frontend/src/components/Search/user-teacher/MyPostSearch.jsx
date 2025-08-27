@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import Button from "@components-ui/Button";
 import InputField from "@components-ui/Input";
 
-const MyPostSearch = ({ onResults }) => {
+const MyPostSearch = ({ onResults, onUserAction }) => {
   const currentUser = useSelector((state) => state.currentUser.user);
 
   const { form, handleChange, handleResetFilter, results } = useSearchFilter({
@@ -13,6 +13,17 @@ const MyPostSearch = ({ onResults }) => {
     currentUser,
     fetchFunction: getMyPosts,
   });
+
+  // wrapper nhỏ để gắn cờ user action
+  const handleChangeWithFlag = (e) => {
+    onUserAction?.();
+    handleChange(e);
+  };
+
+  const handleResetWithFlag = () => {
+    onUserAction?.();
+    handleResetFilter();
+  };
 
   useEffect(() => {
     onResults(results);
@@ -25,14 +36,14 @@ const MyPostSearch = ({ onResults }) => {
         name="title"
         placeholder="Tìm theo tiêu đề..."
         value={form.title}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
       />
 
       {/* Select status */}
       <select
         name="status"
         value={form.status}
-        onChange={handleChange}
+        onChange={handleChangeWithFlag}
         className="form-select-custom w-[30%]"
       >
         <option value="">Tất cả</option>
@@ -42,7 +53,7 @@ const MyPostSearch = ({ onResults }) => {
       </select>
 
       {/* Reset button */}
-      <Button variant="reset" onClick={handleResetFilter}>
+      <Button variant="reset" onClick={handleResetWithFlag}>
         Reset
       </Button>
     </div>

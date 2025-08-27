@@ -209,6 +209,10 @@ const initialForms = {
     title: "",
     status: "",
   },
+  "my-list-block": {
+    name: "",
+    email: "",
+  },
   "admin-post": {
     title: "",
     provinceCode: "",
@@ -307,6 +311,11 @@ export default function useSearchFilter({
         if (form.title) filters.title = form.title;
         if (form.status) filters.status = form.status;
         if (currentUser?._id) filters.createdBy = currentUser._id;
+        break;
+
+      case "my-list-block":
+        if (form.name) filters.name = form.name;
+        if (form.email) filters.email = form.email;
         break;
 
       case "admin-post":

@@ -15,6 +15,7 @@ const DynamicTitle = () => {
     if (path === "/khoi-phuc-mat-khau") return "Khôi phục mật khẩu";
 
     if (path === "/bai-viet-cua-toi") return "Bài viết của tôi";
+    if (path === "/danh-sach-chan") return "Danh sách chặn";
     if (path.startsWith("/bai-viet/")) return "Chi tiết bài viết";
     if (path.startsWith("/giao-vien/")) return "Chi tiết giáo viên";
 
