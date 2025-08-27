@@ -1,3 +1,4 @@
+import { actionBlock, getBlockStatus } from "@api/block";
 import {
   clearUnreadMessageCount,
   createNewMessage,
@@ -10,9 +11,13 @@ import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
+const ADMIN_ID = "68946f57455a4c49bda694ed";
+
 const ChatArea = () => {
   const [receiverInfo, setReceiverInfo] = useState(null);
   const dispatch = useDispatch();
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [blockChecked, setBlockChecked] = useState(false);
   const { selectedChat, user, allChats } = useSelector(
     (state) => state.currentUser
   );
@@ -50,6 +55,26 @@ const ChatArea = () => {
   const fullName = `${receiverInfo?.data?.middleName || ""} ${
     receiverInfo?.data?.name || ""
   }`.trim();
+
+  //tính năng chặn
+  const handleBlock = async () => {
+    if (!receiverInfo?.data?._id) return;
+
+    try {
+      const res = await actionBlock(receiverInfo.data._id);
+      if (res?.success) {
+        toast.success(res.message || "Chặn thành công!");
+        setIsBlocked(true);
+      } else {
+        toast.error(res.message || "Chặn thất bại!");
+      }
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message || "Có lỗi khi chặn người dùng!"
+      );
+      console.error(err);
+    }
+  };
 
   // Gửi tin nhắn
   const handleSend = async () => {
@@ -89,7 +114,7 @@ const ChatArea = () => {
       }
     } catch (err) {
       console.log("Lỗi gửi tin: ", err);
-      toast.error("Không thể gửi tin nhắn!");
+      toast.error(err?.response?.data?.message || "Không thể gửi tin nhắn!");
     }
   };
 
@@ -127,6 +152,34 @@ const ChatArea = () => {
       console.error("Lỗi xóa tin chưa đọc", err);
     }
   };
+
+  //kiểm tra trạng thái block trước khi gọi ChatArea
+  const checkBlockStatus = async () => {
+    try {
+      const res = await getBlockStatus(receiverInfo?.data?._id);
+      if (res?.success) {
+        setIsBlocked(res.isBlocked);
+      }
+    } catch (err) {
+      console.error("Không thể kiểm tra trạng thái block:", err);
+      setIsBlocked(false);
+    } finally {
+      setBlockChecked(true);
+    }
+  };
+
+  //kiểm tra trạng thái block khi mount
+  useEffect(() => {
+    if (!receiverInfo?.data?._id) return;
+
+    if (receiverInfo?.data?._id === ADMIN_ID) {
+      setIsBlocked(false); // không thể chặn admin
+      setBlockChecked(true); // luôn mở chat với admin
+      return;
+    }
+
+    checkBlockStatus();
+  }, [receiverInfo]);
 
   //nhận tin
   useEffect(() => {
@@ -166,12 +219,22 @@ const ChatArea = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2 bg-blue-500 text-white rounded-t-md">
         <span>💬 {fullName || "Người dùng"}</span>
-        <button
-          onClick={() => dispatch(setSelectedChat(null))}
-          className="text-sm text-red-200 hover:text-white"
-        >
-          Đóng
-        </button>
+        <div className="flex gap-3">
+          {!isBlocked && receiverInfo?.data?._id !== ADMIN_ID && (
+            <button
+              onClick={handleBlock}
+              className="text-sm text-yellow-200 hover:text-white"
+            >
+              Chặn
+            </button>
+          )}
+          <button
+            onClick={() => dispatch(setSelectedChat(null))}
+            className="text-sm text-red-200 hover:text-white"
+          >
+            Đóng
+          </button>
+        </div>
       </div>
 
       {/* Message list */}
@@ -204,30 +267,38 @@ const ChatArea = () => {
 
       {/* Input */}
       <div className="p-2 border-t flex items-center gap-2">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-          placeholder="Nhập tin nhắn..."
-          className="flex-1 px-3 py-2 border rounded text-sm"
-        />
-        <button
-          onClick={handleSend}
-          disabled={!message.trim()}
-          className={`px-3 py-2 text-sm rounded ${
-            !message.trim()
-              ? "bg-gray-300 text-white cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
-          }`}
-        >
-          Gửi
-        </button>
+        {!blockChecked ? (
+          <p className="text-sm text-gray-500">Đang kiểm tra trạng thái...</p>
+        ) : isBlocked ? (
+          <p className="text-sm text-red-500">Bạn đã chặn người này</p>
+        ) : (
+          <>
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              placeholder="Nhập tin nhắn..."
+              className="flex-1 px-3 py-2 border rounded text-sm"
+            />
+            <button
+              onClick={handleSend}
+              disabled={!message.trim()}
+              className={`px-3 py-2 text-sm rounded ${
+                !message.trim()
+                  ? "bg-gray-300 text-white cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
+            >
+              Gửi
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
