@@ -5,6 +5,7 @@ import {
   setAllChats,
   setSelectedChat,
 } from "@redux/currentUserSlice";
+import { addNotifiByAdmin } from "@redux/notifiByAdminSlice";
 import React, {
   createContext,
   useContext,
@@ -107,6 +108,20 @@ export const ChatProvider = ({ children }) => {
       socket.off("receive-message", handleReceiveMessage);
     };
   }, [user, currentChatId]);
+
+  // Nhận thông báo realtime từ admin (duyệt bài, blog, ...)
+  useEffect(() => {
+    const handleReceiveNotification = (notification) => {
+      // push vào redux notifiByAdmin
+      dispatch(addNotifiByAdmin(notification));
+    };
+
+    socket.on("receive-notification", handleReceiveNotification);
+
+    return () => {
+      socket.off("receive-notification", handleReceiveNotification);
+    };
+  }, [dispatch]);
 
   const fetchAllChats = async () => {
     try {
