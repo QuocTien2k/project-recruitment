@@ -70,12 +70,14 @@ const UpdatePassword = ({ onClose }) => {
     <div className="bg-modal backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md flex flex-col max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b">
-          <h3 className="text-lg font-semibold">Cập nhật mật khẩu</h3>
+        <div className="flex justify-between items-center p-4 border-b w-full">
+          <h3 className="flex-shrink-0 flex-grow text-lg font-semibold text-center min-w-[120px]">
+            Cập nhật mật khẩu
+          </h3>
           <button
             onClick={onClose}
             aria-label="Đóng modal"
-            className="cursor-pointer p-2 rounded-full hover:bg-gray-200 text-gray-600 transition"
+            className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 text-gray-600 transition"
           >
             <MdClose size={20} />
           </button>
