@@ -230,6 +230,56 @@
     }
 }
 
+/* shake: lắc chuông*/
+@keyframes shake-bell {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    10% {
+        transform: rotate(-25deg);
+    }
+
+    20% {
+        transform: rotate(25deg);
+    }
+
+    30% {
+        transform: rotate(-20deg);
+    }
+
+    40% {
+        transform: rotate(20deg);
+    }
+
+    50% {
+        transform: rotate(-15deg);
+    }
+
+    60% {
+        transform: rotate(15deg);
+    }
+
+    70% {
+        transform: rotate(-10deg);
+    }
+
+    80% {
+        transform: rotate(10deg);
+    }
+
+    90% {
+        transform: rotate(-5deg);
+    }
+}
+
+.animate-shake-bell {
+    animation: shake-bell 0.8s ease-in-out infinite;
+    transform-origin: top center;
+    /* xoay từ đỉnh chuông để tự nhiên hơn */
+}
 
 /* Animation blink cho text */
 @keyframes blink {

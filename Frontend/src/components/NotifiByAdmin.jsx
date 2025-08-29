@@ -42,6 +42,9 @@ const NotifiByAdmin = () => {
 
   const unreadCount = list.filter((n) => !n.isRead).length;
 
+  // Trigger animation dựa vào unreadCount và dropdown
+  const isShaking = unreadCount > 0 && !isDropdownOpen;
+
   //khi click đọc tin
   const handleClickNotification = async (noti) => {
     try {
@@ -83,6 +86,12 @@ const NotifiByAdmin = () => {
     }
   };
 
+  //xử lý văn bản dài
+  const truncateText = (text, maxLength = 50) => {
+    if (!text) return "";
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
+
   return (
     <div className="relative">
       {/* Trigger */}
@@ -91,9 +100,9 @@ const NotifiByAdmin = () => {
         className="cursor-pointer flex items-center gap-2"
       >
         <span className="text-xl relative">
-          <Bell size={20} />
+          <Bell size={20} className={isShaking ? "animate-shake-bell" : ""} />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full px-0.5">
               {unreadCount}
             </span>
           )}
@@ -102,9 +111,15 @@ const NotifiByAdmin = () => {
 
       {/* Dropdown */}
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-96 bg-white shadow-lg rounded-lg max-h-96 overflow-y-auto z-10">
-          <div className="flex justify-between items-center px-4 py-2 border-b">
-            <span className="font-medium text-sm">Thông báo</span>
+        <div
+          className="absolute right-0 mt-2 w-72 sm:w-80 md:max-w-lg 
+                bg-white shadow-lg rounded-lg min-h-[100px] max-h-96 overflow-y-auto z-50"
+        >
+          {/* Header */}
+          <div className="flex items-center gap-3 px-3 py-2 border-b">
+            <span className="w-[180px] font-medium text-xs text-gray-700">
+              Thông báo
+            </span>
             {list.length > 0 && (
               <button
                 onClick={handleMarkAllRead}
@@ -127,24 +142,43 @@ const NotifiByAdmin = () => {
                   !n.isRead ? "bg-gray-50 font-medium" : ""
                 }`}
               >
-                <div
-                  onClick={() => handleClickNotification(n)}
-                  className="flex justify-between items-start"
-                >
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-800">{n.message}</span>
-                    <span className="text-xs text-gray-500">
-                      {dayjs(n.createdAt).fromNow()}
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                  {/* Message + Status */}
+                  <div
+                    onClick={() => handleClickNotification(n)}
+                    className="flex-1 cursor-pointer"
+                  >
+                    <span className="block text-sm text-gray-800 break-words">
+                      {truncateText(n?.message, 50)}" của bạn{" "}
+                      <span
+                        className={
+                          n.type === "POST_APPROVED"
+                            ? "text-green-600 font-semibold"
+                            : n.type === "POST_REJECTED"
+                            ? "text-red-600 font-semibold"
+                            : ""
+                        }
+                      >
+                        {n.type === "POST_APPROVED"
+                          ? "đã được duyệt!"
+                          : n.type === "POST_REJECTED"
+                          ? "đã bị từ chối!"
+                          : ""}
+                      </span>
                     </span>
+                    <div className="text-xs text-gray-500">
+                      {dayjs(n.createdAt).fromNow()}
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  onClick={() => handleDelete(n._id)}
-                  className="text-xs text-red-500 hover:underline mt-1"
-                >
-                  Xóa
-                </button>
+                  {/* Nút Xóa */}
+                  <button
+                    onClick={() => handleDelete(n._id)}
+                    className="mt-1 sm:mt-0 cursor-pointer text-xs text-red-500 hover:underline shrink-0"
+                  >
+                    Xóa
+                  </button>
+                </div>
               </div>
             ))
           )}
