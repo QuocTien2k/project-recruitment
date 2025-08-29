@@ -1,10 +1,10 @@
 const router = require("express").Router();
-import {
+const {
   getMyNotifications,
   markAsRead,
   markAllAsRead,
   deleteNotification,
-} from "../controllers/notificationController.js";
+} = require("../controllers/notificationController.js");
 const { protect, authorize } = require("../middlewares/authMiddleware.js");
 
 router.get("/", protect, authorize("user", "teacher"), getMyNotifications);
@@ -24,3 +24,5 @@ router.delete(
   authorize("user", "teacher"),
   deleteNotification
 );
+
+module.exports = router;

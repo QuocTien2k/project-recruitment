@@ -1,7 +1,7 @@
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 const PostModel = require("../models/Post");
-const Notification = require("../models/notificationModel.js");
+const Notification = require("../models/Notification");
 const deleteImage = require("../utils/deleteFromCloudinary");
 
 /********************* Account ************************** */
