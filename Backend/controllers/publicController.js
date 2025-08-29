@@ -198,7 +198,7 @@ const getListTeachers = async (req, res) => {
           from: "users", // tên collection
           localField: "userId",
           foreignField: "_id",
-          as: "user",
+          as: "userId",
           pipeline: [
             { $match: userMatch }, // filter user
             {
@@ -215,7 +215,7 @@ const getListTeachers = async (req, res) => {
           ],
         },
       },
-      { $unwind: "$user" }, // chỉ lấy teacher có user thỏa match
+      { $unwind: "$userId" }, // chỉ lấy teacher có user thỏa match
       { $project: { degreeImages: 0, __v: 0 } }, // loại bỏ field không cần thiết
     ]);
 
