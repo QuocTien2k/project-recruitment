@@ -50,11 +50,13 @@ const ChatArea = () => {
     fetchReceiver();
   }, [selectedChat, user]);
 
-  //console.log("Thông tin người nhận đã cập nhật:", receiverInfo?.data);
+  console.log("Thông tin người nhận đã cập nhật:", receiverInfo?.data);
 
   const fullName = `${receiverInfo?.data?.middleName || ""} ${
     receiverInfo?.data?.name || ""
   }`.trim();
+
+  const avatarReceiver = receiverInfo?.data?.profilePic?.url;
 
   //tính năng chặn
   const handleBlock = async () => {
@@ -215,30 +217,46 @@ const ChatArea = () => {
   //console.log("Tin nhắn: ", messages);
 
   return (
-    <div className="fixed bottom-4 right-4 w-[320px] sm:w-[360px] h-[400px] bg-white rounded-lg shadow-lg flex flex-col z-50">
+    <div className="fixed bottom-4 right-4 w-[320px] sm:w-[360px] h-[450px] bg-white rounded-xl shadow-xl flex flex-col z-50 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 bg-blue-500 text-white rounded-t-md">
-        <span>💬 {fullName || "Người dùng"}</span>
-        <div className="flex gap-3">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-blue-600 text-white shadow-md">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold overflow-hidden">
+            {avatarReceiver ? (
+              <img
+                src={avatarReceiver}
+                alt={fullName || "U"}
+                className="w-full h-full object-cover"
+              />
+            ) : fullName ? (
+              fullName[0]
+            ) : (
+              "U"
+            )}
+          </div>
+          <span className="font-semibold">{fullName || "Người dùng"}</span>
+        </div>
+        <div className="flex gap-3 text-sm">
           {!isBlocked && receiverInfo?.data?._id !== ADMIN_ID && (
             <button
               onClick={handleBlock}
-              className="text-sm text-yellow-200 hover:text-white"
+              className="hover:text-yellow-200 cursor-pointer transition-colors"
             >
               Chặn
             </button>
           )}
           <button
             onClick={() => dispatch(setSelectedChat(null))}
-            className="text-sm text-red-200 hover:text-white"
+            className="hover:text-red-600 cursor-pointer transition-colors"
           >
-            Đóng
+            ✕
           </button>
         </div>
       </div>
 
       {/* Message list */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-50 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {messages.map((msg) => {
           const isSender = msg.sender?._id === user._id;
           return (
@@ -247,12 +265,14 @@ const ChatArea = () => {
               className={`flex ${isSender ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[70%] px-3 py-2 rounded-md text-sm ${
-                  isSender ? "bg-blue-500 text-white" : "bg-gray-200 text-black"
+                className={`max-w-[70%] px-3 py-2 rounded-2xl text-sm break-words shadow ${
+                  isSender
+                    ? "bg-blue-500 text-white rounded-br-none"
+                    : "bg-gray-200 text-black rounded-bl-none"
                 }`}
               >
                 {msg.text}
-                <div className="text-[10px] mt-1 opacity-70 text-right">
+                <div className="text-[10px] mt-1 opacity-60 text-right">
                   {new Date(msg.createdAt).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -266,15 +286,15 @@ const ChatArea = () => {
       </div>
 
       {/* Input */}
-      <div className="p-2 border-t flex items-center gap-2">
+      <div className="p-3 border-t bg-white">
         {!blockChecked ? (
           <p className="text-sm text-gray-500">Đang kiểm tra trạng thái...</p>
         ) : isBlocked ? (
           <p className="text-sm text-red-500">Bạn đã chặn người này</p>
         ) : (
-          <>
-            <input
-              type="text"
+          <div className="flex items-center gap-2 w-full">
+            <textarea
+              rows={1}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => {
@@ -283,21 +303,21 @@ const ChatArea = () => {
                   handleSend();
                 }
               }}
-              placeholder="Nhập tin nhắn..."
-              className="flex-1 px-3 py-2 border rounded text-sm"
+              placeholder="Aa"
+              className="flex-1 min-w-0 resize-none rounded-full px-4 py-2 text-sm bg-gray-100 focus:outline-none max-h-24 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300"
             />
             <button
               onClick={handleSend}
               disabled={!message.trim()}
-              className={`px-3 py-2 text-sm rounded ${
+              className={`w-16 !w-auto flex-shrink-0 p-2 rounded-full transition-colors ${
                 !message.trim()
-                  ? "bg-gray-300 text-white cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-blue-500 hover:bg-blue-100"
               }`}
             >
               Gửi
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>
