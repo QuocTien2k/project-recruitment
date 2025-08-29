@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import { axiosInstance } from "./index";
 
 // Lấy tất cả thông báo
 export const getAllNotifi = async () => {

@@ -113,6 +113,7 @@ export const ChatProvider = ({ children }) => {
   useEffect(() => {
     const handleReceiveNotification = (notification) => {
       // push vào redux notifiByAdmin
+      //console.log("🔔 Realtime noti:", notification);
       dispatch(addNotifiByAdmin(notification));
     };
 

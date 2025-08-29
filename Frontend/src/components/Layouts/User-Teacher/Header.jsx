@@ -11,6 +11,7 @@ import UpdatePassword from "@modals/UpdatePassword";
 import UpdateInfo from "@modals/UpdateInfo";
 import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
 import { Ban } from "lucide-react";
+import NotifiByAdmin from "../../NotifiByAdmin";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -111,6 +112,9 @@ const Header = () => {
       {currentUser && currentUser?.isActive ? (
         <>
           <div className="flex items-center gap-4 relative">
+            {/* Notification by Admin */}
+            <NotifiByAdmin />
+
             {/* Icon message */}
             <MessageNotification />
 
