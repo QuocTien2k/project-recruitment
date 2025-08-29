@@ -1,6 +1,7 @@
 const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 const PostModel = require("../models/Post");
+const Notification = require("../models/notificationModel.js");
 const deleteImage = require("../utils/deleteFromCloudinary");
 
 /********************* Account ************************** */
@@ -354,6 +355,14 @@ const approvePostByAdmin = async (req, res) => {
     post.status = "approved";
     await post.save();
 
+    // 🔔 Tạo thông báo cho chủ bài viết
+    await Notification.create({
+      user: post.createdBy, // id user tạo bài viết
+      type: "POST_APPROVED",
+      post: post._id,
+      message: `Bài viết "${post.title}" của bạn đã được duyệt!`,
+    });
+
     res.status(200).json({
       success: true,
       message: "Duyệt bài tuyển dụng thành công.",
@@ -400,6 +409,14 @@ const rejectPost = async (req, res) => {
     post.rejectionReason = reason;
 
     await post.save();
+
+    // 🔔 Tạo thông báo cho chủ bài viết
+    await Notification.create({
+      user: post.createdBy,
+      type: "POST_REJECTED",
+      post: post._id,
+      message: `Bài viết "${post.title}" của bạn đã bị từ chối!`,
+    });
 
     res.status(200).json({
       success: true,

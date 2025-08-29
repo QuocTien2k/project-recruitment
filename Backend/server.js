@@ -54,6 +54,13 @@ io.on("connection", (socket) => {
     if (index !== -1) onlineUsers.splice(index, 1);
     io.emit("online-users-updated", onlineUsers);
   });
+
+  socket.on("send-notification", (notification) => {
+    io.to(notification.user.toString()).emit(
+      "receive-notification",
+      notification
+    );
+  });
 });
 
 server.listen(port, () => {
