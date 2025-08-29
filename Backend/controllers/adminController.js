@@ -356,12 +356,18 @@ const approvePostByAdmin = async (req, res) => {
     await post.save();
 
     // 🔔 Tạo thông báo cho chủ bài viết
-    await Notification.create({
+    const notification = await Notification.create({
       user: post.createdBy, // id user tạo bài viết
       type: "POST_APPROVED",
       post: post._id,
       message: `Bài viết "${post.title}" của bạn đã được duyệt!`,
     });
+
+    // emit socket realtime luôn
+    req.app
+      .get("io")
+      .to(post.createdBy.toString())
+      .emit("receive-notification", notification);
 
     res.status(200).json({
       success: true,
@@ -411,12 +417,18 @@ const rejectPost = async (req, res) => {
     await post.save();
 
     // 🔔 Tạo thông báo cho chủ bài viết
-    await Notification.create({
+    const notification = await Notification.create({
       user: post.createdBy,
       type: "POST_REJECTED",
       post: post._id,
       message: `Bài viết "${post.title}" của bạn đã bị từ chối!`,
     });
+
+    // emit socket realtime luôn
+    req.app
+      .get("io")
+      .to(post.createdBy.toString())
+      .emit("receive-notification", notification);
 
     res.status(200).json({
       success: true,

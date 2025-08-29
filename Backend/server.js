@@ -14,6 +14,8 @@ const io = socketIo(server, {
   },
 });
 
+expressApp.set("io", io);
+
 const port = process.env.PORT || 3000;
 
 // --- SOCKET LOGIC ---
