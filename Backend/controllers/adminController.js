@@ -368,6 +368,7 @@ const approvePostByAdmin = async (req, res) => {
       .get("io")
       .to(post.createdBy.toString())
       .emit("receive-notification", notification);
+    //console.log("Emit noti tới:", post.createdBy.toString(), notification);
 
     res.status(200).json({
       success: true,
@@ -429,6 +430,7 @@ const rejectPost = async (req, res) => {
       .get("io")
       .to(post.createdBy.toString())
       .emit("receive-notification", notification);
+    //console.log("Emit noti tới:", post.createdBy.toString(), notification);
 
     res.status(200).json({
       success: true,
