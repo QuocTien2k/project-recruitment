@@ -331,7 +331,7 @@ const SignupTeacher = () => {
         {/* Năm kinh nghiệm + môn dạy */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block font-medium">Số năm kinh nghiệm</label>
+            <label className="block font-medium">Số năm k/nghiệm</label>
             <input
               type="number"
               name="experience"

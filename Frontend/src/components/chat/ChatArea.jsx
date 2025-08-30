@@ -50,7 +50,7 @@ const ChatArea = () => {
     fetchReceiver();
   }, [selectedChat, user]);
 
-  console.log("Thông tin người nhận đã cập nhật:", receiverInfo?.data);
+  //console.log("Thông tin người nhận đã cập nhật:", receiverInfo?.data);
 
   const fullName = `${receiverInfo?.data?.middleName || ""} ${
     receiverInfo?.data?.name || ""
@@ -218,7 +218,6 @@ const ChatArea = () => {
 
   return (
     <div className="fixed bottom-4 right-4 w-[320px] sm:w-[360px] h-[450px] bg-white rounded-xl shadow-xl flex flex-col z-50 overflow-hidden">
-      {/* Header */}
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-blue-600 text-white shadow-md">
         <div className="flex items-center gap-2">

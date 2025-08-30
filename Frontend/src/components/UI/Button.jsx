@@ -11,9 +11,9 @@ const Button = ({
 }) => {
   // Kích thước
   const sizeClasses = {
-    sm: "px-3 py-1 text-sm min-w-[80px]",
-    md: "px-4 py-2 text-base min-w-[100px]",
-    lg: "px-6 py-3 text-lg min-w-[120px]",
+    sm: "px-2 py-1 text-xs min-w-[70px] sm:px-3 sm:text-sm sm:min-w-[80px]",
+    md: "px-3 py-2 text-sm min-w-[90px] sm:px-4 sm:text-base sm:min-w-[100px]",
+    lg: "px-4 py-2 text-base min-w-[100px] sm:px-6 sm:py-3 sm:text-lg sm:min-w-[120px]",
   };
 
   // Màu sắc theo variant

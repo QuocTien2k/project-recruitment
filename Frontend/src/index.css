@@ -352,8 +352,10 @@
 @media (max-width: 640px) {
 
     .form-select-custom,
-    input,
-    button {
+    input {
+
         width: 100% !important;
     }
+
+    /* button {} */
 }
