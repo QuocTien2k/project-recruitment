@@ -148,7 +148,7 @@ export const ChatProvider = ({ children }) => {
 
     try {
       const res = await createNewChat([user._id, targetUserId]);
-      console.log(res);
+      //console.log(res);
       if (res?.success) {
         const newChat = res.data;
         const exists = allChats.some((chat) => chat._id === newChat._id);
