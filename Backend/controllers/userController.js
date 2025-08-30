@@ -57,7 +57,7 @@ const getLogged = async (req, res) => {
   }
 };
 
-//lấy thông tin dựa vào id
+// lấy thông tin dựa vào id
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -71,10 +71,19 @@ const getUserById = async (req, res) => {
       });
     }
 
+    let teacherId = null;
+    if (user.role === "teacher") {
+      const teacher = await TeacherModel.findOne({ userId: user._id }).select(
+        "_id"
+      );
+      teacherId = teacher?._id || null;
+    }
+
+    // 👉 Trả về user + teacherId (nếu có)
     res.status(200).json({
       message: "Lấy thông tin người dùng thành công",
       success: true,
-      data: user,
+      data: { ...user.toObject(), teacherId },
     });
   } catch (error) {
     res.status(500).json({
