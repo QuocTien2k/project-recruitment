@@ -15,6 +15,9 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
     workingType: currentUser?.teacher?.workingType || "",
     timeType: currentUser?.teacher?.timeType || "",
     description: currentUser?.teacher?.description || "",
+    experience: currentUser?.teacher?.experience ?? "",
+    faculty: currentUser?.teacher?.faculty || "",
+    teachingLevel: currentUser?.teacher?.teachingLevel || "",
   });
   const [provinces, setProvinces] = useState([]);
   const [districtList, setDistrictList] = useState([]);
@@ -58,7 +61,7 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
   }, [selectedProvince]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
 
     if (name === "province") {
       setSelectedProvince(value);
@@ -70,7 +73,7 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
     } else {
       setFormData((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: type === "number" ? (value === "" ? "" : Number(value)) : value,
       }));
     }
   };
@@ -94,6 +97,19 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
         errors.timeType = "Vui lòng chọn loại thời gian làm việc";
       if (!formData.description?.trim())
         errors.description = "Vui lòng nhập mô tả";
+
+      if (formData.experience === "") {
+        errors.experience = "Vui lòng nhập số năm kinh nghiệm.";
+      } else if (Number(formData.experience) < 0) {
+        errors.experience = "Số năm kinh nghiệm không được là số âm.";
+      } else if (Number(formData.experience) > 60) {
+        errors.experience = "Số năm kinh nghiệm tối đa là 60.";
+      }
+
+      if (!formData.teachingLevel)
+        errors.teachingLevel = "Vui lòng chọn hình trình độ.";
+      if (!formData.faculty)
+        errors.faculty = "Vui lòng chọn hình thức khoa/bộ môn.";
     }
 
     return errors;
@@ -122,6 +138,9 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
         workingType: formData.workingType,
         timeType: formData.timeType,
         description: formData.description,
+        experience: formData.experience,
+        faculty: formData.faculty,
+        teachingLevel: formData.teachingLevel,
       };
 
       const res = await updateInfo(submitData);
@@ -146,6 +165,12 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
       dispatch(setUserLoading(false));
     }
   };
+
+  console.log(
+    "experience khi mở modal:",
+    formData.experience,
+    typeof formData.experience
+  );
 
   return (
     <div className="bg-modal backdrop-blur-sm">
@@ -238,53 +263,115 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
           {/* Các trường riêng của teacher */}
           {currentUser.role === "teacher" && (
             <>
-              {/* Hình thức làm việc */}
               <div className="space-y-1">
-                <label
-                  htmlFor="workingType"
-                  className="block text-sm text-gray-700"
-                >
-                  Hình thức làm việc
-                </label>
-                <select
-                  id="workingType"
-                  name="workingType"
-                  value={formData.workingType}
+                <label className="block font-medium">Số năm k/nghiệm</label>
+                <input
+                  type="number"
+                  name="experience"
+                  placeholder="VD: 2"
+                  value={formData.experience}
                   onChange={handleChange}
-                  className="form-select-custom"
-                >
-                  <option value="">Chọn hình thức</option>
-                  <option value="online">Online</option>
-                  <option value="offline">Offline</option>
-                  <option value="both">Cả hai</option>
-                </select>
-                {errors.workingType && (
-                  <p className="text-red-500 text-sm">{errors.workingType}</p>
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+                {errors.experience && (
+                  <span className="text-red-500 text-sm">
+                    {errors.experience}
+                  </span>
                 )}
               </div>
 
-              {/* Loại thời gian */}
-              <div className="space-y-1">
-                <label
-                  htmlFor="timeType"
-                  className="block text-sm text-gray-700"
-                >
-                  Loại thời gian
-                </label>
-                <select
-                  id="timeType"
-                  name="timeType"
-                  value={formData.timeType}
-                  onChange={handleChange}
-                  className="form-select-custom"
-                >
-                  <option value="">Chọn thời gian</option>
-                  <option value="part-time">Part-time</option>
-                  <option value="full-time">Full-time</option>
-                </select>
-                {errors.timeType && (
-                  <p className="text-red-500 text-sm">{errors.timeType}</p>
-                )}
+              {/*Hình thức làm việc + thời gian làm việc */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium">
+                    Hình thức làm việc
+                  </label>
+                  <select
+                    name="workingType"
+                    value={formData.workingType}
+                    onChange={handleChange}
+                    className="form-select-custom"
+                  >
+                    <option value="">Chọn hình thức</option>
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                    <option value="both">Cả hai</option>
+                  </select>
+                  {errors.workingType && (
+                    <span className="text-red-500 text-sm">
+                      {errors.workingType}
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block font-medium">
+                    Thời gian làm việc
+                  </label>
+                  <select
+                    name="timeType"
+                    value={formData.timeType}
+                    onChange={handleChange}
+                    className="form-select-custom"
+                  >
+                    <option value="">Chọn thời gian</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="full-time">Full-time</option>
+                  </select>
+                  {errors.timeType && (
+                    <span className="text-red-500 text-sm">
+                      {errors.timeType}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/*Khoa/bộ môn + trình độ giảng dạy */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium">Khoa/bộ môn</label>
+                  <select
+                    name="faculty"
+                    value={formData.faculty}
+                    onChange={handleChange}
+                    className="form-select-custom"
+                  >
+                    <option value="">Chọn khoa/bộ môn</option>
+                    <option value="xahoi">Xã hội</option>
+                    <option value="tunhien">Tự nhiên</option>
+                    <option value="ngonngu">Ngoại ngữ</option>
+                    <option value="khac">Khác</option>
+                  </select>
+                  {errors.faculty && (
+                    <span className="text-red-500 text-sm">
+                      {errors.faculty}
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block font-medium">
+                    Trình độ giảng dạy
+                  </label>
+                  <select
+                    name="teachingLevel"
+                    value={formData.teachingLevel}
+                    onChange={handleChange}
+                    className="form-select-custom"
+                  >
+                    <option value="">Chọn trình độ</option>
+                    <option value="cap1">Cấp 1</option>
+                    <option value="cap2">Cấp 2</option>
+                    <option value="cap3">Cấp 3</option>
+                    <option value="daihoc">Đại học</option>
+                    <option value="khac">Khác</option>
+                  </select>
+                  {errors.teachingLevel && (
+                    <span className="text-red-500 text-sm">
+                      {errors.teachingLevel}
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Mô tả */}

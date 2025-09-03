@@ -32,6 +32,12 @@ const CardTeacher = ({
 
   const fullName = `${userId.middleName || ""} ${userId.name || ""}`.trim();
 
+  const vietsubWorkingType = {
+    offline: "Offline",
+    online: "Online",
+    both: "Cả hai (Online và Offline)",
+  };
+
   return (
     <div className="max-w-[380px] relative border rounded-xl shadow-md bg-white p-5 hover:shadow-lg transition duration-300 space-y-5 flex flex-col items-center text-center">
       {/* 2 nút hành động của Admin ở góc phải */}
@@ -92,13 +98,13 @@ const CardTeacher = ({
           <span>Môn dạy: {subject?.join(", ")}</span>
         </p>
 
-        <p className="flex items-center gap-2 col-span-full justify-center sm:justify-start">
+        <p className="flex items-start gap-2 col-span-full justify-center sm:justify-start">
           <span className="text-yellow-600">🕒</span>
-          <span>
+          <span className="block text-left">
             Hình thức làm việc:{" "}
-            <i>
-              {workingType} - {timeType}
-            </i>
+            <i>{vietsubWorkingType[workingType] || workingType}</i>
+            {" / "}
+            <i>{timeType}</i>
           </span>
         </p>
 

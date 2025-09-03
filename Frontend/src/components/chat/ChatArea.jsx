@@ -10,6 +10,7 @@ import { setAllChats, setSelectedChat } from "@redux/currentUserSlice";
 import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ADMIN_ID = "68946f57455a4c49bda694ed";
 
@@ -21,32 +22,33 @@ const ChatArea = () => {
   const { selectedChat, user, allChats } = useSelector(
     (state) => state.currentUser
   );
+  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
   const { socket } = useContext(ChatContext);
 
+  const fetchReceiver = async () => {
+    if (!selectedChat || !user) return;
+
+    const receiver = selectedChat.members.find((m) =>
+      typeof m === "string" ? m !== user._id : m._id !== user._id
+    );
+
+    const receiverId = typeof receiver === "string" ? receiver : receiver?._id;
+    console.log(receiverId);
+    if (!receiverId) return;
+
+    try {
+      const res = await getUserById(receiverId);
+      setReceiverInfo(res);
+    } catch (err) {
+      console.error("Không thể lấy thông tin người nhận:", err.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchReceiver = async () => {
-      if (!selectedChat || !user) return;
-
-      const receiver = selectedChat.members.find((m) =>
-        typeof m === "string" ? m !== user._id : m._id !== user._id
-      );
-
-      const receiverId =
-        typeof receiver === "string" ? receiver : receiver?._id;
-      if (!receiverId) return;
-
-      try {
-        const res = await getUserById(receiverId);
-        setReceiverInfo(res);
-      } catch (err) {
-        console.error("Không thể lấy thông tin người nhận:", err.message);
-      }
-    };
-
     fetchReceiver();
   }, [selectedChat, user]);
 
@@ -57,6 +59,12 @@ const ChatArea = () => {
   }`.trim();
 
   const avatarReceiver = receiverInfo?.data?.profilePic?.url;
+
+  const handleClickName = () => {
+    if (receiverInfo?.data?.role === "teacher") {
+      navigate(`/giao-vien/${receiverInfo?.data?.teacherId}`);
+    }
+  };
 
   //tính năng chặn
   const handleBlock = async () => {
@@ -234,7 +242,16 @@ const ChatArea = () => {
               "U"
             )}
           </div>
-          <span className="font-semibold">{fullName || "Người dùng"}</span>
+          <span
+            className={`font-semibold ${
+              receiverInfo?.data?.role === "teacher"
+                ? "cursor-pointer hover:underline"
+                : ""
+            }`}
+            onClick={handleClickName}
+          >
+            {fullName || "Người dùng"}
+          </span>
         </div>
         <div className="flex gap-3 text-sm">
           {!isBlocked && receiverInfo?.data?._id !== ADMIN_ID && (

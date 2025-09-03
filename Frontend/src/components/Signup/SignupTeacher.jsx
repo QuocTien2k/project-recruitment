@@ -19,6 +19,8 @@ const SignupTeacher = () => {
     timeType: "",
     subject: "",
     description: "",
+    faculty: "",
+    teachingLevel: "",
     degreeImages: [],
   });
 
@@ -117,6 +119,11 @@ const SignupTeacher = () => {
     if (!formData.description.trim())
       newErrors.description = "Vui lòng nhập mô tả.";
 
+    if (!formData.teachingLevel)
+      newErrors.teachingLevel = "Vui lòng chọn hình trình độ.";
+    if (!formData.faculty)
+      newErrors.faculty = "Vui lòng chọn hình thức khoa/bộ môn.";
+
     if (formData.degreeImages.length === 0)
       newErrors.degreeImages = "Vui lòng tải lên ít nhất 1 ảnh bằng cấp.";
     if (formData.degreeImages.length > 2)
@@ -178,6 +185,8 @@ const SignupTeacher = () => {
           timeType: "",
           subject: "",
           description: "",
+          faculty: "",
+          teachingLevel: "",
           degreeImages: [],
         });
 
@@ -395,6 +404,50 @@ const SignupTeacher = () => {
             </select>
             {errors.timeType && (
               <span className="text-red-500 text-sm">{errors.timeType}</span>
+            )}
+          </div>
+        </div>
+
+        {/*Khoa/bộ môn + trình độ giảng dạy */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block font-medium">Khoa/bộ môn</label>
+            <select
+              name="faculty"
+              value={formData.faculty}
+              onChange={handleChange}
+              className="form-select-custom"
+            >
+              <option value="">Chọn khoa/bộ môn</option>
+              <option value="xahoi">Xã hội</option>
+              <option value="tunhien">Tự nhiên</option>
+              <option value="ngonngu">Ngoại ngữ</option>
+              <option value="khac">Khác</option>
+            </select>
+            {errors.faculty && (
+              <span className="text-red-500 text-sm">{errors.faculty}</span>
+            )}
+          </div>
+
+          <div>
+            <label className="block font-medium">Trình độ giảng dạy</label>
+            <select
+              name="teachingLevel"
+              value={formData.teachingLevel}
+              onChange={handleChange}
+              className="form-select-custom"
+            >
+              <option value="">Chọn trình độ</option>
+              <option value="cap1">Cấp 1</option>
+              <option value="cap2">Cấp 2</option>
+              <option value="cap3">Cấp 3</option>
+              <option value="daihoc">Đại học</option>
+              <option value="khac">Khác</option>
+            </select>
+            {errors.teachingLevel && (
+              <span className="text-red-500 text-sm">
+                {errors.teachingLevel}
+              </span>
             )}
           </div>
         </div>
