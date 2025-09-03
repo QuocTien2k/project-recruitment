@@ -26,6 +26,16 @@ const teacherSchema = new mongoose.Schema(
         public_id: String,
       },
     ],
+    faculty: {
+      type: String,
+      enum: ["xahoi", "tunhien", "ngoaingu", "khac"],
+      required: true,
+    },
+    teachingLevel: {
+      type: String,
+      enum: ["cap1", "cap2", "cap3", "daihoc", "khac"],
+      required: true,
+    },
   },
   { timestamps: true }
 );

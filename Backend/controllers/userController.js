@@ -39,6 +39,9 @@ const getLogged = async (req, res) => {
             workingType: teacher.workingType,
             timeType: teacher.timeType,
             description: teacher.description,
+            faculty: teacher.faculty,
+            teachingLevel: teacher.teachingLevel,
+            experience: teacher.experience,
           },
         };
       }
@@ -205,8 +208,17 @@ const changePassword = async (req, res) => {
 const updateInfo = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { phone, district, province, workingType, timeType, description } =
-      req.body;
+    const {
+      phone,
+      district,
+      province,
+      workingType,
+      timeType,
+      description,
+      experience,
+      faculty,
+      teachingLevel,
+    } = req.body;
 
     // 1. Tìm user theo ID
     const user = await UserModel.findById(userId);
@@ -246,15 +258,21 @@ const updateInfo = async (req, res) => {
         });
       }
 
+      if (experience) teacher.experience = experience;
       if (workingType) teacher.workingType = workingType;
       if (timeType) teacher.timeType = timeType;
       if (description) teacher.description = description;
+      if (faculty) teacher.faculty = faculty;
+      if (teachingLevel) teacher.teachingLevel = teachingLevel;
 
       await teacher.save();
       teacherData = {
         workingType: teacher.workingType,
         timeType: teacher.timeType,
         description: teacher.description,
+        experience: teacher.experience,
+        faculty: teacher.faculty,
+        teachingLevel: teacher.teachingLevel,
       };
     }
 

@@ -92,6 +92,8 @@ const signupTeacher = async (req, res) => {
       timeType,
       subject,
       description,
+      faculty,
+      teachingLevel,
     } = req.body;
 
     //1. Kiểm tra thông tin
@@ -107,7 +109,9 @@ const signupTeacher = async (req, res) => {
       !workingType ||
       !timeType ||
       !subject ||
-      !description
+      !description ||
+      !faculty ||
+      !teachingLevel
     ) {
       return res.status(400).json({
         success: false,
@@ -194,6 +198,8 @@ const signupTeacher = async (req, res) => {
       subject: normalizedSubject,
       description,
       degreeImages: degreeImageUrls,
+      faculty,
+      teachingLevel,
     });
     await newTeacher.save();
     return res.status(201).json({
