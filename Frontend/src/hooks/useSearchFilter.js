@@ -217,6 +217,8 @@ const initialForms = {
     title: "",
     provinceCode: "",
     districtCode: "",
+    dateFrom: "", // dạng YYYY-MM-DD
+    dateTo: "", // dạng YYYY-MM-DD
   },
   "admin-user": {
     id: "",
@@ -321,10 +323,14 @@ export default function useSearchFilter({
 
       case "admin-post":
         if (form.title) filters.title = form.title;
+
         if (form.provinceCode)
           filters.province = getProvinceNameSync(form.provinceCode);
         if (form.districtCode)
           filters.district = getDistrictNameSync(form.districtCode);
+
+        if (form.dateFrom) filters.dateFrom = form.dateFrom;
+        if (form.dateTo) filters.dateTo = form.dateTo;
         break;
 
       case "admin-user":
