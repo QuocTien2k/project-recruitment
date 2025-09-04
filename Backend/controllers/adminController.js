@@ -262,32 +262,33 @@ const deleteAccount = async (req, res) => {
 // Lấy danh sách bài đang chờ duyệt (có filter)
 const getPendingPost = async (req, res) => {
   try {
-    const { title, province, district } = req.query;
+    const { title, province, district, dateFrom, dateTo } = req.query;
 
-    // Bắt đầu với điều kiện mặc định
     const filters = { status: "pending" };
 
-    // Nếu có filter tiêu đề
-    if (title && title.trim() !== "") {
+    if (title && title.trim()) {
       filters.title = { $regex: title.trim(), $options: "i" };
     }
+    if (province && province.trim()) filters.province = province.trim();
+    if (district && district.trim()) filters.district = district.trim();
 
-    // Nếu có filter tỉnh
-    if (province && province.trim() !== "") {
-      filters.province = province.trim();
+    //filter theo khoảng thời gian tạo
+    if (dateFrom || dateTo) {
+      filters.createdAt = {};
+      if (dateFrom) filters.createdAt.$gte = new Date(dateFrom); // ví dụ: "2025-09-01"
+      if (dateTo) {
+        const end = new Date(dateTo);
+        end.setHours(23, 59, 59, 999); // bao trọn ngày cuối
+        filters.createdAt.$lte = end;
+      }
     }
 
-    // Nếu có filter quận/huyện
-    if (district && district.trim() !== "") {
-      filters.district = district.trim();
-    }
-
-    // Query dữ liệu
     const pendingPosts = await PostModel.find(filters).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
       message: "Lấy danh sách bài tuyển dụng đang chờ duyệt thành công.",
+      total: pendingPosts.length,
       data: pendingPosts,
     });
   } catch (error) {
@@ -301,7 +302,7 @@ const getPendingPost = async (req, res) => {
 // Lấy danh sách bài đã duyệt (có filter)
 const getApprovedPostByAdmin = async (req, res) => {
   try {
-    const { title, province, district } = req.query;
+    const { title, province, district, dateFrom, dateTo } = req.query;
 
     // Điều kiện mặc định
     const filters = { status: "approved" };
@@ -316,6 +317,20 @@ const getApprovedPostByAdmin = async (req, res) => {
 
     if (district && district.trim() !== "") {
       filters.district = district.trim();
+    }
+
+    //filter theo khoảng thời gian tạo
+    //$gte = greater than or equal
+    //$lte = less than or equal (nhỏ hơn hoặc bằng).
+    if (dateFrom || dateTo) {
+      filters.createdAt = {};
+      //"2025-09-10T00:00:00.000Z"
+      if (dateFrom) filters.createdAt.$gte = new Date(dateFrom);
+      if (dateTo) {
+        const end = new Date(dateTo);
+        end.setHours(23, 59, 59, 999); // bao trọn ngày cuối: "2025-09-10T23:59:59.999Z"
+        filters.createdAt.$lte = end;
+      }
     }
 
     const approvedPosts = await PostModel.find(filters).sort({ createdAt: -1 });
