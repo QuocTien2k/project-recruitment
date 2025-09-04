@@ -78,7 +78,7 @@ const getInActiveUsers = async (req, res) => {
 //lấy danh sách teacher hoạt động
 const getActiveTeachers = async (req, res) => {
   try {
-    const { userId, name, email, province, district } = req.query;
+    const { userId, name, email, province, district, faculty } = req.query;
 
     let teacherQuery = {};
     if (userId) teacherQuery.userId = userId;
@@ -93,13 +93,14 @@ const getActiveTeachers = async (req, res) => {
     if (email) userQuery.email = { $regex: email, $options: "i" };
     if (province) userQuery.province = province;
     if (district) userQuery.district = district;
+    if (faculty) userQuery.faculty = faculty;
 
     const teachers = await TeacherModel.find(teacherQuery)
       .populate({
         path: "userId",
         match: userQuery, // lọc user theo điều kiện
         select:
-          "middleName name email phone profilePic province district isActive",
+          "middleName name email phone profilePic province district faculty isActive",
       })
       .select("-__v");
 
@@ -123,7 +124,7 @@ const getActiveTeachers = async (req, res) => {
 //lấy danh sách teacher tạm khóa
 const getInActiveTeachers = async (req, res) => {
   try {
-    const { userId, name, email, province, district } = req.query;
+    const { userId, name, email, province, district, faculty } = req.query;
 
     let teacherQuery = {};
     if (userId) teacherQuery.userId = userId;
@@ -139,13 +140,14 @@ const getInActiveTeachers = async (req, res) => {
     if (email) userQuery.email = { $regex: email, $options: "i" };
     if (province) userQuery.province = province;
     if (district) userQuery.district = district;
+    if (faculty) userQuery.faculty = faculty;
 
     const teachers = await TeacherModel.find(teacherQuery)
       .populate({
         path: "userId",
         match: userQuery, // lọc user theo điều kiện
         select:
-          "middleName name email phone profilePic province district isActive",
+          "middleName name email phone profilePic province district faculty isActive",
       })
       .select("-__v");
 
