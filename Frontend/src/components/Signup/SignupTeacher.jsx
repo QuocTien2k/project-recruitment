@@ -340,7 +340,7 @@ const SignupTeacher = () => {
         {/* Năm kinh nghiệm + môn dạy */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block font-medium">Số năm k/nghiệm</label>
+            <label className="block font-medium">Kinh nghiệm</label>
             <input
               type="number"
               name="experience"
@@ -430,14 +430,14 @@ const SignupTeacher = () => {
           </div>
 
           <div>
-            <label className="block font-medium">Trình độ giảng dạy</label>
+            <label className="block font-medium">Cấp dạy</label>
             <select
               name="teachingLevel"
               value={formData.teachingLevel}
               onChange={handleChange}
               className="form-select-custom"
             >
-              <option value="">Chọn trình độ</option>
+              <option value="">Chọn cấp</option>
               <option value="cap1">Cấp 1</option>
               <option value="cap2">Cấp 2</option>
               <option value="cap3">Cấp 3</option>

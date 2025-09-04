@@ -112,8 +112,14 @@ const NotifiByAdmin = () => {
       {/* Dropdown */}
       {isDropdownOpen && (
         <div
-          className="absolute right-0 mt-2 w-72 sm:w-80 md:max-w-lg 
-                bg-white shadow-lg rounded-lg min-h-[100px] max-h-96 overflow-y-auto z-50"
+          className="
+    absolute mt-2 w-72 sm:w-80 md:max-w-lg 
+    max-w-[calc(100vw-20px)] bg-white shadow-lg rounded-lg 
+    min-h-[100px] max-h-96 overflow-y-auto z-50
+    
+    left-1/2 -translate-x-[65%]   /* mobile: căn giữa màn hình */
+    sm:left-auto sm:right-0 sm:translate-x-0  /* từ sm trở lên: bám chuông */
+  "
         >
           {/* Header */}
           <div className="flex items-center gap-3 px-3 py-2 border-b">
