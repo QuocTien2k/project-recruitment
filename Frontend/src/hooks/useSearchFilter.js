@@ -226,11 +226,12 @@ const initialForms = {
     districtCode: "",
   },
   "admin-teacher": {
-    userId: "",
+    //userId: "",
     name: "",
     email: "",
     provinceCode: "",
     districtCode: "",
+    faculty: "",
   },
 };
 
@@ -337,13 +338,14 @@ export default function useSearchFilter({
         break;
 
       case "admin-teacher":
-        if (form.userId) filters.userId = form.userId;
+        //if (form.userId) filters.userId = form.userId;
         if (form.name) filters.name = form.name;
         if (form.email) filters.email = form.email;
         if (form.provinceCode)
           filters.province = getProvinceNameSync(form.provinceCode);
         if (form.districtCode)
           filters.district = getDistrictNameSync(form.districtCode);
+        if (form.faculty) filters.faculty = form.faculty;
         break;
     }
     return filters;

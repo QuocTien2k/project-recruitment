@@ -35,13 +35,13 @@ const ActiveTeacherSearch = ({ onResults, onUserAction }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       {/* Input */}
-      <InputField
+      {/* <InputField
         name="userId"
         placeholder="Tìm theo id..."
         value={form.userId}
         onChange={handleChangeWithFlag}
         className="w-[20%]"
-      />
+      /> */}
 
       <InputField
         name="name"
@@ -58,6 +58,20 @@ const ActiveTeacherSearch = ({ onResults, onUserAction }) => {
         onChange={handleChangeWithFlag}
         className="w-[20%]"
       />
+
+      {/* Select khoa/bộ môn */}
+      <select
+        name="faculty"
+        value={form.faculty}
+        onChange={handleChangeWithFlag}
+        className="form-select-custom w-[20%]"
+      >
+        <option value="">Khoa/Bộ môn</option>
+        <option value="xahoi">Xã hội</option>
+        <option value="tunhien">Tự nhiên</option>
+        <option value="ngonngu">Ngoại ngữ</option>
+        <option value="khac">Khác</option>
+      </select>
 
       {/* Select tỉnh/thành */}
       <select
