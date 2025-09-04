@@ -46,7 +46,7 @@ const MyPostSearch = ({ onResults, onUserAction }) => {
         onChange={handleChangeWithFlag}
         className="form-select-custom w-[30%]"
       >
-        <option value="">Tất cả</option>
+        <option value="">Trạng thái</option>
         <option value="pending">Chờ duyệt</option>
         <option value="approved">Đã duyệt</option>
         <option value="rejected">Từ chối</option>
