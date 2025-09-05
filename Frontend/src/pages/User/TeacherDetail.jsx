@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { FaEnvelope, FaUserTie, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaUserTie,
+  FaMapMarkerAlt,
+  FaUniversity,
+  FaRegClock,
+} from "react-icons/fa";
 import { MdWork } from "react-icons/md";
 import { getTeacherDetail } from "@api/public";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,8 +43,15 @@ const TeacherDetail = () => {
     fetchDetail();
   }, []);
 
-  const { userId, description, experience, subject, timeType, workingType } =
-    teacher || {};
+  const {
+    userId,
+    description,
+    experience,
+    subject,
+    timeType,
+    workingType,
+    faculty,
+  } = teacher || {};
   const fullName = `${userId?.middleName || ""} ${userId?.name || ""}`.trim();
 
   const handleStartChat = async () => {
@@ -59,6 +72,20 @@ const TeacherDetail = () => {
   //   console.log("Thông tin của mình: ", currentUser?._id);
   //   console.log("Thông tin của giáo viên: ", userId?._id);
   // }, [userId, currentUser]);
+
+  const vietsubWorkingType = {
+    offline: "Offline",
+    online: "Online",
+    both: "Cả hai (Online và Offline)",
+  };
+
+  const vietsubFaculty = {
+    xahoi: "Xã hội",
+    tunhien: "Tự nhiên",
+    ngoaingu: "Ngoại ngữ",
+    khac: "Khác",
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
       <Link to="/" className="text-sm text-blue-600 hover:underline block mb-4">
@@ -97,15 +124,21 @@ const TeacherDetail = () => {
               <span className="font-medium">{subject?.join(", ")}</span>
             </p>
 
+            <p className="flex items-center gap-2 justify-center sm:justify-start">
+              <FaUniversity className="text-purple-500" />
+              <span>Khoa: {vietsubFaculty[faculty] || faculty}</span>
+            </p>
+
             <p className="flex items-center gap-2">
               <MdWork className="text-green-500 text-lg" /> Kinh nghiệm:
               <span className="font-medium">{experience} năm</span>
             </p>
 
             <p className="flex items-center gap-2">
-              🕒 Hình thức làm việc:
+              <FaRegClock className="text-yellow-600" />
               <span className="italic">
-                {workingType || "N/A"} - {timeType}
+                Hình thức làm việc:{" "}
+                {vietsubWorkingType[workingType] || workingType} / {timeType}
               </span>
             </p>
 

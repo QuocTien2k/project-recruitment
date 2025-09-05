@@ -166,11 +166,11 @@ const UpdateInfo = ({ currentUser, onClose, onUpdateSuccess }) => {
     }
   };
 
-  console.log(
-    "experience khi mở modal:",
-    formData.experience,
-    typeof formData.experience
-  );
+  // console.log(
+  //   "experience khi mở modal:",
+  //   formData.experience,
+  //   typeof formData.experience
+  // );
 
   return (
     <div className="bg-modal backdrop-blur-sm">

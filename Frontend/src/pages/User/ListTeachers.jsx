@@ -20,6 +20,8 @@ const ListTeachers = () => {
     setCurrentPage(0);
   }, [listTeacher]);
 
+  //console.log(listTeacher);
+
   return (
     <>
       <div className="flex items-center justify-between mb-4">

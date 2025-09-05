@@ -1,5 +1,11 @@
 import { useSelector } from "react-redux";
-import { FaEnvelope, FaMapMarkerAlt, FaUserTie } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaRegClock,
+  FaUniversity,
+  FaUserTie,
+} from "react-icons/fa";
 import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Button from "@components-ui/Button";
@@ -25,6 +31,7 @@ const CardTeacher = ({
     timeType,
     workingType,
     degreeImages,
+    faculty,
     userId, // user info đã populate
   } = teacher || {};
 
@@ -36,6 +43,13 @@ const CardTeacher = ({
     offline: "Offline",
     online: "Online",
     both: "Cả hai (Online và Offline)",
+  };
+
+  const vietsubFaculty = {
+    xahoi: "Xã hội",
+    tunhien: "Tự nhiên",
+    ngoaingu: "Ngoại ngữ",
+    khac: "Khác",
   };
 
   return (
@@ -98,8 +112,13 @@ const CardTeacher = ({
           <span>Môn dạy: {subject?.join(", ")}</span>
         </p>
 
+        <p className="flex items-center gap-2 justify-center sm:justify-start">
+          <FaUniversity className="text-purple-500" />
+          <span>Khoa: {vietsubFaculty[faculty] || faculty}</span>
+        </p>
+
         <p className="flex items-start gap-2 col-span-full justify-center sm:justify-start">
-          <span className="text-yellow-600">🕒</span>
+          <FaRegClock className="text-yellow-600" size={20} />
           <span className="block text-left">
             Hình thức làm việc:{" "}
             <i>{vietsubWorkingType[workingType] || workingType}</i>
