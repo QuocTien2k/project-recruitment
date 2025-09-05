@@ -5,7 +5,7 @@ import { setGlobalLoading } from "@redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Post = () => {
   const [listPost, setListPost] = useState([]);
@@ -51,6 +51,22 @@ const Post = () => {
                 onViewDetail={() => navigate(`/bai-viet/${post.slug}`)}
               />
             ))}
+          </div>
+          {/* Nút Xem tất cả */}
+          <div className="flex justify-center mt-6">
+            <Link
+              to="/danh-sach-bai-viet"
+              className="
+            py-2 px-6 
+            bg-green-100 text-green-600
+            rounded-lg 
+            shadow-sm 
+            hover:bg-green-200 hover:text-black
+            transition 
+            font-medium duration-300 transform hover:scale-95"
+            >
+              Xem tất cả bài viết
+            </Link>
           </div>
         </>
       )}

@@ -35,9 +35,11 @@ export const getTeacherDetail = async (teacherId) => {
   }
 };
 
-export const getApprovedPost = async () => {
+export const getApprovedPost = async (filters = {}) => {
   try {
-    const res = await axiosInstance.get("/api/public/list-posts/");
+    const res = await axiosInstance.get("/api/public/list-posts/", {
+      params: filters, // truyền filters lên query
+    });
 
     return res?.data;
   } catch (err) {
