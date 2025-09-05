@@ -5,7 +5,32 @@ const TeacherModel = require("../models/Teacher");
 //lấy bài viết đã duyệt
 const getAllApprovedPosts = async (req, res) => {
   try {
-    const posts = await PostModel.find({ status: "approved" })
+    const { title, province, district, workingType, timeType } = req.query;
+
+    // Điều kiện mặc định
+    const filters = { status: "approved" };
+
+    if (title && title.trim() !== "") {
+      filters.title = { $regex: title.trim(), $options: "i" };
+    }
+
+    if (province && province.trim() !== "") {
+      filters.province = province.trim();
+    }
+
+    if (district && district.trim() !== "") {
+      filters.district = district.trim();
+    }
+
+    if (workingType && workingType.trim() !== "") {
+      filters.workingType = workingType.trim(); // "online" hoặc "offline"
+    }
+
+    if (timeType && timeType.trim() !== "") {
+      filters.timeType = timeType.trim(); // "full-time" hoặc "part-time"
+    }
+
+    const posts = await PostModel.find(filters)
       .sort({ createdAt: -1 })
       .populate("createdBy", "middleName name");
 
@@ -32,6 +57,11 @@ const getAllApprovedPosts = async (req, res) => {
       message: "Lỗi server: " + error.message,
     });
   }
+};
+
+//lấy 12 bài viết đã duyệt
+const getApproveShortList = async (req, res) => {
+  const posts = await PostModel;
 };
 
 //lấy bài viết tạo bởi user và thông tin user
