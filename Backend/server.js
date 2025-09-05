@@ -9,7 +9,7 @@ const socketIo = require("socket.io");
 const server = http.createServer(expressApp); // Tạo HTTP server từ app
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
   },
 });
