@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import Button from "@components-ui/Button";
 import InputField from "@components-ui/Input";
 
-const ListTeacherSearch = ({ onResults }) => {
+const ListTeacherSearch = ({ onResults, onUserAction }) => {
   const {
     form,
     handleChange,
@@ -21,23 +21,34 @@ const ListTeacherSearch = ({ onResults }) => {
     onResults(results);
   }, [results, onResults]);
 
+  // wrapper nhỏ để gắn cờ user action
+  const handleChangeWithFlag = (e) => {
+    onUserAction?.();
+    handleChange(e);
+  };
+
+  const handleResetWithFlag = () => {
+    onUserAction?.();
+    handleResetFilter();
+  };
+
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+    <div className="flex flex-wrap items-center gap-3 mb-4">
       {/* Input */}
       <InputField
         name="subject"
         placeholder="Tìm theo môn học. Ví dụ: Toán, Sử..."
         value={form.subject}
-        onChange={handleChange}
-        className="w-[25%]"
+        onChange={handleChangeWithFlag}
+        className="flex-1 min-w-[180px]"
       />
 
       {/* Select kinh nghiệm */}
       <select
         name="experience"
         value={form.experience}
-        onChange={handleChange}
-        className="form-select-custom w-[10%]"
+        onChange={handleChangeWithFlag}
+        className="form-select-custom flex-1 min-w-[140px]"
       >
         <option value="">Kinh nghiệm</option>
         <option value="0-1">0-1 năm</option>
@@ -50,8 +61,8 @@ const ListTeacherSearch = ({ onResults }) => {
       <select
         name="workingType"
         value={form.workingType}
-        onChange={handleChange}
-        className="form-select-custom w-[15%]"
+        onChange={handleChangeWithFlag}
+        className="form-select-custom flex-1 min-w-[140px]"
       >
         <option value="">Hình thức làm việc</option>
         <option value="offline">Offline</option>
@@ -63,8 +74,8 @@ const ListTeacherSearch = ({ onResults }) => {
       <select
         name="timeType"
         value={form.timeType}
-        onChange={handleChange}
-        className="form-select-custom w-[15%]"
+        onChange={handleChangeWithFlag}
+        className="form-select-custom flex-1 min-w-[140px]"
       >
         <option value="">Thời gian làm việc</option>
         <option value="full-time">full-time</option>
@@ -75,8 +86,8 @@ const ListTeacherSearch = ({ onResults }) => {
       <select
         name="provinceCode"
         value={form.provinceCode}
-        onChange={handleChange}
-        className="form-select-custom w-[15%]"
+        onChange={handleChangeWithFlag}
+        className="form-select-custom flex-1 min-w-[140px]"
       >
         <option value="">Tỉnh/Thành</option>
         {provinces.map((p) => (
@@ -90,8 +101,8 @@ const ListTeacherSearch = ({ onResults }) => {
       <select
         name="districtCode"
         value={form.districtCode}
-        onChange={handleChange}
-        className="form-select-custom w-[15%]"
+        onChange={handleChangeWithFlag}
+        className="form-select-custom flex-1 min-w-[140px]"
         disabled={!districts.length}
       >
         <option value="">Phường/Xã</option>
@@ -103,7 +114,7 @@ const ListTeacherSearch = ({ onResults }) => {
       </select>
 
       {/* Reset button */}
-      <Button onClick={handleResetFilter} variant="reset">
+      <Button onClick={handleResetWithFlag} variant="reset">
         Reset
       </Button>
     </div>
