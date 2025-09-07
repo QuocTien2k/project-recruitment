@@ -33,7 +33,7 @@ const ListTeacherSearch = ({ onResults, onUserAction }) => {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-3 mb-4">
+    <div className="flex flex-wrap items-center gap-3">
       {/* Input */}
       <InputField
         name="subject"

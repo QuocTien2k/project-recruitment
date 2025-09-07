@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Button from "@components-ui/Button";
 import MessageNotification from "@components-chat/MessageNotification";
-import { FiPower } from "react-icons/fi";
+import { FiHeart, FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@redux/loadingSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat, setUser } from "@redux/currentUserSlice";
@@ -208,6 +208,17 @@ const Header = () => {
                         >
                           <FiEdit className="text-[16px]" />
                           <span>Tạo hợp đồng</span>
+                        </Button>
+
+                        {/*My Favorite */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                          onClick={() => navigate("/danh-sach-yeu-thich")}
+                        >
+                          <FiHeart className="text-[16px]" />
+                          <span>Danh sách yêu thích</span>
                         </Button>
                       </>
                     )}
