@@ -8,6 +8,7 @@ const {
   getFavoriteTeachers,
   addFavoriteTeacher,
   removeFavoriteTeacher,
+  checkFavoriteTeacher,
 } = require("../controllers/userController");
 const { protect, authorize } = require("../middlewares/authMiddleware");
 const uploadSingleToCloud = require("../utils/uploadSingleToCloud");
@@ -41,6 +42,12 @@ router.delete(
   protect,
   authorize("user"),
   removeFavoriteTeacher
+);
+router.get(
+  "/favorites/check/:teacherId",
+  protect,
+  authorize("user"),
+  checkFavoriteTeacher
 );
 
 module.exports = router;

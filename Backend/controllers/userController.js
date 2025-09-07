@@ -454,6 +454,37 @@ const removeFavoriteTeacher = async (req, res) => {
   }
 };
 
+// Check teacher có trong danh sách yêu thích không
+const checkFavoriteTeacher = async (req, res) => {
+  try {
+    const userId = req.user.userId; // lấy từ token
+    const { teacherId } = req.params;
+
+    if (!teacherId) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu teacherId.",
+      });
+    }
+
+    // tìm xem có tồn tại record favorite không
+    const favorite = await FavoriteModel.findOne({
+      user: userId,
+      teacher: teacherId,
+    });
+
+    res.status(200).json({
+      success: true,
+      isFavorite: !!favorite, //ép sang boolean
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   getLogged,
   getUserById,
@@ -463,4 +494,5 @@ module.exports = {
   getFavoriteTeachers,
   addFavoriteTeacher,
   removeFavoriteTeacher,
+  checkFavoriteTeacher,
 };
