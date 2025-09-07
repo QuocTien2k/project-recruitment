@@ -7,6 +7,7 @@ const {
   updateInfo,
   getFavoriteTeachers,
   addFavoriteTeacher,
+  removeFavoriteTeacher,
 } = require("../controllers/userController");
 const { protect, authorize } = require("../middlewares/authMiddleware");
 const uploadSingleToCloud = require("../utils/uploadSingleToCloud");
@@ -35,5 +36,11 @@ router.patch("/update-info", protect, authorize("user", "teacher"), updateInfo);
 //danh sách user thích teacher
 router.get("/favorites", protect, authorize("user"), getFavoriteTeachers);
 router.post("/add-favorite", protect, authorize("user"), addFavoriteTeacher);
+router.delete(
+  "/delete-favorite",
+  protect,
+  authorize("user"),
+  removeFavoriteTeacher
+);
 
 module.exports = router;
