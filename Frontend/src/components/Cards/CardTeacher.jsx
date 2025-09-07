@@ -98,7 +98,7 @@ const CardTeacher = ({
 
       {/* Thông tin chi tiết */}
       <div className="flex flex-col gap-3 text-md text-gray-700 w-full">
-        <p className="flex items-center gap-2 justify-center sm:justify-start">
+        <p className="flex items-center gap-2">
           <MdWork className="text-green-500 text-lg" />
           <span className="text-sm text-gray-700">
             Kinh nghiệm:{" "}
@@ -108,17 +108,17 @@ const CardTeacher = ({
           </span>
         </p>
 
-        <p className="flex items-center gap-2 justify-center sm:justify-start">
+        <p className="flex items-center gap-2">
           <FaUserTie className="text-indigo-500" />
           <span>Môn dạy: {subject?.join(", ")}</span>
         </p>
 
-        <p className="flex items-center gap-2 justify-center sm:justify-start">
+        <p className="flex items-center gap-2">
           <FaUniversity className="text-purple-500" />
           <span>Khoa: {vietsubFaculty[faculty] || faculty}</span>
         </p>
 
-        <p className="flex items-start gap-2 col-span-full justify-center sm:justify-start">
+        <p className="flex items-start gap-2 col-span-full">
           <FaRegClock className="text-yellow-600" size={20} />
           <span className="block text-left">
             Hình thức làm việc:{" "}
@@ -128,7 +128,7 @@ const CardTeacher = ({
           </span>
         </p>
 
-        <p className="flex items-center gap-2 col-span-full justify-center sm:justify-start overflow-hidden">
+        <p className="flex items-center gap-2 col-span-full overflow-hidden">
           <FaMapMarkerAlt className="text-red-400 flex-shrink-0" />
           <span className="truncate whitespace-nowrap">
             Khu vực: {userId.district}, {userId.province}

@@ -26,6 +26,7 @@ const TeacherDetail = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const { openChat } = useChatContext();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [disableFavorite, setDisableFavorite] = useState(false);
 
   const avatarDefault =
     "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -136,7 +137,12 @@ const TeacherDetail = () => {
   };
 
   // Toggle công tắc yêu thích
-  const toggleFavorite = (teacherId) => {
+  const toggleFavorite = async (teacherId) => {
+    if (!teacherId || disableFavorite) return; // chặn spam click
+
+    setDisableFavorite(true);
+    setTimeout(() => setDisableFavorite(false), 3500); //diabled nút 3.5s
+
     if (isFavorite) {
       handleRemoveFavorite(teacherId);
     } else {
@@ -157,22 +163,24 @@ const TeacherDetail = () => {
       ) : (
         <div className="flex flex-col md:flex-row gap-6">
           {/* Avatar + Info + Favorite */}
-          <div className="flex-shrink-0 flex flex-col justify-around items-center gap-y-2 sm:gap-y-4 md:gap-y-6">
+          <div className="flex-shrink-0 flex flex-col justify-center items-center gap-4">
             <img
               src={userId?.profilePic?.url || avatarDefault}
               alt={fullName}
-              className="w-32 h-32 object-cover rounded-full border"
+              className="w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 object-cover rounded-full border"
             />
 
-            <div className="">
-              <FaHeart
-                size={22}
-                onClick={() => toggleFavorite(userId?._id)}
-                className={`cursor-pointer transition ${
-                  isFavorite ? "text-red-500" : "text-gray-400"
-                }`}
-              />
-            </div>
+            <FaHeart
+              size={24}
+              onClick={() => toggleFavorite(userId?._id)}
+              className={`transition transform hover:scale-110 ${
+                isFavorite ? "text-red-500" : "text-gray-400"
+              } ${
+                disableFavorite
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
+            />
 
             <Button size="sm" variant="default" onClick={handleStartChat}>
               💬 Liên hệ
@@ -192,7 +200,7 @@ const TeacherDetail = () => {
               <span className="font-medium">{subject?.join(", ")}</span>
             </p>
 
-            <p className="flex items-center gap-2 justify-center sm:justify-start">
+            <p className="flex items-center gap-2">
               <FaUniversity className="text-purple-500" />
               <span>Khoa: {vietsubFaculty[faculty] || faculty}</span>
             </p>
