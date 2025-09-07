@@ -68,3 +68,29 @@ export const updateInfo = async (formData) => {
     throw err;
   }
 };
+
+//Lấy danh sách yêu thích
+export const getListFavorite = async (filters = {}) => {
+  try {
+    const response = await axiosInstance.get("/api/user/favorites", {
+      params: filters, // truyền filters lên query
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi cập nhật:", err?.message);
+    throw err;
+  }
+};
+
+//Thêm teacher vào yêu thích
+export const addFavorite = async (teacherId) => {
+  try {
+    const response = await axiosInstance.post("/api/user/add-favorite", {
+      teacherId,
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi thêm vào yêu thích:", err?.message);
+    throw err;
+  }
+};
