@@ -1,4 +1,4 @@
-import { getApprovedPost } from "@api/public";
+import { getPostShortList } from "@api/public";
 import Loading from "@components-ui/Loading";
 import PostCard from "@components-post/PostCard";
 import { setGlobalLoading } from "@redux/loadingSlice";
@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-const Post = () => {
+const ShortListPost = () => {
   const [listPost, setListPost] = useState([]);
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const Post = () => {
   const fetchPost = async () => {
     dispatch(setGlobalLoading(true));
     try {
-      const res = await getApprovedPost();
+      const res = await getPostShortList();
 
       if (res?.success) {
         setListPost(res?.data);
@@ -74,4 +74,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default ShortListPost;

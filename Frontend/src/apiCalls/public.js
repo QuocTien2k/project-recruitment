@@ -48,6 +48,17 @@ export const getApprovedPost = async (filters = {}) => {
   }
 };
 
+export const getPostShortList = async () => {
+  try {
+    const res = await axiosInstance.get("/api/public/get-post-short");
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
 export const getPostDetail = async (slug) => {
   try {
     const res = await axiosInstance.get(`/api/public/detail-by-slug/${slug}`);

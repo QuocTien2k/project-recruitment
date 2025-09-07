@@ -1,5 +1,5 @@
 import ShortListTeacher from "@sections/ShortListTeacher";
-import Post from "@sections/Post";
+import ShortListPost from "@sections/ShortListPost";
 import React from "react";
 
 const Home = () => {
@@ -8,7 +8,7 @@ const Home = () => {
       <div className="space-y-8">
         <ShortListTeacher />
 
-        <Post />
+        <ShortListPost />
       </div>
     </>
   );
