@@ -82,7 +82,7 @@ export const getListFavorite = async (filters = {}) => {
   }
 };
 
-//Thêm teacher vào yêu thích
+//Thêm teacher vào mục yêu thích
 export const addFavorite = async (teacherId) => {
   try {
     const response = await axiosInstance.post("/api/user/add-favorite", {
@@ -91,6 +91,19 @@ export const addFavorite = async (teacherId) => {
     return response.data;
   } catch (err) {
     console.log("Có lỗi khi thêm vào yêu thích:", err?.message);
+    throw err;
+  }
+};
+
+//Xóa teacher ở mục yêu thích
+export const removeFavorite = async (teacherId) => {
+  try {
+    const response = await axiosInstance.delete("/api/user/delete-favorite", {
+      data: { teacherId },
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi xóa:", err?.message);
     throw err;
   }
 };

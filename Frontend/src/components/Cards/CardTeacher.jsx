@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import {
   FaEnvelope,
+  FaHeart,
   FaMapMarkerAlt,
   FaRegClock,
   FaUniversity,
@@ -11,6 +12,8 @@ import { Link } from "react-router-dom";
 import Button from "@components-ui/Button";
 import { useState } from "react";
 import { FiX } from "react-icons/fi";
+import toast from "react-hot-toast";
+import { addFavorite, removeFavorite } from "@api/user";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -35,6 +38,8 @@ const CardTeacher = ({
     userId, // user info đã populate
   } = teacher || {};
 
+  const [isFavorite, setIsFavorite] = useState(false);
+
   if (!userId) return null;
 
   const fullName = `${userId.middleName || ""} ${userId.name || ""}`.trim();
@@ -50,6 +55,46 @@ const CardTeacher = ({
     tunhien: "Tự nhiên",
     ngoaingu: "Ngoại ngữ",
     khac: "Khác",
+  };
+
+  //thêm vào mục yêu thích
+  const handleAddFavorite = async (teacherId) => {
+    try {
+      const res = await addFavorite(teacherId);
+
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsFavorite(true);
+      }
+    } catch (err) {
+      console.error("Lỗi khi thêm vào yêu thích:", err);
+      const errorMsg = err.response?.data?.message || "Yêu thích thất bại.";
+      toast.error(errorMsg);
+    }
+  };
+
+  //xóa khỏi mục yêu thích
+  const handleRemoveFavorite = async (teacherId) => {
+    try {
+      const res = await removeFavorite(teacherId);
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsFavorite(false);
+      }
+    } catch (err) {
+      console.error("Lỗi khi xóa yêu thích:", err);
+      const errorMsg = err.response?.data?.message || "Xóa yêu thích thất bại.";
+      toast.error(errorMsg);
+    }
+  };
+
+  // Toggle công tắc yêu thích
+  const toggleFavorite = (teacherId) => {
+    if (isFavorite) {
+      handleRemoveFavorite(teacherId);
+    } else {
+      handleAddFavorite(teacherId);
+    }
   };
 
   return (
@@ -85,6 +130,16 @@ const CardTeacher = ({
         alt={fullName}
         className="w-24 h-24 object-cover rounded-full border-2 border-gray-200"
       />
+
+      <div className="absolute top-4 right-4">
+        <FaHeart
+          size={22}
+          onClick={() => toggleFavorite(userId?._id)}
+          className={`cursor-pointer transition ${
+            isFavorite ? "text-red-500" : "text-gray-400"
+          }`}
+        />
+      </div>
 
       {/* Thông tin cơ bản */}
       <div>
