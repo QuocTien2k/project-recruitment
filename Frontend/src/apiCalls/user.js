@@ -107,3 +107,16 @@ export const removeFavorite = async (teacherId) => {
     throw err;
   }
 };
+
+//kiểm tra trạng thái
+export const checkStatusFavorite = async (teacherId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/user/favorites/check/${teacherId}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi kiểm tra:", err?.message);
+    throw err;
+  }
+};

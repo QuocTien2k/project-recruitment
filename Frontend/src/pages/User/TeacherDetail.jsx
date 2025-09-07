@@ -6,6 +6,7 @@ import {
   FaMapMarkerAlt,
   FaUniversity,
   FaRegClock,
+  FaHeart,
 } from "react-icons/fa";
 import { MdWork } from "react-icons/md";
 import { getTeacherDetail } from "@api/public";
@@ -15,6 +16,7 @@ import Loading from "@components-ui/Loading";
 import Button from "@components-ui/Button";
 import { useChatContext } from "@context/ChatContext";
 import toast from "react-hot-toast";
+import { addFavorite, checkStatusFavorite, removeFavorite } from "@api/user";
 
 const TeacherDetail = () => {
   const { teacherId } = useParams();
@@ -23,6 +25,7 @@ const TeacherDetail = () => {
   const isTeacherLoading = useSelector((state) => state.loading.teacher);
   const currentUser = useSelector((state) => state.currentUser.user);
   const { openChat } = useChatContext();
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const avatarDefault =
     "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -68,6 +71,21 @@ const TeacherDetail = () => {
     await openChat(userId?._id); // Gọi context xử lý logic tạo hoặc chọn chat
   };
 
+  const checkFavorite = async () => {
+    if (!currentUser) return;
+    try {
+      const res = await checkStatusFavorite(userId?._id);
+      setIsFavorite(res?.isFavorite || false);
+    } catch (err) {
+      const msg = err.response?.data?.message || "Lỗi kiểm tra trạng thái";
+      console.error(msg);
+    }
+  };
+
+  useEffect(() => {
+    checkFavorite();
+  }, [currentUser, userId?._id]);
+
   // useEffect(() => {
   //   console.log("Thông tin của mình: ", currentUser?._id);
   //   console.log("Thông tin của giáo viên: ", userId?._id);
@@ -86,6 +104,46 @@ const TeacherDetail = () => {
     khac: "Khác",
   };
 
+  //thêm vào mục yêu thích
+  const handleAddFavorite = async (teacherId) => {
+    try {
+      const res = await addFavorite(teacherId);
+
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsFavorite(true);
+      }
+    } catch (err) {
+      console.error("Lỗi khi thêm vào yêu thích:", err);
+      const errorMsg = err.response?.data?.message || "Yêu thích thất bại.";
+      toast.error(errorMsg);
+    }
+  };
+
+  //xóa khỏi mục yêu thích
+  const handleRemoveFavorite = async (teacherId) => {
+    try {
+      const res = await removeFavorite(teacherId);
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsFavorite(false);
+      }
+    } catch (err) {
+      console.error("Lỗi khi xóa yêu thích:", err);
+      const errorMsg = err.response?.data?.message || "Xóa yêu thích thất bại.";
+      toast.error(errorMsg);
+    }
+  };
+
+  // Toggle công tắc yêu thích
+  const toggleFavorite = (teacherId) => {
+    if (isFavorite) {
+      handleRemoveFavorite(teacherId);
+    } else {
+      handleAddFavorite(teacherId);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
       <Link to="/" className="text-sm text-blue-600 hover:underline block mb-4">
@@ -98,13 +156,23 @@ const TeacherDetail = () => {
         </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Avatar + Info */}
+          {/* Avatar + Info + Favorite */}
           <div className="flex-shrink-0 flex flex-col justify-around items-center gap-y-2 sm:gap-y-4 md:gap-y-6">
             <img
               src={userId?.profilePic?.url || avatarDefault}
               alt={fullName}
               className="w-32 h-32 object-cover rounded-full border"
             />
+
+            <div className="">
+              <FaHeart
+                size={22}
+                onClick={() => toggleFavorite(userId?._id)}
+                className={`cursor-pointer transition ${
+                  isFavorite ? "text-red-500" : "text-gray-400"
+                }`}
+              />
+            </div>
 
             <Button size="sm" variant="default" onClick={handleStartChat}>
               💬 Liên hệ
