@@ -1,4 +1,5 @@
 const UserModel = require("../models/User");
+const FavoriteModel = require("../models/Favorite");
 const TeacherModel = require("../models/Teacher");
 const cloudinary = require("../cloudinary");
 const bcrypt = require("bcryptjs");
@@ -301,10 +302,112 @@ const updateInfo = async (req, res) => {
   }
 };
 
+/******** Cá nhân ******** */
+const getFavoriteTeachers = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { name, email, province, district } = req.query;
+
+    //1 lấy danh sách
+    const favorites = await FavoriteModel.find({ user: userId }).populate(
+      "teacher"
+    );
+
+    //2 lọc
+    const teacherIds = favorites.map((fav) => fav.teacher._id);
+
+    //3
+    const query = {
+      _id: { $in: teacherIds },
+      isActive: true,
+      role: "teacher",
+    };
+
+    if (name) {
+      query.$or = [
+        { name: { $regex: name, $options: "i" } },
+        { middleName: { $regex: name, $options: "i" } },
+      ];
+    }
+    if (email) query.email = { $regex: email, $options: "i" };
+    if (province) query.province = province;
+    if (district) query.district = district;
+
+    const teachers = await UserModel.find(query).select(
+      "-password -resetPasswordToken"
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách yêu thích thành công.",
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+// Thêm teacher vào mục yêu thích
+const addFavoriteTeacher = async (req, res) => {
+  try {
+    const userId = req.user.userId; // lấy user từ token
+    const { teacherId } = req.body;
+
+    if (!teacherId) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu teacherId.",
+      });
+    }
+
+    // kiểm tra teacher có tồn tại không
+    const teacher = await UserModel.findOne({
+      _id: teacherId,
+      role: "teacher",
+    });
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy giáo viên.",
+      });
+    }
+
+    // tạo bản ghi favorite (sẽ fail nếu đã tồn tại vì unique index)
+    const favorite = await FavoriteModel.create({
+      user: userId,
+      teacher: teacherId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Đã thêm vào mục yêu thích.",
+      data: favorite,
+    });
+  } catch (error) {
+    // trường hợp duplicate key error (user + teacher đã tồn tại)
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Giáo viên này đã có trong danh sách yêu thích.",
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   getLogged,
   getUserById,
   updateAvatar,
   changePassword,
   updateInfo,
+  getFavoriteTeachers,
+  addFavoriteTeacher,
 };
