@@ -3,14 +3,10 @@ import Button from "@components-ui/Button";
 import InputField from "@components-ui/Input";
 import useSearchFilter from "@hooks/useSearchFilter";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 const MyListBlocked = ({ onResults, onUserAction }) => {
-  const currentUser = useSelector((state) => state.currentUser.user);
-
   const { form, handleChange, handleResetFilter, results } = useSearchFilter({
     searchType: "my-list-block",
-    currentUser,
     fetchFunction: getBlockList,
   });
 

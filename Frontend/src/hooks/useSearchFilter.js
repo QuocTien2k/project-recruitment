@@ -239,7 +239,6 @@ const initialForms = {
 
 export default function useSearchFilter({
   searchType,
-  currentUser,
   fetchFunction,
   debounceTime = 500,
 }) {
@@ -313,7 +312,6 @@ export default function useSearchFilter({
       case "mypost":
         if (form.title) filters.title = form.title;
         if (form.status) filters.status = form.status;
-        if (currentUser?._id) filters.createdBy = currentUser._id;
         break;
 
       case "my-list-block":
@@ -380,7 +378,7 @@ export default function useSearchFilter({
     runFetch(filters);
 
     return () => runFetch.cancel();
-  }, [form, provincesData, districts, searchType, currentUser, runFetch]);
+  }, [form, provincesData, districts, searchType, runFetch]);
 
   // ===== 6. Reset filter =====
   const handleResetFilter = () => {

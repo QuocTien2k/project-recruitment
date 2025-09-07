@@ -1,16 +1,12 @@
 import { getMyPosts } from "@api/post";
 import useSearchFilter from "@hooks/useSearchFilter";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import Button from "@components-ui/Button";
 import InputField from "@components-ui/Input";
 
 const MyPostSearch = ({ onResults, onUserAction }) => {
-  const currentUser = useSelector((state) => state.currentUser.user);
-
   const { form, handleChange, handleResetFilter, results } = useSearchFilter({
     searchType: "mypost",
-    currentUser,
     fetchFunction: getMyPosts,
   });
 
