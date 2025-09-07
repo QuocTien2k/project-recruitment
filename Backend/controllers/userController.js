@@ -305,42 +305,67 @@ const updateInfo = async (req, res) => {
 /******** Cá nhân ******** */
 const getFavoriteTeachers = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.userId; // lấy userId từ token
     const { name, email, province, district } = req.query;
 
-    //1 lấy danh sách
-    const favorites = await FavoriteModel.find({ user: userId }).populate(
-      "teacher"
-    );
+    // 1. Lấy tất cả favorite của user kèm theo thông tin User (teacher)
+    const favorites = await FavoriteModel.find({ user: userId })
+      .populate("teacher", "-password -resetPasswordToken") // populate để lấy thông tin User
+      .lean();
 
-    //2 lọc
+    // 2. Lấy danh sách id của teacher (User._id)
     const teacherIds = favorites.map((fav) => fav.teacher._id);
 
-    //3
-    const query = {
-      _id: { $in: teacherIds },
-      isActive: true,
-      role: "teacher",
-    };
+    // 3. Tìm hồ sơ Teacher (TeacherModel) theo danh sách userId
+    const teacherProfiles = await TeacherModel.find({
+      userId: { $in: teacherIds },
+    }).lean();
 
-    if (name) {
-      query.$or = [
-        { name: { $regex: name, $options: "i" } },
-        { middleName: { $regex: name, $options: "i" } },
-      ];
-    }
-    if (email) query.email = { $regex: email, $options: "i" };
-    if (province) query.province = province;
-    if (district) query.district = district;
+    // 4. Lọc theo các điều kiện (name, email, province, district)
+    let result = favorites
+      .map((fav) => {
+        const u = fav.teacher; // lấy thông tin từ UseModel
+        const tp = teacherProfiles.find(
+          (t) => t.userId.toString() === u._id.toString()
+        ); // tìm teacher profile
 
-    const teachers = await UserModel.find(query).select(
-      "-password -resetPasswordToken"
-    );
+        return {
+          _id: u._id,
+          name: u.name,
+          middleName: u.middleName,
+          email: u.email,
+          province: u.province,
+          district: u.district,
+          profilePic: u.profilePic,
+          experience: tp?.experience ?? null,
+          subject: tp?.subject ?? [],
+          faculty: tp?.faculty ?? null,
+          isActive: u.isActive,
+        };
+      })
+      // 5. Chỉ lấy những giáo viên đang hoạt động
+      .filter((t) => t.isActive);
 
+    // 6. Lọc theo query (name, email, province, district)
+    result = result.filter((t) => {
+      if (name) {
+        const regex = new RegExp(name, "i");
+        if (!regex.test(t.name) && !regex.test(t.middleName)) return false;
+      }
+      if (email) {
+        const regex = new RegExp(email, "i");
+        if (!regex.test(t.email)) return false;
+      }
+      if (province && t.province !== province) return false;
+      if (district && t.district !== district) return false;
+      return true;
+    });
+
+    // 7. Trả kết quả
     res.status(200).json({
       success: true,
       message: "Lấy danh sách yêu thích thành công.",
-      data: teachers,
+      data: result,
     });
   } catch (error) {
     res.status(500).json({
