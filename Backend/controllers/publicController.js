@@ -61,7 +61,36 @@ const getAllApprovedPosts = async (req, res) => {
 
 //lấy 12 bài viết đã duyệt
 const getApproveShortList = async (req, res) => {
-  const posts = await PostModel;
+  try {
+    const posts = await PostModel.find({ status: "approved" })
+      .sort({ createdAt: -1 }) //mới nhất
+      .limit(12)
+      .populate("createdBy", "middleName name");
+
+    const formattedPosts = posts.map((post) => {
+      const { _id } = post.createdBy;
+      const fullName = `${post.createdBy.middleName} ${post.createdBy.name}`;
+
+      return {
+        ...post._doc,
+        createdBy: {
+          _id,
+          fullName,
+        },
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy bài viết thành công",
+      data: formattedPosts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
 };
 
 //lấy bài viết tạo bởi user và thông tin user
@@ -324,6 +353,7 @@ const countViews = async (req, res) => {
 
 module.exports = {
   getAllApprovedPosts,
+  getApproveShortList,
   getDetailPost,
   getPostBySlug,
   getTeachersShortList,
