@@ -6,7 +6,7 @@ import InputField from "@components-ui/Input";
 
 const MyPostSearch = ({ onResults, onUserAction }) => {
   const { form, handleChange, handleResetFilter, results } = useSearchFilter({
-    searchType: "mypost",
+    searchType: "my-post",
     fetchFunction: getMyPosts,
   });
 

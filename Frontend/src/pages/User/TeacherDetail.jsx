@@ -72,7 +72,7 @@ const TeacherDetail = () => {
   };
 
   const checkFavorite = async () => {
-    if (!currentUser) return;
+    if (!currentUser || !userId?._id) return;
     try {
       const res = await checkStatusFavorite(userId?._id);
       setIsFavorite(res?.isFavorite || false);

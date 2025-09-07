@@ -205,13 +205,19 @@ const initialForms = {
     workingType: "",
     timeType: "",
   },
-  mypost: {
+  "my-post": {
     title: "",
     status: "",
   },
   "my-list-block": {
     name: "",
     email: "",
+  },
+  "my-favorite": {
+    name: "",
+    email: "",
+    provinceCode: "",
+    districtCode: "",
   },
   "admin-post": {
     title: "",
@@ -317,6 +323,15 @@ export default function useSearchFilter({
       case "my-list-block":
         if (form.name) filters.name = form.name;
         if (form.email) filters.email = form.email;
+        break;
+
+      case "my-favorite":
+        if (form.name) filters.name = form.name;
+        if (form.email) filters.email = form.email;
+        if (form.provinceCode)
+          filters.province = getProvinceNameSync(form.provinceCode);
+        if (form.districtCode)
+          filters.district = getDistrictNameSync(form.districtCode);
         break;
 
       case "admin-post":
