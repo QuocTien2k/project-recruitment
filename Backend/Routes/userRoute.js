@@ -9,6 +9,10 @@ const {
   addFavoriteTeacher,
   removeFavoriteTeacher,
   checkFavoriteTeacher,
+  getSavePosts,
+  addSavePost,
+  removeSavePost,
+  checkSavePost,
 } = require("../controllers/userController");
 const { protect, authorize } = require("../middlewares/authMiddleware");
 const uploadSingleToCloud = require("../utils/uploadSingleToCloud");
@@ -34,7 +38,7 @@ router.patch(
 );
 router.patch("/update-info", protect, authorize("user", "teacher"), updateInfo);
 
-//danh sách user thích teacher
+/******** Cá nhân - đối với role User ******** */
 router.get("/favorites", protect, authorize("user"), getFavoriteTeachers);
 router.post("/add-favorite", protect, authorize("user"), addFavoriteTeacher);
 router.delete(
@@ -48,6 +52,17 @@ router.get(
   protect,
   authorize("user"),
   checkFavoriteTeacher
+);
+
+/******** Cá nhân - đối với role Teacher ******** */
+router.get("/saved-posts", protect, authorize("teacher"), getSavePosts);
+router.post("/add-saved", protect, authorize("teacher"), addSavePost);
+router.delete("/delete-saved", protect, authorize("teacher"), removeSavePost);
+router.get(
+  "/saved-post/check/:postId",
+  protect,
+  authorize("teacher"),
+  checkSavePost
 );
 
 module.exports = router;

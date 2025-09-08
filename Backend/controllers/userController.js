@@ -1,6 +1,8 @@
 const UserModel = require("../models/User");
 const FavoriteModel = require("../models/Favorite");
 const TeacherModel = require("../models/Teacher");
+const SavedPostModel = require("../models/SavedPost.js");
+const PostModel = require("../models/Post.js");
 const cloudinary = require("../cloudinary");
 const bcrypt = require("bcryptjs");
 
@@ -302,7 +304,7 @@ const updateInfo = async (req, res) => {
   }
 };
 
-/******** Cá nhân ******** */
+/******** Cá nhân - đối với role User ******** */
 const getFavoriteTeachers = async (req, res) => {
   try {
     const userId = req.user.userId; // lấy userId từ token
@@ -513,6 +515,232 @@ const checkFavoriteTeacher = async (req, res) => {
   }
 };
 
+/******** Cá nhân - đối với role Teacher ******** */
+const getSavePosts = async (req, res) => {
+  try {
+    const teacherId = req.user.userId; // lấy teacher từ token
+    const { title, province, district, workingType, timeType } = req.query;
+
+    // 1. Lấy danh sách postId mà teacher đã lưu
+    const savedPosts = await SavedPostModel.find({ teacher: teacherId }).lean();
+    const postIds = savedPosts.map((sp) => sp.post);
+
+    if (!postIds.length) {
+      return res.status(200).json({
+        success: true,
+        message: "Danh sách bài viết đã lưu rỗng.",
+        data: [],
+      });
+    }
+
+    // 2. Xây dựng bộ lọc
+    const filters = { _id: { $in: postIds }, status: "approved" };
+
+    if (title && title.trim() !== "") {
+      filters.title = { $regex: title.trim(), $options: "i" };
+    }
+
+    if (province && province.trim() !== "") {
+      filters.province = province.trim();
+    }
+
+    if (district && district.trim() !== "") {
+      filters.district = district.trim();
+    }
+
+    if (workingType && workingType.trim() !== "") {
+      filters.workingType = workingType.trim();
+    }
+
+    if (timeType && timeType.trim() !== "") {
+      filters.timeType = timeType.trim();
+    }
+
+    // 3. Truy vấn PostModel với filter
+    const posts = await PostModel.find(filters)
+      .populate("createdBy", "-password -resetPasswordToken")
+      .sort({ createdAt: -1 }); // mới nhất trước
+
+    // 4. Trả về kết quả
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách bài viết đã lưu thành công.",
+      data: posts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+const addSavePost = async (req, res) => {
+  try {
+    const teacherId = req.user.userId; // lấy user từ token
+    const { postId } = req.body;
+
+    if (!postId) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu postId.",
+      });
+    }
+
+    // kiểm tra user có phải teacher không
+    const teacher = await UserModel.findOne({
+      _id: teacherId,
+      role: "teacher",
+    });
+    if (!teacher) {
+      return res.status(403).json({
+        success: false,
+        message: "Chỉ giáo viên mới có quyền lưu bài viết.",
+      });
+    }
+
+    // kiểm tra post có tồn tại không
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bài viết.",
+      });
+    }
+
+    // tạo bản ghi save (sẽ fail nếu đã tồn tại vì unique index)
+    const savedPost = await SavedPostModel.create({
+      teacher: teacherId,
+      post: postId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Đã lưu bài viết.",
+      data: savedPost,
+    });
+  } catch (error) {
+    // trường hợp duplicate key error (teacher + post đã tồn tại)
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Bạn đã lưu bài viết này trước đó.",
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+// Xóa post khỏi mục đã lưu (chỉ teacher mới có quyền)
+const removeSavePost = async (req, res) => {
+  try {
+    const teacherId = req.user.userId; // lấy user từ token
+    const { postId } = req.body;
+
+    if (!postId) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu postId.",
+      });
+    }
+
+    // kiểm tra user có phải teacher không
+    const teacher = await UserModel.findOne({
+      _id: teacherId,
+      role: "teacher",
+    });
+    if (!teacher) {
+      return res.status(403).json({
+        success: false,
+        message: "Chỉ giáo viên mới có quyền xóa bài đã lưu.",
+      });
+    }
+
+    // xóa bản ghi lưu
+    const saved = await SavedPostModel.findOneAndDelete({
+      teacher: teacherId,
+      post: postId,
+    });
+
+    if (!saved) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy trong danh sách đã lưu.",
+      });
+    }
+
+    // lấy lại danh sách bài viết đã lưu mới nhất
+    const savedPosts = await SavedPostModel.find({
+      teacher: teacherId,
+    }).populate("post");
+
+    // lọc danh sách postId
+    const postIds = savedPosts.map((sp) => sp.post._id);
+
+    const posts = await PostModel.find({
+      _id: { $in: postIds },
+      status: "approved", // chỉ lấy bài viết còn hợp lệ
+    }).populate("createdBy", "-password -resetPasswordToken");
+
+    res.status(200).json({
+      success: true,
+      message: "Đã xóa khỏi danh sách đã lưu.",
+      data: posts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+const checkSavePost = async (req, res) => {
+  try {
+    const teacherId = req.user.userId; // lấy từ token
+    const { postId } = req.params;
+
+    if (!postId) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu postId.",
+      });
+    }
+
+    // kiểm tra user có phải teacher không
+    const teacher = await UserModel.findOne({
+      _id: teacherId,
+      role: "teacher",
+    });
+    if (!teacher) {
+      return res.status(403).json({
+        success: false,
+        message: "Chỉ giáo viên mới có quyền kiểm tra lưu bài.",
+      });
+    }
+
+    // tìm xem có tồn tại record savedPost không
+    const saved = await SavedPostModel.findOne({
+      teacher: teacherId,
+      post: postId,
+    });
+
+    res.status(200).json({
+      success: true,
+      isSaved: !!saved, // ép sang boolean
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   getLogged,
   getUserById,
@@ -523,4 +751,8 @@ module.exports = {
   addFavoriteTeacher,
   removeFavoriteTeacher,
   checkFavoriteTeacher,
+  getSavePosts,
+  addSavePost,
+  removeSavePost,
+  checkSavePost,
 };
