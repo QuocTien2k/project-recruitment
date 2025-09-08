@@ -138,6 +138,10 @@ const TeacherDetail = () => {
 
   // Toggle công tắc yêu thích
   const toggleFavorite = async (teacherId) => {
+    if (!currentUser?._id) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
     if (!teacherId || disableFavorite) return; // chặn spam click
 
     setDisableFavorite(true);
