@@ -49,6 +49,7 @@ const MyFavorite = () => {
       }
     } catch (err) {
       const msg = err.response?.data?.message || "Xóa thất bại";
+      toast.error(msg);
       console.error(msg);
     }
   };

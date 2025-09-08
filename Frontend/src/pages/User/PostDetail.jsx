@@ -17,6 +17,7 @@ import {
   Clock,
   CalendarDays,
 } from "lucide-react";
+import { FaBookmark } from "react-icons/fa";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -28,6 +29,8 @@ const PostDetail = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const currentUser = useSelector((state) => state.currentUser.user);
   const { openChat } = useChatContext();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [disableFavorite, setDisableFavorite] = useState(false);
 
   const fetchPost = async () => {
     dispatch(setGlobalLoading(true));
@@ -82,6 +85,39 @@ const PostDetail = () => {
   const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
   //console.log(post);
 
+  const checkFavorite = async () => {
+    if (!currentUser || !authorId) return;
+    try {
+      const res = await checkStatusFavorite(authorId);
+      setIsFavorite(res?.isFavorite || false);
+    } catch (err) {
+      const msg = err.response?.data?.message || "Lỗi kiểm tra trạng thái";
+      console.error(msg);
+    }
+  };
+
+  useEffect(() => {
+    checkFavorite();
+  }, [currentUser, authorId]);
+
+  // Toggle công tắc yêu thích
+  const toggleFavorite = async (userId) => {
+    if (!currentUser?._id) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+    if (!userId || disableFavorite) return; // chặn spam click
+
+    setDisableFavorite(true);
+    setTimeout(() => setDisableFavorite(false), 3500); //diabled nút 3.5s
+
+    if (isFavorite) {
+      handleRemoveFavorite(userId);
+    } else {
+      handleAddFavorite(userId);
+    }
+  };
+
   return (
     <>
       {isGlobalLoading ? (
@@ -97,12 +133,25 @@ const PostDetail = () => {
 
           <div className="flex flex-col md:flex-row gap-6">
             {/* Bên trái: avatar + chat */}
-            <div className="flex-shrink-0 flex flex-col justify-around items-center gap-y-4">
+            <div className="flex-shrink-0 flex flex-col justify-center items-center gap-4">
               <img
                 src={post?.createdBy?.profilePic?.url || avatarDefault}
                 alt={post?.createdBy?.fullName}
                 className="w-32 h-32 object-cover rounded-full border"
               />
+              {currentUser?.role === "teacher" && (
+                <FaBookmark
+                  size={24}
+                  onClick={() => toggleFavorite(authorId)}
+                  className={`transition transform hover:scale-110 ${
+                    isFavorite ? "text-amber-500" : "text-gray-400"
+                  } ${
+                    disableFavorite
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
+                />
+              )}
               <Button size="sm" variant="default" onClick={handleStartChat}>
                 💬 Liên hệ
               </Button>
