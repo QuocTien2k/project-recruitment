@@ -174,17 +174,19 @@ const TeacherDetail = () => {
               className="w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 object-cover rounded-full border"
             />
 
-            <FaHeart
-              size={24}
-              onClick={() => toggleFavorite(userId?._id)}
-              className={`transition transform hover:scale-110 ${
-                isFavorite ? "text-red-500" : "text-gray-400"
-              } ${
-                disableFavorite
-                  ? "opacity-50 cursor-not-allowed"
-                  : "cursor-pointer"
-              }`}
-            />
+            {currentUser?.role === "user" && (
+              <FaHeart
+                size={24}
+                onClick={() => toggleFavorite(userId?._id)}
+                className={`transition transform hover:scale-110 ${
+                  isFavorite ? "text-red-500" : "text-gray-400"
+                } ${
+                  disableFavorite
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              />
+            )}
 
             <Button size="sm" variant="default" onClick={handleStartChat}>
               💬 Liên hệ
