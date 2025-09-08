@@ -330,17 +330,20 @@ const getFavoriteTeachers = async (req, res) => {
         ); // tìm teacher profile
 
         return {
-          _id: u._id,
+          _id: u._id, //id bảng User
           name: u.name,
           middleName: u.middleName,
           email: u.email,
           province: u.province,
           district: u.district,
+          isActive: u.isActive,
           profilePic: u.profilePic,
           experience: tp?.experience ?? null,
           subject: tp?.subject ?? [],
           faculty: tp?.faculty ?? null,
-          isActive: u.isActive,
+          workingType: tp?.workingType ?? null,
+          timeType: tp?.timeType ?? null,
+          teacherId: tp?._id ?? null, //id bảng teacher
         };
       })
       // 5. Chỉ lấy những giáo viên đang hoạt động
