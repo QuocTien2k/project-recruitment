@@ -1,3 +1,4 @@
+import { removeFavorite } from "@api/user";
 import CardFavorite from "@components-cards/CardFavorite";
 import MyFavoriteSearch from "@components-search/user-teacher/MyFavoriteSearch";
 import EmptyState from "@components-states/EmptyState";
@@ -6,6 +7,7 @@ import Loading from "@components-ui/Loading";
 import Pagination from "@components-ui/Pagination";
 import Title from "@components-ui/Title";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -35,6 +37,21 @@ const MyFavorite = () => {
     }
     return () => clearTimeout(timer);
   }, [isGlobalLoading]);
+
+  //xử lý xóa
+  const handleRemove = async (teacherId) => {
+    try {
+      const res = await removeFavorite(teacherId);
+
+      if (res?.success) {
+        toast.success(res?.message);
+        setMyList(res.data);
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || "Xóa thất bại";
+      console.error(msg);
+    }
+  };
 
   return (
     <>
@@ -73,7 +90,7 @@ const MyFavorite = () => {
             <CardFavorite
               user={item}
               key={item._id}
-              //handleUpdateList={handleUpdateList}
+              handleRemove={handleRemove}
             />
           ))}
         </div>
