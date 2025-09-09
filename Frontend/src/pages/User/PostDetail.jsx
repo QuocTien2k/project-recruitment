@@ -18,6 +18,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { FaBookmark } from "react-icons/fa";
+import { addSavePost, checkStatusSavePost, removeSavePost } from "@api/user";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -85,11 +86,11 @@ const PostDetail = () => {
   const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
   //console.log(post);
 
-  const checkFavorite = async () => {
-    if (!currentUser || !authorId) return;
+  const checkStatus = async () => {
+    if (!currentUser || !post?._id) return;
     try {
-      const res = await checkStatusFavorite(authorId);
-      setIsFavorite(res?.isFavorite || false);
+      const res = await checkStatusSavePost(post?._id);
+      setIsFavorite(res?.isSaved || false);
     } catch (err) {
       const msg = err.response?.data?.message || "Lỗi kiểm tra trạng thái";
       console.error(msg);
@@ -97,24 +98,55 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
-    checkFavorite();
-  }, [currentUser, authorId]);
+    checkStatus();
+  }, [currentUser, post?._id]);
+
+  console.log(post?._id);
+
+  const handleAdd = async (postId) => {
+    try {
+      const res = await addSavePost(postId);
+
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsFavorite(true);
+      }
+    } catch (err) {
+      console.error("Lỗi khi thêm:", err);
+      const errorMsg = err.response?.data?.message || "Yêu thích thất bại.";
+      toast.error(errorMsg);
+    }
+  };
+
+  const handleRemove = async (postId) => {
+    try {
+      const res = await removeSavePost(postId);
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsFavorite(false);
+      }
+    } catch (err) {
+      console.error("Lỗi khi xóa yêu thích:", err);
+      const errorMsg = err.response?.data?.message || "Xóa yêu thích thất bại.";
+      toast.error(errorMsg);
+    }
+  };
 
   // Toggle công tắc yêu thích
-  const toggleFavorite = async (userId) => {
+  const toggleFavorite = async (postId) => {
     if (!currentUser?._id) {
       toast.error("Vui lòng đăng nhập");
       return;
     }
-    if (!userId || disableFavorite) return; // chặn spam click
+    if (!postId || disableFavorite) return; // chặn spam click
 
     setDisableFavorite(true);
     setTimeout(() => setDisableFavorite(false), 3500); //diabled nút 3.5s
 
     if (isFavorite) {
-      handleRemoveFavorite(userId);
+      handleRemove(postId);
     } else {
-      handleAddFavorite(userId);
+      handleAdd(postId);
     }
   };
 
@@ -142,7 +174,7 @@ const PostDetail = () => {
               {currentUser?.role === "teacher" && (
                 <FaBookmark
                   size={24}
-                  onClick={() => toggleFavorite(authorId)}
+                  onClick={() => toggleFavorite(post?._id)}
                   className={`transition transform hover:scale-110 ${
                     isFavorite ? "text-amber-500" : "text-gray-400"
                   } ${
