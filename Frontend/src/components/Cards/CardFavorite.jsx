@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
 
-const CardFavorite = ({ user, handleRemove }) => {
+const CardFavorite = ({ user, onDelete }) => {
   if (!user) return null;
   const fullName = `${user.middleName || ""} ${user.name || ""}`.trim();
 
@@ -36,7 +36,7 @@ const CardFavorite = ({ user, handleRemove }) => {
     <div className="bg-white shadow-md rounded-lg p-5 flex flex-col items-center gap-4 w-full sm:w-96 relative">
       {/* Nút Xóa */}
       <Button
-        onClick={() => handleRemove(user._id)}
+        onClick={onDelete}
         variant="danger"
         size="sm"
         className="absolute top-2 right-2"

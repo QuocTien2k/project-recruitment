@@ -101,7 +101,7 @@ const PostDetail = () => {
     checkStatus();
   }, [currentUser, post?._id]);
 
-  console.log(post?._id);
+  //console.log(post?._id);
 
   const handleAdd = async (postId) => {
     try {

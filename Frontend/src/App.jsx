@@ -28,6 +28,7 @@ import ContactAdminButton from "./components/ContactAdmin";
 import MyBlock from "@pages/User/MyBlock";
 import ListPosts from "@pages/User/ListPosts";
 import MyFavorite from "@pages/User/MyFavorite";
+import MySavePost from "@pages/User/MySavePost";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path="/bai-viet-cua-toi" element={<MyPost />} />
             <Route path="/danh-sach-chan" element={<MyBlock />} />
             <Route path="/danh-sach-yeu-thich" element={<MyFavorite />} />
+            <Route path="/danh-sach-bai-viet-da-luu" element={<MySavePost />} />
             <Route path="/danh-sach-giao-vien" element={<ListTeachers />} />
             <Route path="/danh-sach-bai-viet" element={<ListPosts />} />
           </Route>

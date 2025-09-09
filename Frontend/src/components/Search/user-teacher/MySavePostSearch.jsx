@@ -1,10 +1,10 @@
-import { getListFavorite } from "@api/user";
+import { getListSavedPost } from "@api/user";
 import Button from "@components-ui/Button";
 import InputField from "@components-ui/Input";
 import useSearchFilter from "@hooks/useSearchFilter";
 import React, { useEffect } from "react";
 
-const MyFavoriteSearch = ({ onResults, onUserAction }) => {
+const MySavePostSearch = ({ onResults, onUserAction }) => {
   const {
     form,
     handleChange,
@@ -13,8 +13,8 @@ const MyFavoriteSearch = ({ onResults, onUserAction }) => {
     provinces,
     districts,
   } = useSearchFilter({
-    searchType: "my-favorite",
-    fetchFunction: getListFavorite,
+    searchType: "post",
+    fetchFunction: getListSavedPost,
   });
 
   // wrapper nhỏ để gắn cờ user action
@@ -37,21 +37,37 @@ const MyFavoriteSearch = ({ onResults, onUserAction }) => {
       <div className="flex flex-wrap items-center gap-3">
         {/* Input */}
         <InputField
-          name="name"
-          placeholder="Tìm theo tên..."
-          value={form.name}
+          name="title"
+          placeholder="Tìm theo tiêu đề..."
+          value={form.title}
           onChange={handleChangeWithFlag}
           className="flex-1 min-w-[180px]"
         />
 
-        {/* Email */}
-        <InputField
-          name="email"
-          placeholder="Tìm theo email..."
-          value={form.email}
+        {/* Select hình thức làm việc */}
+        <select
+          name="workingType"
+          value={form.workingType}
           onChange={handleChangeWithFlag}
-          className="flex-1 min-w-[180px]"
-        />
+          className="form-select-custom flex-1 min-w-[140px]"
+        >
+          <option value="">Hình thức làm việc</option>
+          <option value="offline">Offline</option>
+          <option value="online">Online</option>
+          <option value="both">Cả hai</option>
+        </select>
+
+        {/* Select thời gian làm việc */}
+        <select
+          name="timeType"
+          value={form.timeType}
+          onChange={handleChangeWithFlag}
+          className="form-select-custom flex-1 min-w-[140px]"
+        >
+          <option value="">Thời gian làm việc</option>
+          <option value="full-time">full-time</option>
+          <option value="part-time">Part-time</option>
+        </select>
 
         {/* Select tỉnh/thành */}
         <select
@@ -93,4 +109,4 @@ const MyFavoriteSearch = ({ onResults, onUserAction }) => {
   );
 };
 
-export default MyFavoriteSearch;
+export default MySavePostSearch;

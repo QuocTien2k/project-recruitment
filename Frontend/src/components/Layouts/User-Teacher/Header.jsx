@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Button from "@components-ui/Button";
 import MessageNotification from "@components-chat/MessageNotification";
-import { FiHeart, FiPower } from "react-icons/fi";
+import { FiBookmark, FiHeart, FiPower } from "react-icons/fi";
 import { setGlobalLoading } from "@redux/loadingSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat, setUser } from "@redux/currentUserSlice";
@@ -219,6 +219,21 @@ const Header = () => {
                         >
                           <FiHeart className="text-[16px]" />
                           <span>Danh sách yêu thích</span>
+                        </Button>
+                      </>
+                    )}
+
+                    {currentUser?.role === "teacher" && (
+                      <>
+                        {/*My Saved Post */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                          onClick={() => navigate("/danh-sach-bai-viet-da-luu")}
+                        >
+                          <FiBookmark className="text-[16px]" />
+                          <span>Bài tuyển dụng đã lưu</span>
                         </Button>
                       </>
                     )}
