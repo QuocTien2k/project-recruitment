@@ -292,6 +292,215 @@ const getListTeachers = async (req, res) => {
   }
 };
 
+// lấy danh sách giáo viên khoa tự nhiên
+const getListTeacherNatural = async (req, res) => {
+  try {
+    const { experience, workingType, timeType, subject, province, district } =
+      req.query;
+
+    // Build teacher filters
+    const teacherMatch = { faculty: "tunhien" }; //thêm điều kiện faculty
+    if (experience) {
+      if (experience.includes("-")) {
+        const [min, max] = experience.split("-").map(Number);
+        teacherMatch.experience = { $gte: min, $lte: max };
+      } else if (experience.endsWith("+")) {
+        const min = Number(experience.replace("+", ""));
+        teacherMatch.experience = { $gte: min };
+      } else {
+        teacherMatch.experience = Number(experience);
+      }
+    }
+    if (workingType) teacherMatch.workingType = workingType;
+    if (timeType) teacherMatch.timeType = timeType;
+    if (subject) teacherMatch.subject = { $regex: subject, $options: "i" };
+
+    // Build user filters
+    const userMatch = { isActive: true };
+    if (province) userMatch.province = province;
+    if (district) userMatch.district = district;
+
+    const teachers = await TeacherModel.aggregate([
+      { $match: teacherMatch },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+          pipeline: [
+            { $match: userMatch },
+            {
+              $project: {
+                middleName: 1,
+                name: 1,
+                email: 1,
+                profilePic: 1,
+                province: 1,
+                district: 1,
+                isActive: 1,
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$userId" },
+      { $project: { degreeImages: 0, __v: 0 } },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      total: teachers.length,
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi tìm danh sách giáo viên khoa tự nhiên",
+      error: error.message,
+    });
+  }
+};
+// lấy danh sách giáo viên khoa xã hội
+const getListTeacherSocial = async (req, res) => {
+  try {
+    const { experience, workingType, timeType, subject, province, district } =
+      req.query;
+
+    // Build teacher filters
+    const teacherMatch = { faculty: "xahoi" }; //thêm điều kiện faculty
+    if (experience) {
+      if (experience.includes("-")) {
+        const [min, max] = experience.split("-").map(Number);
+        teacherMatch.experience = { $gte: min, $lte: max };
+      } else if (experience.endsWith("+")) {
+        const min = Number(experience.replace("+", ""));
+        teacherMatch.experience = { $gte: min };
+      } else {
+        teacherMatch.experience = Number(experience);
+      }
+    }
+    if (workingType) teacherMatch.workingType = workingType;
+    if (timeType) teacherMatch.timeType = timeType;
+    if (subject) teacherMatch.subject = { $regex: subject, $options: "i" };
+
+    // Build user filters
+    const userMatch = { isActive: true };
+    if (province) userMatch.province = province;
+    if (district) userMatch.district = district;
+
+    const teachers = await TeacherModel.aggregate([
+      { $match: teacherMatch },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+          pipeline: [
+            { $match: userMatch },
+            {
+              $project: {
+                middleName: 1,
+                name: 1,
+                email: 1,
+                profilePic: 1,
+                province: 1,
+                district: 1,
+                isActive: 1,
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$userId" },
+      { $project: { degreeImages: 0, __v: 0 } },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      total: teachers.length,
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi tìm danh sách giáo viên khoa xã hội",
+      error: error.message,
+    });
+  }
+};
+
+// lấy danh sách giáo viên khoa ngoại ngữ
+const getListTeacherLanguages = async (req, res) => {
+  try {
+    const { experience, workingType, timeType, subject, province, district } =
+      req.query;
+
+    // Build teacher filters
+    const teacherMatch = { faculty: "ngoaingu" }; //thêm điều kiện faculty
+    if (experience) {
+      if (experience.includes("-")) {
+        const [min, max] = experience.split("-").map(Number);
+        teacherMatch.experience = { $gte: min, $lte: max };
+      } else if (experience.endsWith("+")) {
+        const min = Number(experience.replace("+", ""));
+        teacherMatch.experience = { $gte: min };
+      } else {
+        teacherMatch.experience = Number(experience);
+      }
+    }
+    if (workingType) teacherMatch.workingType = workingType;
+    if (timeType) teacherMatch.timeType = timeType;
+    if (subject) teacherMatch.subject = { $regex: subject, $options: "i" };
+
+    // Build user filters
+    const userMatch = { isActive: true };
+    if (province) userMatch.province = province;
+    if (district) userMatch.district = district;
+
+    const teachers = await TeacherModel.aggregate([
+      { $match: teacherMatch },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+          pipeline: [
+            { $match: userMatch },
+            {
+              $project: {
+                middleName: 1,
+                name: 1,
+                email: 1,
+                profilePic: 1,
+                province: 1,
+                district: 1,
+                isActive: 1,
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$userId" },
+      { $project: { degreeImages: 0, __v: 0 } },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      total: teachers.length,
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi tìm danh sách giáo viên khoa ngoại ngữ",
+      error: error.message,
+    });
+  }
+};
+
 // Lấy chi tiết 1 giáo viên đang hoạt động
 const getPublicTeacherDetail = async (req, res) => {
   const { teacherId } = req.params;
@@ -358,6 +567,9 @@ module.exports = {
   getPostBySlug,
   getTeachersShortList,
   getListTeachers,
+  getListTeacherNatural,
+  getListTeacherSocial,
+  getListTeacherLanguages,
   getPublicTeacherDetail,
   countViews,
 };
