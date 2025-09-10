@@ -20,9 +20,11 @@
         background-color: var(--color-bg);
         color: var(--color-text);
         scroll-behavior: smooth;
-        overflow-y: auto;
+        overflow-y: scroll;
+        overflow-x: hidden;
         scrollbar-gutter: stable;
         height: 100%;
+        width: 100%;
     }
 }
 

@@ -2,9 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Button from "@components-ui/Button";
 import MessageNotification from "@components-chat/MessageNotification";
-import { FiBookmark, FiHeart, FiPower } from "react-icons/fi";
+import { FiBookmark, FiHeart, FiMenu, FiPower, FiX } from "react-icons/fi";
 import { setGlobalLoading } from "@redux/loadingSlice";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { clearUser, setSelectedChat, setUser } from "@redux/currentUserSlice";
 import UpdateAvatar from "@modals/UpdateAvatar";
 import UpdatePassword from "@modals/UpdatePassword";
@@ -26,6 +26,13 @@ const Header = () => {
   const [openModalUpdateChangePassword, setOpenModalUpdateChangePassword] =
     useState(false);
   const [openModalUpdateInfo, setOpenModalUpdateInfo] = useState(false);
+  const [openMobileNav, setOpenMobileNav] = useState(false);
+  const navLinks = [
+    { path: "/giao-vien-khoa-tu-nhien", label: "Giáo viên Tự nhiên" },
+    { path: "/giao-vien-khoa-xa-hoi", label: "Giáo viên Xã hội" },
+    { path: "/giao-vien-khoa-ngoai-ngu", label: "Ngoại ngữ" },
+    { path: "/blog", label: "Blog" },
+  ];
 
   const navigate = useNavigate();
   const fullName = `${currentUser?.middleName || ""} ${
@@ -103,10 +110,44 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 w-full bg-white shadow-md px-6 py-4 flex justify-between items-center z-20 max-h-[72px]">
-      {/* Logo trái */}
-      <Link to="/" className="flex items-center p-2">
-        <img src="/logo.png" alt="Logo" className="w-28 h-17 object-contain" />
-      </Link>
+      {/* Bên trái Logo + Hamburger */}
+      <div className="flex items-center gap-3">
+        {/* Hamburger (chỉ hiện mobile) */}
+        <button
+          className="md:hidden p-2 text-2xl"
+          onClick={() => setOpenMobileNav(true)}
+        >
+          <FiMenu />
+        </button>
+
+        {/* Logo */}
+        <Link to="/" className="flex items-center">
+          <img
+            src="/logo.png"
+            alt="Logo"
+            className="w-28 h-17 object-contain"
+          />
+        </Link>
+      </div>
+
+      {/* Ở giữa Navigation Desktop */}
+      <nav className="hidden md:flex items-center gap-6">
+        {navLinks.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `text-sm font-medium transition-colors ${
+                isActive
+                  ? "text-green-600 border-b-2 border-green-600"
+                  : "text-gray-700 hover:text-green-600"
+              }`
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
 
       {/* Phần phải */}
       {currentUser && currentUser?.isActive ? (
@@ -287,6 +328,51 @@ const Header = () => {
           <Button onClick={() => navigate("/dang-nhap")}>Đăng nhập</Button>
           <Button onClick={() => navigate("/dang-ky")}>Đăng ký</Button>
         </div>
+      )}
+
+      {/* Mobile Navigation (Drawer) */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-30 transform transition-transform duration-300 ease-in-out
+        ${openMobileNav ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        {/* Header Drawer */}
+        <div className="flex justify-between items-center p-4 border-b">
+          <span className="font-semibold text-lg">Menu</span>
+          <button
+            className="p-2 text-2xl"
+            onClick={() => setOpenMobileNav(false)}
+          >
+            <FiX />
+          </button>
+        </div>
+
+        {/* Nav Items */}
+        <nav className="flex flex-col p-4 gap-4">
+          {navLinks.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `text-base font-medium transition-colors ${
+                  isActive
+                    ? "text-green-600 border-l-4 border-green-600 pl-2"
+                    : "text-gray-700 hover:text-green-600"
+                }`
+              }
+              onClick={() => setOpenMobileNav(false)} // đóng khi click
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+      </div>
+
+      {/* Overlay (click ngoài để đóng) */}
+      {openMobileNav && (
+        <div
+          className="fixed inset-0 backdrop-blur-sm z-20"
+          onClick={() => setOpenMobileNav(false)}
+        />
       )}
     </header>
   );

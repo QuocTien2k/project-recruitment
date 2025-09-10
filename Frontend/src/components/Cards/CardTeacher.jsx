@@ -43,7 +43,7 @@ const CardTeacher = ({
   const vietsubWorkingType = {
     offline: "Offline",
     online: "Online",
-    both: "Cả hai (Online và Offline)",
+    both: "Online và Offline",
   };
 
   const vietsubFaculty = {
@@ -108,9 +108,11 @@ const CardTeacher = ({
           </span>
         </p>
 
-        <p className="flex items-center gap-2">
+        <p className="flex items-center gap-2 col-span-full">
           <FaUserTie className="text-indigo-500" />
-          <span>Môn dạy: {subject?.join(", ")}</span>
+          <span className="block text-left">
+            Môn dạy: {subject?.join(", ")}
+          </span>
         </p>
 
         <p className="flex items-center gap-2">
@@ -119,10 +121,9 @@ const CardTeacher = ({
         </p>
 
         <p className="flex items-start gap-2 col-span-full">
-          <FaRegClock className="text-yellow-600" size={20} />
+          <FaRegClock className="text-yellow-600" size={22} />
           <span className="block text-left">
-            Hình thức làm việc:{" "}
-            <i>{vietsubWorkingType[workingType] || workingType}</i>
+            Hình thức: <i>{vietsubWorkingType[workingType] || workingType}</i>
             {" / "}
             <i>{timeType}</i>
           </span>
