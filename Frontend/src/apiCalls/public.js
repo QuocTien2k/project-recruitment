@@ -24,6 +24,47 @@ export const getListTeacher = async (filters = {}) => {
   }
 };
 
+//tu nhien
+export const getTeachersNatural = async (filters = {}) => {
+  try {
+    const res = await axiosInstance.get(`/api/public/teachers-natural`, {
+      params: filters,
+    });
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
+//xa hoi
+export const getTeachersSocial = async (filters = {}) => {
+  try {
+    const res = await axiosInstance.get(`/api/public/teachers-social`, {
+      params: filters,
+    });
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
+export const getTeachersLanguages = async (filters = {}) => {
+  try {
+    const res = await axiosInstance.get(`/api/public/teachers-languages`, {
+      params: filters,
+    });
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
 export const getTeacherDetail = async (teacherId) => {
   try {
     const res = await axiosInstance.get(`/api/public/teachers/${teacherId}`);
