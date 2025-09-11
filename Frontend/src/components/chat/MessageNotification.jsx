@@ -73,7 +73,7 @@ const MessageNotification = () => {
             hasNewMessages ? "text-red-500" : "text-gray-500"
           } hidden sm:inline`}
         >
-          {hasNewMessages ? "Tin nhắn mới" : "Không có tin nhắn mới"}
+          {hasNewMessages ? "Tin nhắn mới" : ""}
         </span>
       </div>
 

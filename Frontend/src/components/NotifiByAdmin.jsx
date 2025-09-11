@@ -123,15 +123,15 @@ const NotifiByAdmin = () => {
         >
           {/* Header */}
           <div className="flex items-center gap-3 px-3 py-2 border-b">
-            <span className="w-[180px] font-medium text-xs text-gray-700">
+            <span className="w-[180px] font-medium text-[13px] text-gray-700">
               Thông báo
             </span>
             {list.length > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-xs text-blue-500 hover:underline"
+                className="text-[13px] text-blue-500 hover:underline"
               >
-                Đánh dấu tất cả đã đọc
+                Đánh dấu đã đọc
               </button>
             )}
           </div>

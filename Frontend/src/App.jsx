@@ -30,6 +30,8 @@ import ListPosts from "@pages/User/ListPosts";
 import MyFavorite from "@pages/User/MyFavorite";
 import MySavePost from "@pages/User/MySavePost";
 import TeachersNatural from "@pages/User/TeachersNatural";
+import TeachersSocial from "@pages/User/TeachersSocial";
+import TeachersLanguages from "@pages/User/TeachersLanguages";
 
 function App() {
   return (
@@ -51,6 +53,11 @@ function App() {
             <Route
               path="/giao-vien-khoa-tu-nhien"
               element={<TeachersNatural />}
+            />
+            <Route path="/giao-vien-khoa-xa-hoi" element={<TeachersSocial />} />
+            <Route
+              path="/giao-vien-khoa-ngoai-ngu"
+              element={<TeachersLanguages />}
             />
             <Route path="/danh-sach-giao-vien" element={<ListTeachers />} />
             <Route path="/danh-sach-bai-viet" element={<ListPosts />} />

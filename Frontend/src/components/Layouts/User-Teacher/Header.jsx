@@ -30,7 +30,9 @@ const Header = () => {
   const navLinks = [
     { path: "/giao-vien-khoa-tu-nhien", label: "Giáo viên Tự nhiên" },
     { path: "/giao-vien-khoa-xa-hoi", label: "Giáo viên Xã hội" },
-    { path: "/giao-vien-khoa-ngoai-ngu", label: "Ngoại ngữ" },
+    { path: "/giao-vien-khoa-ngoai-ngu", label: "Giáo viên Ngoại ngữ" },
+    { path: "/ve-chung-toi", label: "Về chúng tôi" },
+    { path: "/lien-he", label: "Liên hệ" },
     { path: "/blog", label: "Blog" },
   ];
 
@@ -109,226 +111,240 @@ const Header = () => {
   //console.log("Thông tin: ", currentUser);
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-white shadow-md px-6 py-4 flex justify-between items-center z-20 max-h-[72px]">
-      {/* Bên trái Logo + Hamburger */}
-      <div className="flex items-center gap-3">
-        {/* Hamburger (chỉ hiện mobile) */}
-        <button
-          className="md:hidden p-2 text-2xl"
-          onClick={() => setOpenMobileNav(true)}
-        >
-          <FiMenu />
-        </button>
-
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            className="w-28 h-17 object-contain"
-          />
-        </Link>
-      </div>
-
-      {/* Ở giữa Navigation Desktop */}
-      <nav className="hidden md:flex items-center gap-6">
-        {navLinks.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              `text-sm font-medium transition-colors ${
-                isActive
-                  ? "text-green-600 border-b-2 border-green-600"
-                  : "text-gray-700 hover:text-green-600"
-              }`
-            }
-          >
-            {item.label}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Phần phải */}
-      {currentUser && currentUser?.isActive ? (
-        <>
-          <div className="flex items-center gap-4 relative">
-            {/* Notification by Admin */}
-            <NotifiByAdmin />
-
-            {/* Icon message */}
-            <MessageNotification />
-
-            {/* Avatar + Name + Dropdown */}
-            <div
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={openDropdown ? handleCloseDropdown : handleOpenDropdown}
+    <header className="fixed top-0 left-0 w-full bg-white shadow-md z-20 max-h-[72px]">
+      <div className="max-w-[var(--width-8xl)] mx-auto px-6">
+        <div className="grid grid-cols-12 items-center">
+          {/* Bên trái Logo + Hamburger */}
+          <div className="col-span-2 flex items-center gap-3">
+            {/* Hamburger (chỉ hiện mobile) */}
+            <button
+              className="md:hidden p-2 text-2xl"
+              onClick={() => setOpenMobileNav(true)}
             >
-              <img
-                src={currentUser.profilePic?.url || avatarDefault}
-                alt="Avatar"
-                className="w-10 h-10 rounded-full object-cover border"
-              />
-              <span className="max-w-[120px] truncate font-medium text-sm hidden sm:inline-block">
-                {fullName}
-              </span>
-            </div>
+              <FiMenu />
+            </button>
 
-            {showDropdown && (
-              <div
-                className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-50
+            {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="w-28 h-18 object-contain"
+              />
+            </Link>
+          </div>
+
+          {/* Ở giữa Navigation Desktop */}
+          <nav className="hidden md:flex col-span-7 justify-center items-center gap-10">
+            {navLinks.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `font-medium transition-colors ${
+                    isActive
+                      ? "text-green-600 border-b-2 border-green-600"
+                      : "text-gray-700 hover:text-green-600"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Phần phải */}
+          <div className="col-span-3 flex justify-end items-center gap-4">
+            {currentUser && currentUser?.isActive ? (
+              <>
+                <div className="flex items-center gap-4 relative">
+                  {/* Notification by Admin */}
+                  <NotifiByAdmin />
+
+                  {/* Icon message */}
+                  <MessageNotification />
+
+                  {/* Avatar + Name + Dropdown */}
+                  <div
+                    className="flex items-center gap-2 cursor-pointer"
+                    onClick={
+                      openDropdown ? handleCloseDropdown : handleOpenDropdown
+                    }
+                  >
+                    <img
+                      src={currentUser.profilePic?.url || avatarDefault}
+                      alt="Avatar"
+                      className="w-10 h-10 rounded-full object-cover border"
+                    />
+                    <span className="max-w-[120px] truncate font-medium text-sm hidden sm:inline-block">
+                      {fullName}
+                    </span>
+                  </div>
+
+                  {showDropdown && (
+                    <div
+                      className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-50
       ${openDropdown ? "animate-fade-in" : "animate-fade-out"}
       ${!openDropdown ? "pointer-events-none" : ""}`}
-                style={{ top: "100%" }}
-              >
-                <div className="py-2 max-h-[220px] overflow-y-auto">
-                  <div className="flex flex-col px-2">
-                    {/*Avatar */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                      onClick={() => setOpenModalUpdateAvatar(true)}
+                      style={{ top: "100%" }}
                     >
-                      <FiImage className="text-[16px]" />
-                      <span>Đổi ảnh</span>
-                    </Button>
+                      <div className="py-2 max-h-[220px] overflow-y-auto">
+                        <div className="flex flex-col px-2">
+                          {/*Avatar */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                            onClick={() => setOpenModalUpdateAvatar(true)}
+                          >
+                            <FiImage className="text-[16px]" />
+                            <span>Đổi ảnh</span>
+                          </Button>
 
-                    {/*Mật khẩu */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                      onClick={() => setOpenModalUpdateChangePassword(true)}
-                    >
-                      <FiLock className="text-[16px]" />
-                      <span>Đổi mật khẩu</span>
-                    </Button>
+                          {/*Mật khẩu */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                            onClick={() =>
+                              setOpenModalUpdateChangePassword(true)
+                            }
+                          >
+                            <FiLock className="text-[16px]" />
+                            <span>Đổi mật khẩu</span>
+                          </Button>
 
-                    {/*Thông tin */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                      onClick={() => setOpenModalUpdateInfo(true)}
-                    >
-                      <FiUser className="text-[16px]" />
-                      <span>Thông tin</span>
-                    </Button>
+                          {/*Thông tin */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                            onClick={() => setOpenModalUpdateInfo(true)}
+                          >
+                            <FiUser className="text-[16px]" />
+                            <span>Thông tin</span>
+                          </Button>
 
-                    {/*Danh sách chặn */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                      onClick={() => navigate("/danh-sach-chan")}
-                    >
-                      <Ban className="w-4 h-4" />
-                      <span>Danh sách chặn</span>
-                    </Button>
+                          {/*Danh sách chặn */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                            onClick={() => navigate("/danh-sach-chan")}
+                          >
+                            <Ban className="w-4 h-4" />
+                            <span>Danh sách chặn</span>
+                          </Button>
 
-                    {currentUser?.role === "user" && (
-                      <>
-                        {/*My post */}
+                          {currentUser?.role === "user" && (
+                            <>
+                              {/*My post */}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                                onClick={() => navigate("/bai-viet-cua-toi")}
+                              >
+                                <FiList className="text-[16px]" />
+                                <span>Bài tuyển dụng của tôi</span>
+                              </Button>
+
+                              {/*Bài viết */}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                                onClick={() => {}}
+                              >
+                                <FiEdit className="text-[16px]" />
+                                <span>Tạo hợp đồng</span>
+                              </Button>
+
+                              {/*My Favorite */}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                                onClick={() => navigate("/danh-sach-yeu-thich")}
+                              >
+                                <FiHeart className="text-[16px]" />
+                                <span>Danh sách yêu thích</span>
+                              </Button>
+                            </>
+                          )}
+
+                          {currentUser?.role === "teacher" && (
+                            <>
+                              {/*My Saved Post */}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                                onClick={() =>
+                                  navigate("/danh-sach-bai-viet-da-luu")
+                                }
+                              >
+                                <FiBookmark className="text-[16px]" />
+                                <span>Bài tuyển dụng đã lưu</span>
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      {/*Logout */}
+                      <div className="flex justify-center sticky bottom-0 bg-white border-t border-gray-200">
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                          onClick={() => navigate("/bai-viet-cua-toi")}
+                          className="flex items-center gap-2 px-4 py-2 w-[65%] text-left text-red-500 hover:bg-red-50"
+                          onClick={handleLogout}
                         >
-                          <FiList className="text-[16px]" />
-                          <span>Bài tuyển dụng của tôi</span>
+                          <span className="text-lg">
+                            <FiPower />
+                          </span>
+                          <span>Đăng xuất</span>
                         </Button>
-
-                        {/*Bài viết */}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                          onClick={() => {}}
-                        >
-                          <FiEdit className="text-[16px]" />
-                          <span>Tạo hợp đồng</span>
-                        </Button>
-
-                        {/*My Favorite */}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                          onClick={() => navigate("/danh-sach-yeu-thich")}
-                        >
-                          <FiHeart className="text-[16px]" />
-                          <span>Danh sách yêu thích</span>
-                        </Button>
-                      </>
-                    )}
-
-                    {currentUser?.role === "teacher" && (
-                      <>
-                        {/*My Saved Post */}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                          onClick={() => navigate("/danh-sach-bai-viet-da-luu")}
-                        >
-                          <FiBookmark className="text-[16px]" />
-                          <span>Bài tuyển dụng đã lưu</span>
-                        </Button>
-                      </>
-                    )}
-                  </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {/*Logout */}
-                <div className="flex justify-center sticky bottom-0 bg-white border-t border-gray-200">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-2 px-4 py-2 w-[65%] text-left text-red-500 hover:bg-red-50"
-                    onClick={handleLogout}
-                  >
-                    <span className="text-lg">
-                      <FiPower />
-                    </span>
-                    <span>Đăng xuất</span>
-                  </Button>
-                </div>
+
+                {/*Modal Update Avatar */}
+                {openModalUpdateAvatar && (
+                  <UpdateAvatar
+                    currentUserAvatar={currentUser.profilePic}
+                    onClose={() => setOpenModalUpdateAvatar(false)}
+                    onUpdateSuccess={handleUpdateAvatarSuccess}
+                  />
+                )}
+
+                {/*Modal Update Info */}
+                {openModalUpdateInfo && (
+                  <UpdateInfo
+                    currentUser={currentUser}
+                    onClose={() => setOpenModalUpdateInfo(false)}
+                    onUpdateSuccess={handleUpdateInfo}
+                  />
+                )}
+
+                {/*Modal Update Password */}
+                {openModalUpdateChangePassword && (
+                  <UpdatePassword
+                    onClose={() => setOpenModalUpdateChangePassword(false)}
+                  />
+                )}
+              </>
+            ) : (
+              <div className="flex gap-2">
+                <Button onClick={() => navigate("/dang-nhap")}>
+                  Đăng nhập
+                </Button>
+                <Button onClick={() => navigate("/dang-ky")}>Đăng ký</Button>
               </div>
             )}
           </div>
-
-          {/*Modal Update Avatar */}
-          {openModalUpdateAvatar && (
-            <UpdateAvatar
-              currentUserAvatar={currentUser.profilePic}
-              onClose={() => setOpenModalUpdateAvatar(false)}
-              onUpdateSuccess={handleUpdateAvatarSuccess}
-            />
-          )}
-
-          {/*Modal Update Info */}
-          {openModalUpdateInfo && (
-            <UpdateInfo
-              currentUser={currentUser}
-              onClose={() => setOpenModalUpdateInfo(false)}
-              onUpdateSuccess={handleUpdateInfo}
-            />
-          )}
-
-          {/*Modal Update Password */}
-          {openModalUpdateChangePassword && (
-            <UpdatePassword
-              onClose={() => setOpenModalUpdateChangePassword(false)}
-            />
-          )}
-        </>
-      ) : (
-        <div className="flex gap-2">
-          <Button onClick={() => navigate("/dang-nhap")}>Đăng nhập</Button>
-          <Button onClick={() => navigate("/dang-ky")}>Đăng ký</Button>
         </div>
-      )}
+      </div>
 
       {/* Mobile Navigation (Drawer) */}
       <div
