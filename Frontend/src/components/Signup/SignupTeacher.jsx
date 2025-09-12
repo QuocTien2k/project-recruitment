@@ -421,7 +421,7 @@ const SignupTeacher = () => {
               <option value="">Chọn khoa/bộ môn</option>
               <option value="xahoi">Xã hội</option>
               <option value="tunhien">Tự nhiên</option>
-              <option value="ngonngu">Ngoại ngữ</option>
+              <option value="ngoaingu">Ngoại ngữ</option>
               <option value="khac">Khác</option>
             </select>
             {errors.faculty && (
