@@ -167,7 +167,7 @@ const getPostBySlug = async (req, res) => {
   }
 };
 
-//lấy 12 giáo viên đang hoạt động
+//lấy 8 giáo viên đang hoạt động
 const getTeachersShortList = async (req, res) => {
   try {
     const teachers = await TeacherModel.aggregate([
@@ -196,7 +196,7 @@ const getTeachersShortList = async (req, res) => {
       },
       { $unwind: "$userId" }, // chỉ lấy teacher có user match
       { $project: { degreeImages: 0, __v: 0 } }, // loại bỏ field không cần thiết
-      { $limit: 12 }, // lấy tối đa 12 giáo viên
+      { $limit: 8 }, // lấy tối đa 8 giáo viên
     ]);
 
     res.status(200).json({
