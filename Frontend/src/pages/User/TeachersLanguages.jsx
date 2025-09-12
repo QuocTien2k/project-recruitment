@@ -13,7 +13,7 @@ const TeachersLanguages = () => {
   const [listTeacher, setListTeacher] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
-  const itemsPerPage = 12;
+  const itemsPerPage = 8;
 
   const displayedTeachers = listTeacher.slice(
     currentPage * itemsPerPage,
@@ -52,7 +52,7 @@ const TeachersLanguages = () => {
           <EmptyState message="Hiện tại chưa có giáo viên nào ✍️" />
         )
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {displayedTeachers.map((teacher) => (
             <CardTeacher teacher={teacher} key={teacher._id} />
           ))}
