@@ -1,5 +1,5 @@
 import Button from "@components-ui/Button";
-import { clearUser } from "@redux/currentUserSlice";
+import { clearUser, setSelectedChat } from "@redux/currentUserSlice";
 import { setGlobalLoading } from "@redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import { FiPower } from "react-icons/fi";
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import MessageNotification from "@components-chat/MessageNotification";
+import { logout } from "@api/auth";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -43,20 +44,29 @@ const Navbar = ({ isOpen, toggleSidebar }) => {
     setTimeout(() => setShowDropdown(false), 180); // chờ fade-out xong
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(setGlobalLoading(true));
 
-    setTimeout(() => {
-      // 1. Xoá thông tin user khỏi Redux và localStorage
-      dispatch(clearUser());
-      localStorage.removeItem("token");
+    try {
+      await logout(); // API xoá cookie ở backend
+    } catch (error) {
+      console.log("Logout API lỗi:", error.message);
+    } finally {
+      setTimeout(() => {
+        // 1. Xóa chat đang chọn (ẩn ChatArea)
+        dispatch(setSelectedChat(null));
 
-      // 2. Tắt loading
-      dispatch(setGlobalLoading(false));
+        // 2. Xoá thông tin user khỏi Redux và localStorage
+        dispatch(clearUser());
+        localStorage.removeItem("user");
 
-      // 3. Chuyển hướng
-      navigate("/dang-nhap");
-    }, 1500);
+        // 3. Tắt loading
+        dispatch(setGlobalLoading(false));
+
+        // 4. Chuyển hướng
+        navigate("/");
+      }, 1500);
+    }
   };
 
   return (

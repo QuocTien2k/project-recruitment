@@ -10,9 +10,6 @@ const UserLayout = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return; // không có token thì không cần gọi API
-
     const fetchUser = async () => {
       try {
         const res = await getLogged(); // có token gọi API
@@ -20,11 +17,11 @@ const UserLayout = () => {
           //console.log(res.data);
           dispatch(setUser(res.data)); // lưu thông tin user hiện tại vào kho
         } else {
-          localStorage.removeItem("token");
+          localStorage.removeItem("user");
         }
       } catch (error) {
         console.log("Token không hợp lệ hoặc hết hạn:", error.message);
-        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
     };
 

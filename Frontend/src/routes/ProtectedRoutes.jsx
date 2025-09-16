@@ -1,24 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ allowedRoles }) => {
-  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!token) return <Navigate to="/admin/login" replace />;
+  if (!user) {
+    return <Navigate to="/dang-nhap" replace />;
+  }
 
-  try {
-    const decoded = jwtDecode(token);
-    const userRole = decoded.role;
-
-    if (allowedRoles.includes(userRole)) {
-      return <Outlet />;
-    } else {
-      return <Navigate to="/unauthorized" replace />;
-    }
-  } catch (err) {
-    console.log("Lỗi: ", err);
-    return <Navigate to="/admin/login" replace />;
+  if (allowedRoles.includes(user.role)) {
+    return <Outlet />;
+  } else {
+    return <Navigate to="/unauthorized" replace />;
   }
 };
-
 export default ProtectedRoute;

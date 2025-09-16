@@ -9,6 +9,17 @@ export const login = async ({ email, password }) => {
   return response.data;
 };
 
+// api đăng xuất
+export const logout = async () => {
+  try {
+    const res = await axiosInstance.post("/api/auth/logout");
+    return res?.data;
+  } catch (err) {
+    console.log("Lỗi logout:", err.message);
+    throw err;
+  }
+};
+
 // API đăng ký người dùng
 export const signupUser = async (formData) => {
   try {

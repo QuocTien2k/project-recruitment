@@ -13,14 +13,6 @@ const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setTimeout(() => {
-        navigate("/dang-nhap");
-      }, 2000);
-      toast.error("Vui lòng đăng nhập!");
-    }
-
     const fetchUser = async () => {
       try {
         const res = await getLogged(); // có token gọi API
@@ -28,11 +20,13 @@ const AdminLayout = () => {
           //console.log(res.data);
           dispatch(setUser(res.data)); // lưu thông tin user hiện tại vào kho
         } else {
-          localStorage.removeItem("token");
+          navigate("/dang-nhap");
+          localStorage.removeItem("user");
         }
       } catch (error) {
         console.log("Token không hợp lệ hoặc hết hạn:", error.message);
-        localStorage.removeItem("token");
+        toast.error("Phiên bản đăng nhập đã hết hạn");
+        localStorage.removeItem("user");
       }
     };
 

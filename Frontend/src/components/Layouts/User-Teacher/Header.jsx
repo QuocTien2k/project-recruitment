@@ -12,6 +12,7 @@ import UpdateInfo from "@modals/UpdateInfo";
 import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
 import { Ban } from "lucide-react";
 import NotifiByAdmin from "../../NotifiByAdmin";
+import { logout } from "@api/auth";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -89,23 +90,29 @@ const Header = () => {
     setOpenModalUpdateInfo(false);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(setGlobalLoading(true));
 
-    setTimeout(() => {
-      // 1. Xóa chat đang chọn (ẩn ChatArea)
-      dispatch(setSelectedChat(null));
+    try {
+      await logout(); // API xoá cookie ở backend
+    } catch (error) {
+      console.log("Logout API lỗi:", error.message);
+    } finally {
+      setTimeout(() => {
+        // 1. Xóa chat đang chọn (ẩn ChatArea)
+        dispatch(setSelectedChat(null));
 
-      // 2. Xoá thông tin user khỏi Redux và localStorage
-      dispatch(clearUser());
-      localStorage.removeItem("token");
+        // 2. Xoá thông tin user khỏi Redux và localStorage
+        dispatch(clearUser());
+        localStorage.removeItem("user");
 
-      // 3. Tắt loading
-      dispatch(setGlobalLoading(false));
+        // 3. Tắt loading
+        dispatch(setGlobalLoading(false));
 
-      // 4. Chuyển hướng
-      navigate("/");
-    }, 1000);
+        // 4. Chuyển hướng
+        navigate("/");
+      }, 1000);
+    }
   };
 
   //console.log("Thông tin: ", currentUser);
