@@ -12,6 +12,9 @@ const UserLayout = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const localUser = localStorage.getItem("user");
+        if (!localUser) return;
+
         const res = await getLogged(); // có token gọi API
         if (res?.success) {
           //console.log(res.data);
