@@ -3,6 +3,7 @@ const {
   signupUser,
   signupTeacher,
   login,
+  logout,
   forgotPassword,
   resetPassword,
 } = require("../controllers/authController");
@@ -23,6 +24,7 @@ router.post(
   signupTeacher
 );
 router.post("/login", login);
+router.post("/logout", logout);
 
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);

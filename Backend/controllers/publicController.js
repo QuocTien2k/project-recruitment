@@ -501,6 +501,58 @@ const getListTeacherLanguages = async (req, res) => {
   }
 };
 
+// Lấy 8 giáo viên có kinh nghiệm >= 5 năm để làm slider
+const getExperiencedTeachers = async (req, res) => {
+  try {
+    const teachers = await TeacherModel.aggregate([
+      {
+        $match: {
+          experience: { $gte: 5 }, // lọc >= 5 năm
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+          pipeline: [
+            {
+              $match: { isActive: true }, // chỉ lấy user còn active
+            },
+            {
+              $project: {
+                middleName: 1,
+                name: 1,
+                email: 1,
+                profilePic: 1,
+                province: 1,
+                district: 1,
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$userId" },
+      { $project: { degreeImages: 0, __v: 0 } },
+      { $sort: { experience: -1 } }, // ưu tiên giáo viên kinh nghiệm cao hơn
+      { $limit: 8 }, // chỉ lấy 8 người
+    ]);
+
+    res.status(200).json({
+      success: true,
+      total: teachers.length,
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy danh sách giáo viên 5+ năm kinh nghiệm",
+      error: error.message,
+    });
+  }
+};
+
 // Lấy chi tiết 1 giáo viên đang hoạt động
 const getPublicTeacherDetail = async (req, res) => {
   const { teacherId } = req.params;
@@ -571,5 +623,6 @@ module.exports = {
   getListTeacherSocial,
   getListTeacherLanguages,
   getPublicTeacherDetail,
+  getExperiencedTeachers,
   countViews,
 };

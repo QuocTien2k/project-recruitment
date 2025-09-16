@@ -272,6 +272,13 @@ const login = async (req, res) => {
       }
     );
 
+    res.cookie("token", token, {
+      httpOnly: true, // không cho JS truy cập
+      secure: process.env.NODE_ENV === "production", // chỉ dùng HTTPS khi production
+      sameSite: "strict", // hạn chế CSRF
+      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 ngày
+    });
+
     res.status(200).json({
       message: "Đăng nhập thành công",
       success: true,
@@ -282,12 +289,32 @@ const login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
-      token: token,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: `Lỗi hệ thống: ${error.message}`,
+    });
+  }
+};
+
+//đăng xuất
+const logout = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Đăng xuất thành công",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi hệ thống: " + error.message,
     });
   }
 };
@@ -390,6 +417,7 @@ module.exports = {
   signupUser,
   signupTeacher,
   login,
+  logout,
   forgotPassword,
   resetPassword,
 };
