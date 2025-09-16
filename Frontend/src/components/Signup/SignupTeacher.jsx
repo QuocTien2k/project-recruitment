@@ -139,6 +139,7 @@ const SignupTeacher = () => {
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length > 0) {
+      toast.error("Vui lòng nhập lại form!");
       setErrors(newErrors);
       setLoading(false);
       return;
@@ -503,7 +504,7 @@ const SignupTeacher = () => {
         {/* Submit */}
         <div className="flex justify-center">
           <Button type="submit" disabled={loading} variant="default">
-            {loading ? "Đang xử lý..." : "Đăng ký giáo viên"}
+            {loading ? "Đang xử lý..." : "Đăng ký"}
           </Button>
         </div>
       </form>
