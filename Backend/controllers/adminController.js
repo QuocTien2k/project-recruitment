@@ -82,6 +82,7 @@ const getActiveTeachers = async (req, res) => {
 
     let teacherQuery = {};
     if (userId) teacherQuery.userId = userId;
+    if (faculty) teacherQuery.faculty = faculty;
 
     let userQuery = { isActive: true, role: "teacher" };
     if (name) {
@@ -93,7 +94,6 @@ const getActiveTeachers = async (req, res) => {
     if (email) userQuery.email = { $regex: email, $options: "i" };
     if (province) userQuery.province = province;
     if (district) userQuery.district = district;
-    if (faculty) userQuery.faculty = faculty;
 
     const teachers = await TeacherModel.find(teacherQuery)
       .populate({
