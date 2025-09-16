@@ -393,7 +393,7 @@ export default function useSearchFilter({
     runFetch(filters);
 
     return () => runFetch.cancel();
-  }, [form, provincesData, districts, searchType, runFetch]);
+  }, [form, searchType, runFetch]);
 
   // ===== 6. Reset filter =====
   const handleResetFilter = () => {
