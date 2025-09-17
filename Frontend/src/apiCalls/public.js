@@ -1,5 +1,17 @@
 import { axiosInstance } from "./index";
 
+/* Giáo viên */
+export const getTeacherExperience = async () => {
+  try {
+    const res = await axiosInstance.get("/api/public/teachers-experience");
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi: ", err?.message);
+    throw err;
+  }
+};
+
 export const getTeacherShortList = async () => {
   try {
     const res = await axiosInstance.get("/api/public/get-teacher-short-list");
@@ -75,6 +87,8 @@ export const getTeacherDetail = async (teacherId) => {
     throw err;
   }
 };
+
+/*Bài viết */
 
 export const getApprovedPost = async (filters = {}) => {
   try {

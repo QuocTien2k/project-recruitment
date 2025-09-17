@@ -36,7 +36,7 @@ const UserLayout = () => {
       <Header />
 
       <main
-        className="flex-grow"
+        className="flex-grow bg-gray-50"
         style={{ paddingTop: "var(--header-height)" }}
       >
         <div className="container-strong">

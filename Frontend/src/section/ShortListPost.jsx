@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import Title from "@components-ui/Title";
 
 const ShortListPost = () => {
   const [listPost, setListPost] = useState([]);
@@ -39,24 +40,27 @@ const ShortListPost = () => {
 
   return (
     <>
-      {isGlobalLoading ? (
-        <Loading size="md" />
-      ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {listPost.map((post) => (
-              <PostCard
-                post={post}
-                key={post._id}
-                onViewDetail={() => navigate(`/bai-viet/${post.slug}`)}
-              />
-            ))}
-          </div>
-          {/* Nút Xem tất cả */}
-          <div className="flex justify-center mt-6">
-            <Link
-              to="/danh-sach-bai-viet"
-              className="
+      <div className="max-w-[var(--width-8xl)] mx-auto px-2 space-y-6">
+        {/* 📌 Tiêu đề */}
+        <Title text="Danh sách bài viết" size="2xl" underline />
+        {isGlobalLoading ? (
+          <Loading size="md" />
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {listPost.map((post) => (
+                <PostCard
+                  post={post}
+                  key={post._id}
+                  onViewDetail={() => navigate(`/bai-viet/${post.slug}`)}
+                />
+              ))}
+            </div>
+            {/* Nút Xem tất cả */}
+            <div className="flex justify-center mt-6">
+              <Link
+                to="/danh-sach-bai-viet"
+                className="
             py-2 px-6 
             bg-green-100 text-green-600
             rounded-lg 
@@ -64,12 +68,13 @@ const ShortListPost = () => {
             hover:bg-green-200 hover:text-black
             transition 
             font-medium duration-300 transform hover:scale-95"
-            >
-              Xem tất cả bài viết
-            </Link>
-          </div>
-        </>
-      )}
+              >
+                Xem tất cả bài viết
+              </Link>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
