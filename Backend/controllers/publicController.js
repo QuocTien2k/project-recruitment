@@ -536,7 +536,7 @@ const getExperiencedTeachers = async (req, res) => {
       { $unwind: "$userId" },
       { $project: { degreeImages: 0, __v: 0 } },
       { $sort: { experience: -1 } }, // ưu tiên giáo viên kinh nghiệm cao hơn
-      { $limit: 8 }, // chỉ lấy 8 người
+      { $limit: 6 }, // chỉ lấy 6 người
     ]);
 
     res.status(200).json({
