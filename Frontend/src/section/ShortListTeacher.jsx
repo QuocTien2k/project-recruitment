@@ -36,38 +36,47 @@ const ShortListTeacher = () => {
 
   return (
     <>
-      <div className="max-w-[var(--width-8xl)] mx-auto px-2 space-y-6">
-        {/* 📌 Tiêu đề */}
-        <Title text="Danh sách giáo viên" size="2xl" underline />
-        {isTeacherLoading ? (
-          <Loading size="md" />
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {listTeacher.map((teacher) => (
-                <CardTeacher key={teacher._id} teacher={teacher} />
-              ))}
-            </div>
+      <section
+        className="py-10 px-2 mx-2 rounded-2xl"
+        style={{
+          background: "var(--bg-section-2)",
+          boxShadow: "var(--section-shadow)",
+        }}
+      >
+        <div className="mx-auto px-2 space-y-4">
+          {/* 📌 Tiêu đề */}
+          <Title text="Giáo viên mới" size="2xl" underline />
+          {isTeacherLoading ? (
+            <Loading size="md" />
+          ) : (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {listTeacher.map((teacher) => (
+                  <CardTeacher key={teacher._id} teacher={teacher} />
+                ))}
+              </div>
 
-            {/* Nút Xem tất cả */}
-            <div className="flex justify-center mt-6">
-              <Link
-                to="/danh-sach-giao-vien"
-                className="
+              {/* Nút Xem tất cả */}
+              <div className="flex justify-center mt-6">
+                <Link
+                  to="/danh-sach-giao-vien"
+                  className="
             py-2 px-6 
-            bg-green-100 text-green-600
-            rounded-lg 
-            shadow-sm 
-            hover:bg-green-200 hover:text-black
+            bg-white text-black
+    border border-green-400
+    rounded-lg 
+    shadow-sm
+    hover:bg-green-50 hover:border-green-500
             transition 
             font-medium duration-300 transform hover:scale-95"
-              >
-                Xem tất cả giáo viên
-              </Link>
-            </div>
-          </>
-        )}
-      </div>
+                >
+                  Xem tất cả giáo viên
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
     </>
   );
 };

@@ -13,6 +13,23 @@
         --header-height: 72px;
         --width-8xl: 90rem;
         --width-9xl: 100rem;
+        /* Section backgrounds */
+        --bg-section-1: linear-gradient(rgba(255, 255, 255, 0) 22.49%,
+                rgb(255, 255, 255) 73.49%),
+            linear-gradient(264.03deg,
+                rgb(187, 247, 208) -10.27%,
+                rgb(220, 252, 231) 35.65%,
+                rgb(209, 250, 229) 110.66%);
+
+        --bg-section-2: linear-gradient(180deg,
+                rgb(240, 253, 250) 0%,
+                rgb(224, 242, 254) 100%);
+
+        --bg-section-3: linear-gradient(180deg,
+                rgb(240, 253, 244) 0%,
+                rgb(220, 252, 231) 100%);
+        /* Shadow chung */
+        --section-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     html {

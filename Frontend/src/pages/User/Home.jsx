@@ -6,12 +6,24 @@ import SliderTeacher from "@sections/SliderTeacher";
 const Home = () => {
   return (
     <>
-      <main className="space-y-16 py-8">
-        <SliderTeacher />
+      <main className="py-8">
+        {/* Grid 12 cột */}
+        <div className="grid grid-cols-12 gap-6">
+          {/* Left: ShortListTeacher */}
+          <div className="col-span-9">
+            <ShortListTeacher />
+          </div>
 
-        <ShortListTeacher />
+          {/* Right: SliderTeacher */}
+          <div className="col-span-3">
+            <SliderTeacher />
+          </div>
+        </div>
 
-        <ShortListPost />
+        {/* Section 3: ShortListPost */}
+        <div className="mt-16">
+          <ShortListPost />
+        </div>
       </main>
     </>
   );

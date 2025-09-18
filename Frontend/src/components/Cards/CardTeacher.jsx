@@ -54,7 +54,7 @@ const CardTeacher = ({
   };
 
   return (
-    <div className="max-w-[380px] relative border rounded-xl shadow-md bg-white p-5 hover:shadow-lg transition duration-300 space-y-5 flex flex-col items-center text-center">
+    <div className="max-w-[380px] relative border rounded-xl shadow-md bg-white p-3 space-y-3 hover:shadow-lg transition duration-300 flex flex-col items-center text-center">
       {/* 2 nút hành động của Admin ở góc phải */}
       {showActions && currentUser?.role === "admin" && (
         <div className="absolute top-4 left-4 right-4 flex justify-between">

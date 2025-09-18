@@ -41,57 +41,35 @@ const SliderTeacher = () => {
     arrows: false, // ẩn mũi tên trái phải
     dots: false, // ẩn chấm tròn điều hướng
     infinite: true, // lặp vô hạn
-    speed: 500, // tốc độ chuyển (ms)
-    slidesToShow: 4, // số card hiển thị trên màn hình
+    speed: 1800, // tốc độ chuyển (ms)
+    slidesToShow: 2, // số card hiển thị trên màn hình
     slidesToScroll: 1, // số card trượt mỗi lần
-
+    vertical: true, // chuyển sang vertical
+    verticalSwiping: true, // cho phép swipe dọc (mobile)
     autoplay: true, // bật auto chạy
-    autoplaySpeed: 3000, // 3s tự động chuyển slide
+    autoplaySpeed: 5000, // 5s tự động chuyển slide
     pauseOnHover: true, // hover thì dừng autoplay
-
-    responsive: [
-      {
-        breakpoint: 1024, // tablet lớn
-        settings: { slidesToShow: 3 },
-      },
-      {
-        breakpoint: 768, // tablet nhỏ
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 480, // mobile
-        settings: { slidesToShow: 1 },
-      },
-    ],
   };
 
   return (
     <>
       <section
-        className="py-10 px-2 mx-2 rounded-2xl"
+        className="py-10 px-2 mx-2 rounded-2xl h-full"
         style={{
-          background: `
-      linear-gradient(rgba(255, 255, 255, 0) 22.49%, rgb(255, 255, 255) 73.49%),
-      linear-gradient(
-        264.03deg,
-        rgb(187, 247, 208) -10.27%,
-        rgb(220, 252, 231) 35.65%,
-        rgb(209, 250, 229) 110.66%
-      )
-    `,
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+          background: "var(--bg-section-1)",
+          boxShadow: "var(--section-shadow)",
         }}
       >
-        <div className="max-w-[var(--width-8xl)] mx-auto px-2 space-y-6">
+        <div className="mx-auto px-2 space-y-4">
           {/* 📌 Tiêu đề slider */}
-          <Title text="Giáo viên nhiều kinh nghiệm" size="2xl" underline />
+          <Title text="Giáo viên tiêu biểu" size="2xl" underline />
           {isTeacherLoading ? (
             <Loading size="md" />
           ) : (
             <>
               <Slider {...settings}>
                 {listTeacher.map((teacher) => (
-                  <div key={teacher._id} className="px-2">
+                  <div key={teacher._id} className="px-2 mb-4">
                     <CardTeacher key={teacher._id} teacher={teacher} />
                   </div>
                 ))}
