@@ -17,6 +17,7 @@ import Button from "@components-ui/Button";
 import { useChatContext } from "@context/ChatContext";
 import toast from "react-hot-toast";
 import { addFavorite, checkStatusFavorite, removeFavorite } from "@api/user";
+import SliderTeacherSimilar from "@sections/SliderTeacherSimilar";
 
 const TeacherDetail = () => {
   const { teacherId } = useParams();
@@ -155,95 +156,101 @@ const TeacherDetail = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
-      <Link to="/" className="text-sm text-blue-600 hover:underline block mb-4">
-        ← Quay lại danh sách
-      </Link>
+    <>
+      <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow">
+        <Link
+          to="/"
+          className="text-sm text-blue-600 hover:underline block mb-4"
+        >
+          ← Quay lại danh sách
+        </Link>
 
-      {isTeacherLoading ? (
-        <div className="flex justify-center items-center h-40">
-          <Loading size="md" />
-        </div>
-      ) : (
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Avatar + Info + Favorite */}
-          <div className="flex-shrink-0 flex flex-col justify-center items-center gap-4">
-            <img
-              src={userId?.profilePic?.url || avatarDefault}
-              alt={fullName}
-              className="w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 object-cover rounded-full border"
-            />
-
-            {currentUser?.role === "user" && (
-              <FaHeart
-                size={24}
-                onClick={() => toggleFavorite(userId?._id)}
-                className={`transition transform hover:scale-110 ${
-                  isFavorite ? "text-red-500" : "text-gray-400"
-                } ${
-                  disableFavorite
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
+        {isTeacherLoading ? (
+          <div className="flex justify-center items-center h-40">
+            <Loading size="md" />
+          </div>
+        ) : (
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Avatar + Info + Favorite */}
+            <div className="flex-shrink-0 flex flex-col justify-center items-center gap-4">
+              <img
+                src={userId?.profilePic?.url || avatarDefault}
+                alt={fullName}
+                className="w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 object-cover rounded-full border"
               />
-            )}
 
-            <Button size="sm" variant="default" onClick={handleStartChat}>
-              💬 Liên hệ
-            </Button>
+              {currentUser?.role === "user" && (
+                <FaHeart
+                  size={24}
+                  onClick={() => toggleFavorite(userId?._id)}
+                  className={`transition transform hover:scale-110 ${
+                    isFavorite ? "text-red-500" : "text-gray-400"
+                  } ${
+                    disableFavorite
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
+                />
+              )}
+
+              <Button size="sm" variant="default" onClick={handleStartChat}>
+                💬 Liên hệ
+              </Button>
+            </div>
+
+            {/* Thông tin chi tiết */}
+            <div className="flex-1 space-y-2 text-gray-800">
+              <h1 className="text-2xl font-bold">{fullName}</h1>
+
+              <p className="flex items-center gap-2 text-sm text-gray-600">
+                <FaEnvelope className="text-blue-500" /> {userId?.email}
+              </p>
+
+              <p className="flex items-center gap-2">
+                <FaUserTie className="text-indigo-500" /> Môn dạy:
+                <span className="font-medium">{subject?.join(", ")}</span>
+              </p>
+
+              <p className="flex items-center gap-2">
+                <FaUniversity className="text-purple-500" />
+                <span>Khoa: {vietsubFaculty[faculty] || faculty}</span>
+              </p>
+
+              <p className="flex items-center gap-2">
+                <MdWork className="text-green-500 text-lg" /> Kinh nghiệm:
+                <span className="font-medium">{experience} năm</span>
+              </p>
+
+              <p className="flex items-center gap-2">
+                <FaRegClock className="text-yellow-600" />
+                <span className="italic">
+                  Hình thức làm việc:{" "}
+                  {vietsubWorkingType[workingType] || workingType} / {timeType}
+                </span>
+              </p>
+
+              <p className="flex items-start gap-2 text-gray-700">
+                <FaMapMarkerAlt className="text-red-400 flex-shrink-0 mt-1" />
+                <span>
+                  <span className="font-medium">Khu vực:</span>{" "}
+                  {userId?.district}, {userId?.province}
+                </span>
+              </p>
+
+              {description && (
+                <div className="pt-4">
+                  <p className="font-semibold text-gray-700">Giới thiệu:</p>
+                  <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
+                    {description}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-
-          {/* Thông tin chi tiết */}
-          <div className="flex-1 space-y-2 text-gray-800">
-            <h1 className="text-2xl font-bold">{fullName}</h1>
-
-            <p className="flex items-center gap-2 text-sm text-gray-600">
-              <FaEnvelope className="text-blue-500" /> {userId?.email}
-            </p>
-
-            <p className="flex items-center gap-2">
-              <FaUserTie className="text-indigo-500" /> Môn dạy:
-              <span className="font-medium">{subject?.join(", ")}</span>
-            </p>
-
-            <p className="flex items-center gap-2">
-              <FaUniversity className="text-purple-500" />
-              <span>Khoa: {vietsubFaculty[faculty] || faculty}</span>
-            </p>
-
-            <p className="flex items-center gap-2">
-              <MdWork className="text-green-500 text-lg" /> Kinh nghiệm:
-              <span className="font-medium">{experience} năm</span>
-            </p>
-
-            <p className="flex items-center gap-2">
-              <FaRegClock className="text-yellow-600" />
-              <span className="italic">
-                Hình thức làm việc:{" "}
-                {vietsubWorkingType[workingType] || workingType} / {timeType}
-              </span>
-            </p>
-
-            <p className="flex items-start gap-2 text-gray-700">
-              <FaMapMarkerAlt className="text-red-400 flex-shrink-0 mt-1" />
-              <span>
-                <span className="font-medium">Khu vực:</span> {userId?.district}
-                , {userId?.province}
-              </span>
-            </p>
-
-            {description && (
-              <div className="pt-4">
-                <p className="font-semibold text-gray-700">Giới thiệu:</p>
-                <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
-                  {description}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+      {teacherId && <SliderTeacherSimilar idTeacherDetail={teacherId} />}
+    </>
   );
 };
 

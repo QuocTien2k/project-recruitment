@@ -88,6 +88,19 @@ export const getTeacherDetail = async (teacherId) => {
   }
 };
 
+export const getTeacherSimilar = async (teacherId) => {
+  try {
+    const res = await axiosInstance.get(
+      `/api/public/teachers-similar/${teacherId}`
+    );
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi khi dữ liệu của giáo viên:", err?.message);
+    throw err;
+  }
+};
+
 /*Bài viết */
 
 export const getApprovedPost = async (filters = {}) => {
@@ -117,6 +130,17 @@ export const getPostShortList = async () => {
 export const getPostDetail = async (slug) => {
   try {
     const res = await axiosInstance.get(`/api/public/detail-by-slug/${slug}`);
+
+    return res?.data;
+  } catch (err) {
+    console.log("Có lỗi khi dữ liệu: ", err?.message);
+    throw err;
+  }
+};
+
+export const getPostSimilar = async (postId) => {
+  try {
+    const res = await axiosInstance.get(`/api/public/posts-similar/${postId}`);
 
     return res?.data;
   } catch (err) {

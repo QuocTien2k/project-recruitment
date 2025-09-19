@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { FaBookmark } from "react-icons/fa";
 import { addSavePost, checkStatusSavePost, removeSavePost } from "@api/user";
+import SliderPostSimilar from "@sections/SliderPostSimilar";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -152,17 +153,17 @@ const PostDetail = () => {
 
   return (
     <>
-      {isGlobalLoading ? (
-        <Loading size="md" />
-      ) : (
-        <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
-          <Link
-            to="/"
-            className="text-sm text-blue-600 hover:underline block mb-4"
-          >
-            ← Quay lại trang chủ
-          </Link>
+      <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow">
+        <Link
+          to="/"
+          className="text-sm text-blue-600 hover:underline block mb-4"
+        >
+          ← Quay lại danh sách
+        </Link>
 
+        {isGlobalLoading ? (
+          <Loading size="md" />
+        ) : (
           <div className="flex flex-col md:flex-row gap-6">
             {/* Bên trái: avatar + chat */}
             <div className="flex-shrink-0 flex flex-col justify-center items-center gap-4">
@@ -239,8 +240,9 @@ const PostDetail = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      {post?._id && <SliderPostSimilar postId={post?._id} />}
     </>
   );
 };
