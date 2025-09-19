@@ -167,6 +167,68 @@ const getPostBySlug = async (req, res) => {
   }
 };
 
+// Bài viết tương tự dựa vào province
+const getRelatedPostsByProvince = async (req, res) => {
+  try {
+    const { id } = req.params; // id bài gốc
+
+    // Tìm bài gốc
+    const currentPost = await PostModel.findById(id);
+    if (!currentPost) {
+      return res.status(404).json({
+        success: false,
+        message: "Bài viết không tồn tại.",
+      });
+    }
+
+    // Lấy danh sách bài viết tương tự theo province
+    const relatedPosts = await PostModel.find({
+      _id: { $ne: currentPost._id }, // loại bỏ bài gốc
+      province: currentPost.province, // cùng province
+      status: "approved", // chỉ lấy bài đã duyệt
+    })
+      .populate("createdBy", "middleName name email profilePic")
+      .sort({ createdAt: -1 })
+      .limit(6)
+      .lean();
+
+    // Chuẩn hóa dữ liệu trả về
+    const data = relatedPosts.map((post) => {
+      const fullName = post.createdBy
+        ? `${post.createdBy.middleName || ""} ${
+            post.createdBy.name || ""
+          }`.trim()
+        : "";
+      return {
+        _id: post._id,
+        title: post.title,
+        slug: post.slug,
+        createdAt: post.createdAt,
+        province: post.province,
+        district: post.district,
+        salary: post.salary,
+        workingType: post.workingType,
+        timeType: post.timeType,
+        createdBy: {
+          ...post.createdBy,
+          fullName,
+        },
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      total: data.length,
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 //lấy 8 giáo viên đang hoạt động
 const getTeachersShortList = async (req, res) => {
   try {
@@ -594,6 +656,65 @@ const getPublicTeacherDetail = async (req, res) => {
   }
 };
 
+//lấy giáo viên tương tự dựa vào id
+const getSimilarTeachers = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const currentTeacher = await TeacherModel.findById(id);
+    if (!currentTeacher) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy giáo viên!" });
+    }
+
+    const teachers = await TeacherModel.aggregate([
+      {
+        $match: {
+          faculty: currentTeacher.faculty,
+          _id: { $ne: currentTeacher._id },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+          pipeline: [
+            { $match: { isActive: true } },
+            {
+              $project: {
+                middleName: 1,
+                name: 1,
+                email: 1,
+                profilePic: 1,
+                province: 1,
+                district: 1,
+                isActive: 1,
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$userId" },
+      { $project: { degreeImages: 0, __v: 0 } },
+      { $limit: 8 }, // lấy 8 giáo viên gợi ý
+    ]);
+
+    res.status(200).json({
+      success: true,
+      total: teachers.length,
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy danh sách giáo viên tương tự",
+      error: error.message,
+    });
+  }
+};
+
 //tổng số lượt xem 1 bài viết
 const countViews = async (req, res) => {
   try {
@@ -624,5 +745,7 @@ module.exports = {
   getListTeacherLanguages,
   getPublicTeacherDetail,
   getExperiencedTeachers,
+  getSimilarTeachers,
+  getRelatedPostsByProvince,
   countViews,
 };

@@ -10,7 +10,9 @@ const {
   getListTeacherSocial,
   getListTeacherLanguages,
   getPublicTeacherDetail,
+  getSimilarTeachers,
   getExperiencedTeachers,
+  getRelatedPostsByProvince,
   countViews,
 } = require("../controllers/publicController.js");
 
@@ -25,6 +27,8 @@ router.get("/teachers-social", getListTeacherSocial);
 router.get("/teachers-languages", getListTeacherLanguages);
 router.get("/teachers-experience", getExperiencedTeachers);
 router.get("/teachers/:teacherId", getPublicTeacherDetail);
+router.get("/teachers-similar/:id", getSimilarTeachers);
+router.get("/posts-similar/:id", getRelatedPostsByProvince);
 router.get("/count-view/:postId", countViews);
 
 module.exports = router;
