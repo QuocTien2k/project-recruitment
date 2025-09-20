@@ -44,8 +44,8 @@ const SliderTeacher = () => {
     speed: 1800, // tốc độ chuyển (ms)
     slidesToShow: 2, // số card hiển thị trên màn hình
     slidesToScroll: 1, // số card trượt mỗi lần
-    //vertical: true, // chuyển sang vertical
-    //verticalSwiping: true, // cho phép swipe dọc (mobile)
+    vertical: true, // chuyển sang vertical
+    verticalSwiping: true, // cho phép swipe dọc (mobile)
     autoplay: true, // bật auto chạy
     autoplaySpeed: 5000, // 5s tự động chuyển slide
     pauseOnHover: true, // hover thì dừng autoplay
@@ -70,7 +70,7 @@ const SliderTeacher = () => {
         },
       },
       {
-        breakpoint: 10000, // giả lập "xl và lớn hơn"
+        breakpoint: 1440, // giả lập "xl và lớn hơn"
         settings: {
           vertical: true,
           verticalSwiping: true,

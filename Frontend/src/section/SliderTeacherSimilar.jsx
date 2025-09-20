@@ -25,13 +25,28 @@ const SliderTeacherSimilar = ({ idTeacherDetail }) => {
     fetchSimilar();
   }, []);
 
+  const [slidesToShow, setSlidesToShow] = useState(4);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 480) setSlidesToShow(1);
+      else if (window.innerWidth <= 769) setSlidesToShow(2);
+      else if (window.innerWidth <= 1025) setSlidesToShow(3);
+      else setSlidesToShow(4);
+    };
+
+    handleResize(); // chạy 1 lần khi load
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // cấu hình slider
   const settings = {
     arrows: false, // ẩn mũi tên trái phải
     dots: true, // ẩn chấm tròn điều hướng
     infinite: true, // lặp vô hạn
     speed: 1800, // tốc độ chuyển (ms)
-    slidesToShow: 4, // số card hiển thị trên màn hình
+    slidesToShow, // số card hiển thị trên màn hình
     slidesToScroll: 1, // số card trượt mỗi lần
     autoplay: true, // bật auto chạy
     autoplaySpeed: 5000, // 5s tự động chuyển slide
