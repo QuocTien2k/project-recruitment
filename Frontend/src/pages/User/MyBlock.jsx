@@ -44,7 +44,7 @@ const MyBlock = () => {
       <Title text="Danh sách người bị chặn" className="mb-6" />
 
       {/* Search */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+      <div className="p-4 rounded-sm flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         <div className="flex-1 min-w-0">
           <MyListBlocked
             onResults={setMyListBlock}

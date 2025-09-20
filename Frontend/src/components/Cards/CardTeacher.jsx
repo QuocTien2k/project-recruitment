@@ -54,7 +54,7 @@ const CardTeacher = ({
   };
 
   return (
-    <div className="max-w-[380px] relative border rounded-xl shadow-md bg-white p-3 space-y-3 hover:shadow-lg transition duration-300 flex flex-col items-center text-center">
+    <div className="max-w-[380px] overflow-hidden relative border rounded-xl shadow-md bg-white p-3 space-y-3 hover:shadow-lg transition duration-300 flex flex-col items-center text-center">
       {/* 2 nút hành động của Admin ở góc phải */}
       {showActions && currentUser?.role === "admin" && (
         <div className="absolute top-4 left-4 right-4 flex justify-between">
@@ -80,27 +80,41 @@ const CardTeacher = ({
         </div>
       )}
 
-      {/* Avatar */}
-      <img
-        src={userId?.profilePic?.url || avatarDefault}
-        alt={fullName}
-        className="w-24 h-24 object-cover rounded-full border-2 border-gray-200"
-      />
+      <div className="flex flex-col items-center justify-center text-sm w-full gap-2">
+        {/* Avatar */}
+        <img
+          src={userId?.profilePic?.url || avatarDefault}
+          alt={fullName}
+          className="w-24 h-24 object-cover rounded-full border-2 border-gray-200"
+        />
+
+        {/* Họ tên */}
+        <p className="flex items-center gap-2 min-w-0">
+          <span
+            className="font-semibold text-base xl:text-lg truncate"
+            title={fullName}
+          >
+            {fullName}
+          </span>
+        </p>
+      </div>
 
       {/* Thông tin cơ bản */}
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800">{fullName}</h2>
-        <p className="text-sm text-gray-600 mt-1 flex items-center justify-center gap-2">
-          <FaEnvelope className="text-blue-500" />
-          <span className="truncate">{userId.email}</span>
+      <div className="flex flex-col gap-2 text-gray-700 text-sm w-full">
+        {/* Email */}
+        <p className="flex items-center gap-2 min-w-0">
+          <FaEnvelope className="text-blue-500 text-lg flex-shrink-0" />
+          <span className="truncate" title={userId.email}>
+            {userId.email}
+          </span>
         </p>
       </div>
 
       {/* Thông tin chi tiết */}
-      <div className="flex flex-col gap-3 text-md text-gray-700 w-full">
-        <p className="flex items-center gap-2">
-          <MdWork className="text-green-500 text-lg" />
-          <span className="text-sm text-gray-700">
+      <div className="flex flex-col gap-3 text-sm text-gray-700 w-full">
+        <p className="flex items-center gap-2 min-w-0">
+          <MdWork className="text-green-500 text-lg flex-shrink-0" />
+          <span className="truncate" title={`${experience} năm`}>
             Kinh nghiệm:{" "}
             <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
               {experience} năm
@@ -108,30 +122,39 @@ const CardTeacher = ({
           </span>
         </p>
 
-        <p className="flex items-center gap-2 col-span-full">
-          <FaUserTie className="text-indigo-500" />
-          <span className="truncate whitespace-nowrap">
+        <p className="flex items-center gap-2 min-w-0">
+          <FaUserTie className="text-indigo-500 flex-shrink-0" />
+          <span className="truncate" title={subject?.join(", ")}>
             Môn dạy: {subject?.join(", ")}
           </span>
         </p>
 
-        <p className="flex items-center gap-2">
-          <FaUniversity className="text-purple-500" />
-          <span>Khoa: {vietsubFaculty[faculty] || faculty}</span>
+        <p className="flex items-center gap-2 min-w-0">
+          <FaUniversity className="text-purple-500 flex-shrink-0" />
+          <span className="truncate" title={vietsubFaculty[faculty] || faculty}>
+            Khoa: {vietsubFaculty[faculty] || faculty}
+          </span>
         </p>
 
-        <p className="flex items-start gap-2 col-span-full">
-          <FaRegClock className="text-yellow-600" size={22} />
-          <span className="truncate whitespace-nowrap">
-            Hình thức: <i>{vietsubWorkingType[workingType] || workingType}</i>
-            {" / "}
+        <p className="flex items-center gap-2 min-w-0">
+          <FaRegClock className="text-yellow-600 flex-shrink-0" size={18} />
+          <span
+            className="truncate"
+            title={`${
+              vietsubWorkingType[workingType] || workingType
+            } / ${timeType}`}
+          >
+            Hình thức: <i>{vietsubWorkingType[workingType] || workingType}</i> /{" "}
             <i>{timeType}</i>
           </span>
         </p>
 
-        <p className="flex items-center gap-2 col-span-full overflow-hidden">
+        <p className="flex items-center gap-2 min-w-0">
           <FaMapMarkerAlt className="text-red-400 flex-shrink-0" />
-          <span className="truncate whitespace-nowrap">
+          <span
+            className="truncate"
+            title={`${userId.district}, ${userId.province}`}
+          >
             Khu vực: {userId.district}, {userId.province}
           </span>
         </p>

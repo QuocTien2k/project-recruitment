@@ -120,12 +120,12 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 w-full bg-white shadow-md z-20 max-h-[72px]">
       <div className="max-w-[var(--width-8xl)] mx-auto px-6">
-        <div className="grid grid-cols-12 items-center">
+        <div className="flex justify-between items-center xl:grid xl:grid-cols-12">
           {/* Bên trái Logo + Hamburger */}
-          <div className="col-span-2 flex items-center gap-3">
+          <div className="xl:col-span-2 flex items-center gap-3">
             {/* Hamburger (chỉ hiện mobile) */}
             <button
-              className="md:hidden p-2 text-2xl"
+              className="md:block xl:hidden p-2 text-2xl"
               onClick={() => setOpenMobileNav(true)}
             >
               <FiMenu />
@@ -142,7 +142,7 @@ const Header = () => {
           </div>
 
           {/* Ở giữa Navigation Desktop */}
-          <nav className="hidden md:flex col-span-7 justify-center items-center gap-10">
+          <nav className="hidden xl:flex xl:col-span-7 justify-center items-center gap-10">
             {navLinks.map((item) => (
               <NavLink
                 key={item.path}
@@ -161,7 +161,7 @@ const Header = () => {
           </nav>
 
           {/* Phần phải */}
-          <div className="col-span-3 flex justify-end items-center gap-4">
+          <div className="xl:col-span-3 flex items-center gap-4">
             {currentUser && currentUser?.isActive ? (
               <>
                 <div className="flex items-center gap-4 relative">

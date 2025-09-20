@@ -28,7 +28,7 @@ const ListPosts = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 bg-white">
+      <div className="p-4 rounded-sm flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 bg-white">
         {/* Nút quay về trang chủ (bên trái) */}
         <div className="sm:w-1/4">
           <Link

@@ -69,7 +69,7 @@ const MyFavorite = () => {
       <Title text="Danh sách giáo viên yêu thích" className="mb-6" />
 
       {/* Search */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 bg-white">
+      <div className="p-4 rounded-sm flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 bg-white">
         <Link
           to="/"
           className="text-green-600 font-medium transition-transform duration-300 

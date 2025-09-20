@@ -8,14 +8,14 @@ const Home = () => {
     <>
       <main className="py-8">
         {/* Grid 12 cột */}
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left: ShortListTeacher */}
-          <div className="col-span-9">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          {/* Left */}
+          <div className="xl:col-span-9">
             <ShortListTeacher />
           </div>
 
-          {/* Right: SliderTeacher */}
-          <div className="col-span-3">
+          {/* Right */}
+          <div className="xl:col-span-3">
             <SliderTeacher />
           </div>
         </div>
