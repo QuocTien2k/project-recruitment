@@ -122,7 +122,7 @@ const Header = () => {
       <div className="max-w-[var(--width-8xl)] mx-auto px-6">
         <div className="flex justify-between items-center xl:grid xl:grid-cols-12">
           {/* Bên trái Logo + Hamburger */}
-          <div className="xl:col-span-2 flex items-center gap-3">
+          <div className="xl:col-span-2 flex justify-center items-center gap-3">
             {/* Hamburger (chỉ hiện mobile) */}
             <button
               className="md:block xl:hidden p-2 text-2xl"
@@ -161,7 +161,7 @@ const Header = () => {
           </nav>
 
           {/* Phần phải */}
-          <div className="xl:col-span-3 flex items-center gap-4">
+          <div className="xl:col-span-3 flex justify-center items-center gap-4">
             {currentUser && currentUser?.isActive ? (
               <>
                 <div className="flex items-center gap-4 relative">
