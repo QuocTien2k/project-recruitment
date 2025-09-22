@@ -4,25 +4,34 @@ import EmptyState from "@components-states/EmptyState";
 import NoResult from "@components-states/NoResult";
 import Loading from "@components-ui/Loading";
 import Pagination from "@components-ui/Pagination";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const TeachersLanguages = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listTeacher, setListTeacher] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
   const itemsPerPage = 8;
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  // đọc từ URL (mặc định = 1), convert sang index (0-based)
+  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
+  const currentPage = pageFromUrl - 1; // react-paginate cần 0-based
+
+  // khi đổi trang (newPage = index từ react-paginate)
+  const handlePageChange = (newPage) => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.set("page", newPage + 1); // convert index -> page hiển thị
+      return params;
+    });
+  };
 
   const displayedTeachers = listTeacher.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
-
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [listTeacher]);
 
   return (
     <>
@@ -36,8 +45,13 @@ const TeachersLanguages = () => {
         </Link>
 
         <TeachersLanguagesSearch
-          onResults={setListTeacher}
-          onUserAction={() => setHasSearched(true)}
+          onResults={(results) => {
+            setListTeacher(results);
+          }}
+          onUserAction={() => {
+            setHasSearched(true);
+            setSearchParams({ page: 0 }); // reset chỉ khi user thao tác
+          }}
         />
       </div>
 
@@ -63,7 +77,7 @@ const TeachersLanguages = () => {
         itemsPerPage={itemsPerPage}
         totalItems={listTeacher.length}
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
     </>
   );
