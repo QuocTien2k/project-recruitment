@@ -11,7 +11,7 @@ import UpdatePassword from "@modals/UpdatePassword";
 import UpdateInfo from "@modals/UpdateInfo";
 import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
 import { Ban } from "lucide-react";
-import NotifiByAdmin from "../../NotifiByAdmin";
+import NotificationBell from "../../NotificationBell";
 import { logout } from "@api/auth";
 
 const avatarDefault =
@@ -166,7 +166,7 @@ const Header = () => {
               <>
                 <div className="flex items-center gap-4 relative">
                   {/* Notification by Admin */}
-                  <NotifiByAdmin />
+                  <NotificationBell />
 
                   {/* Icon message */}
                   <MessageNotification />

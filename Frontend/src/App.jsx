@@ -30,6 +30,9 @@ const TeachersSocial = lazy(() => import("@pages/User/TeachersSocial"));
 const TeachersLanguages = lazy(() => import("@pages/User/TeachersLanguages"));
 const ListTeachers = lazy(() => import("@pages-user/ListTeachers"));
 const ListPosts = lazy(() => import("@pages/User/ListPosts"));
+const PostApplicationDetail = lazy(() =>
+  import("@pages/User/PostApplicationDetail")
+);
 
 // --- Admin Layout Pages ---
 const AdminDashboard = lazy(() => import("@pages-admin/AdminDashboard"));
@@ -62,6 +65,10 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/giao-vien/:teacherId" element={<TeacherDetail />} />
               <Route path="/bai-viet/:slug" element={<PostDetail />} />
+              <Route
+                path="/bai-viet-ung-tuyen/:slug"
+                element={<PostApplicationDetail />}
+              />
               <Route path="/bai-viet-cua-toi" element={<MyPost />} />
               <Route path="/danh-sach-chan" element={<MyBlock />} />
               <Route path="/danh-sach-yeu-thich" element={<MyFavorite />} />

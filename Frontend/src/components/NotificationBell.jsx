@@ -21,7 +21,7 @@ import {
 dayjs.extend(relativeTime);
 dayjs.locale("vi");
 
-const NotifiByAdmin = () => {
+const NotificationBell = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,17 +47,31 @@ const NotifiByAdmin = () => {
 
   //khi click đọc tin
   const handleClickNotification = async (noti) => {
+    // console.log("noti nhận được:", noti);
+    // console.log("slug:", noti.post?.slug);
+    // console.log("link:", noti.link);
+
     try {
       if (!noti.isRead) {
         await markNotifiAsRead(noti._id);
         dispatch(markReadNotifiByAdmin(noti._id));
       }
 
-      // Điều hướng nếu có link
-      if (noti.post) {
-        navigate(`/bai-viet-cua-toi`);
-      } else if (noti.link) {
-        navigate(`/blogs/${noti.link._id}`);
+      // Điều hướng theo type
+      switch (noti.type) {
+        case "APPLICATION_PENDING":
+          navigate(`/bai-viet-ung-tuyen/${noti.post?.slug}`);
+          break;
+
+        case "POST_APPROVED":
+        case "POST_REJECTED":
+          navigate(`/bai-viet-cua-toi`);
+          break;
+        case "APPLICATION_ACCEPTED":
+        case "APPLICATION_REJECTED":
+        default:
+          if (noti.link) navigate(noti.link);
+          break;
       }
 
       setIsDropdownOpen(false);
@@ -155,22 +169,7 @@ const NotifiByAdmin = () => {
                     className="flex-1 cursor-pointer"
                   >
                     <span className="block text-sm text-gray-800 break-words">
-                      {truncateText(n?.message, 50)}" của bạn{" "}
-                      <span
-                        className={
-                          n.type === "POST_APPROVED"
-                            ? "text-green-600 font-semibold"
-                            : n.type === "POST_REJECTED"
-                            ? "text-red-600 font-semibold"
-                            : ""
-                        }
-                      >
-                        {n.type === "POST_APPROVED"
-                          ? "đã được duyệt!"
-                          : n.type === "POST_REJECTED"
-                          ? "đã bị từ chối!"
-                          : ""}
-                      </span>
+                      {truncateText(n?.message, 70)}
                     </span>
                     <div className="text-xs text-gray-500">
                       {dayjs(n.createdAt).fromNow()}
@@ -194,4 +193,4 @@ const NotifiByAdmin = () => {
   );
 };
 
-export default NotifiByAdmin;
+export default NotificationBell;
