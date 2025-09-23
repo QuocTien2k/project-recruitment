@@ -7,6 +7,7 @@ import ScrollToTop from "@components-ui/ScrollToTop";
 import ChatArea from "@components-chat/ChatArea";
 import ContactAdminButton from "./components/ContactAdmin";
 import Loading from "@components-ui/Loading";
+import AboutUs from "@pages/User/AboutUs";
 
 // --- Public Pages ---
 const Home = lazy(() => import("@pages-user/Home"));
@@ -82,6 +83,7 @@ function App() {
               />
               <Route path="/danh-sach-giao-vien" element={<ListTeachers />} />
               <Route path="/danh-sach-bai-viet" element={<ListPosts />} />
+              <Route path="/ve-chung-toi" element={<AboutUs />} />
             </Route>
 
             <Route path="dang-nhap" element={<Login />} />

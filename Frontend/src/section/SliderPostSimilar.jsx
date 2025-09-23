@@ -39,7 +39,7 @@ const SliderPostSimilar = ({ postId }) => {
     pauseOnHover: true, // hover thì dừng autoplay
   };
 
-  console.log("Danh sách: ", postSimilar);
+  //console.log("Danh sách: ", postSimilar);
 
   return (
     <>
