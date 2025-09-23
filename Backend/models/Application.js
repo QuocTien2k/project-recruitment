@@ -8,13 +8,6 @@ const applicationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    message: { type: String },
-    attachments: [
-      {
-        url: String,
-        public_id: String,
-      },
-    ],
     status: {
       type: String,
       enum: ["pending", "accepted", "rejected"],

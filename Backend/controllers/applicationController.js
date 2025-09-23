@@ -2,7 +2,7 @@ const PostModel = require("../models/Post");
 const ApplicationModel = require("../models/Application");
 const Notification = require("../models/Notification");
 
-//lấy danh sách
+//lấy danh sách role user
 const getApplicationsByPost = async (req, res) => {
   try {
     const { postId } = req.params;
@@ -16,12 +16,10 @@ const getApplicationsByPost = async (req, res) => {
     }
 
     if (post.createdBy.toString() !== userId.toString()) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "Bạn không có quyền xem danh sách này.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Bạn không có quyền xem danh sách này.",
+      });
     }
 
     // lấy applications + thông tin user cơ bản
@@ -63,12 +61,11 @@ const getApplicationsByPost = async (req, res) => {
   }
 };
 
-//nộp đơn ứng tuyển
+//nộp đơn ứng tuyển role teacher
 const createApplication = async (req, res) => {
   try {
     const teacherId = req.user.userId; // từ middleware protect
     const { postId } = req.params;
-    const { message, attachments } = req.body;
 
     // kiểm tra post có tồn tại không
     const post = await PostModel.findById(postId);
@@ -82,8 +79,6 @@ const createApplication = async (req, res) => {
     const application = await ApplicationModel.create({
       post: postId,
       applicant: teacherId,
-      message,
-      attachments,
     });
 
     // tăng tổng số ứng tuyển
@@ -94,10 +89,10 @@ const createApplication = async (req, res) => {
     // 🔔 gửi notification cho chủ post
     const notification = await Notification.create({
       user: post.createdBy,
-      type: "POST_PENDING",
+      type: "APPLICATION_PENDING",
       post: post._id,
-      message: `Có một giáo viên mới đã ứng tuyển vào bài tuyển dụng "${post.title}"`,
-      link: `/posts/${post.slug}`,
+      message: `Có giáo viên ứng tuyển vào bài tuyển dụng "${post.title}"`,
+      link: `/bai-viet/${post.slug}`,
     });
 
     // socket: bắn noti realtime cho chủ post
@@ -125,7 +120,7 @@ const createApplication = async (req, res) => {
   }
 };
 
-//duyệt ứng tuyển
+//duyệt ứng tuyển role user
 const approveApplication = async (req, res) => {
   try {
     const { applicationId } = req.params;
@@ -187,7 +182,7 @@ const approveApplication = async (req, res) => {
   }
 };
 
-//từ chối ứng tuyển
+//từ chối ứng tuyển role user
 const rejectApplication = async (req, res) => {
   try {
     const { applicationId } = req.params;
@@ -243,9 +238,52 @@ const rejectApplication = async (req, res) => {
   }
 };
 
+// kiểm tra trạng thái ứng tuyển của giáo viên cho 1 bài post
+const checkApplicationStatus = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const teacherId = req.user.userId; // lấy từ middleware auth
+
+    // kiểm tra bài post có tồn tại không
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy bài tuyển dụng." });
+    }
+
+    // tìm ứng tuyển của giáo viên này
+    const application = await ApplicationModel.findOne({
+      post: postId,
+      applicant: teacherId,
+    });
+
+    if (!application) {
+      return res.status(200).json({
+        success: true,
+        applied: false,
+        message: "Chưa ứng tuyển bài này.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      applied: true,
+      status: application.status, // pending | accepted | rejected
+      applicationId: application._id,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   getApplicationsByPost,
   createApplication,
   approveApplication,
   rejectApplication,
+  checkApplicationStatus,
 };

@@ -10,9 +10,9 @@ const notificationSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: [
-        "POST_PENDING", // user vừa tạo post (đang chờ duyệt)
         "POST_APPROVED", // admin duyệt
         "POST_REJECTED", // admin từ chối
+        "APPLICATION_PENDING", // teacher gửi đơn tuyển (đang chờ duyệt)
         "APPLICATION_ACCEPTED", // user duyệt đơn ứng tuyển
         "APPLICATION_REJECTED", // user từ chối đơn ứng tuyển
       ],
