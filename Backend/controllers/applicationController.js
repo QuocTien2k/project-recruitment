@@ -92,7 +92,7 @@ const createApplication = async (req, res) => {
       type: "APPLICATION_PENDING",
       post: post._id,
       message: `Có giáo viên ứng tuyển vào bài tuyển dụng "${post.title}"`,
-      link: `/bai-viet/${post.slug}`,
+      link: `/bai-viet-ung-tuyen/${post.slug}`,
     });
 
     // socket: bắn noti realtime cho chủ post
