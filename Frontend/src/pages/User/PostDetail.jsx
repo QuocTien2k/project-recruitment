@@ -20,6 +20,10 @@ import {
 import { FaBookmark } from "react-icons/fa";
 import { addSavePost, checkStatusSavePost, removeSavePost } from "@api/user";
 import SliderPostSimilar from "@sections/SliderPostSimilar";
+import {
+  checkStatusTeacherByPost,
+  createApplicationByTeacher,
+} from "@api/application";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -33,6 +37,7 @@ const PostDetail = () => {
   const { openChat } = useChatContext();
   const [isFavorite, setIsFavorite] = useState(false);
   const [disableFavorite, setDisableFavorite] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState(null); // null / pending / accepted / rejected
 
   const fetchPost = async () => {
     dispatch(setGlobalLoading(true));
@@ -151,6 +156,50 @@ const PostDetail = () => {
     }
   };
 
+  //kiểm tra trạng thái teacher - post
+  useEffect(() => {
+    const checkApplicationStatus = async () => {
+      if (!currentUser || currentUser.role !== "teacher" || !post?._id) return;
+
+      try {
+        const res = await checkStatusTeacherByPost(post?._id);
+
+        if (res.applied) {
+          setApplicationStatus(res.status); // pending | accepted | rejected
+        } else {
+          setApplicationStatus(null); // chưa ứng tuyển
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    checkApplicationStatus();
+  }, [currentUser, post?._id]);
+
+  const handleApply = async (postId) => {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập để ứng tuyển!");
+      return;
+    }
+
+    if (currentUser?._id === authorId) {
+      toast.error("Không thể ứng tuyển chính mình!");
+      return;
+    }
+
+    try {
+      const res = await createApplicationByTeacher(postId);
+      if (res.success) {
+        toast.success("Ứng tuyển thành công!");
+        setApplicationStatus("pending"); // ẩn nút Apply, hiện text chờ duyệt
+      }
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || "Ứng tuyển thất bại";
+      toast.error(errorMsg);
+    }
+  };
+
   return (
     <>
       <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow">
@@ -185,9 +234,23 @@ const PostDetail = () => {
                   }`}
                 />
               )}
-              <Button size="sm" variant="default" onClick={handleStartChat}>
-                💬 Liên hệ
-              </Button>
+              {!applicationStatus && (
+                <Button onClick={() => handleApply(post?._id)}>
+                  Ứng tuyển
+                </Button>
+              )}
+
+              {applicationStatus === "pending" && (
+                <span className="text-gray-500">Đang chờ duyệt</span>
+              )}
+
+              {applicationStatus === "rejected" && (
+                <span className="text-red-500">Đơn bị từ chối</span>
+              )}
+
+              {applicationStatus === "accepted" && (
+                <Button onClick={handleStartChat}>💬 Liên hệ</Button>
+              )}
             </div>
 
             {/* Bên phải: nội dung chi tiết */}

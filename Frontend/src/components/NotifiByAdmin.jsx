@@ -56,8 +56,8 @@ const NotifiByAdmin = () => {
       // Điều hướng nếu có link
       if (noti.post) {
         navigate(`/bai-viet-cua-toi`);
-      } else if (noti.blog) {
-        navigate(`/blogs/${noti.blog._id}`);
+      } else if (noti.link) {
+        navigate(`/blogs/${noti.link._id}`);
       }
 
       setIsDropdownOpen(false);
