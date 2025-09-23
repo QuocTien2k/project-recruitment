@@ -380,7 +380,7 @@ const approvePostByAdmin = async (req, res) => {
       message: `Bài viết "${post.title}" của bạn đã được duyệt!`,
     });
 
-    // emit socket realtime luôn
+    // emit socket realtime
     req.app
       .get("io")
       .to(post.createdBy.toString())

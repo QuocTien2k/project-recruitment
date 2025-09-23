@@ -29,6 +29,14 @@ const postSchema = new mongoose.Schema(
     // Optional: denormalized fields
     createdByName: { type: String },
     createdByRole: { type: String },
+    hiredTeacher: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: null,
+      },
+    ],
+    applicationsCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

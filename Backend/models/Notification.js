@@ -13,7 +13,8 @@ const notificationSchema = new mongoose.Schema(
         "POST_PENDING", // user vừa tạo post (đang chờ duyệt)
         "POST_APPROVED", // admin duyệt
         "POST_REJECTED", // admin từ chối
-        "NEW_BLOG", // admin thêm blog
+        "APPLICATION_ACCEPTED", // user duyệt đơn ứng tuyển
+        "APPLICATION_REJECTED", // user từ chối đơn ứng tuyển
       ],
       required: true,
     },

@@ -27,6 +27,7 @@ const publicRoute = require("./Routes/publicRoute");
 const viewerRoute = require("./Routes/viewerRoute");
 const blockRoute = require("./Routes/blockRoute");
 const notificationRoute = require("./Routes/notificationRoute");
+const applicationRoute = require("./Routes/applicationRoute");
 
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
@@ -38,5 +39,6 @@ app.use("/api/public", publicRoute);
 app.use("/api/view", viewerRoute);
 app.use("/api/block", blockRoute);
 app.use("/api/notification", notificationRoute);
+app.use("/api/application", applicationRoute);
 
 module.exports = app;
