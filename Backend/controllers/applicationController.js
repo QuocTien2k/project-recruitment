@@ -1,35 +1,43 @@
 const PostModel = require("../models/Post");
+const TeacherModel = require("../models/Teacher");
 const ApplicationModel = require("../models/Application");
 const Notification = require("../models/Notification");
 
-//lấy danh sách role user
+// lấy danh sách ứng viên apply theo slug cho role user
 const getApplicationsByPost = async (req, res) => {
   try {
-    const { postId } = req.params;
+    const { slug } = req.params;
     const userId = req.user.userId;
 
-    const post = await PostModel.findById(postId);
+    // tìm post theo slug
+    const post = await PostModel.findOne({ slug }).populate(
+      "createdBy",
+      "name middleName email profilePic"
+    );
+
     if (!post) {
       return res
         .status(404)
         .json({ success: false, message: "Không tìm thấy bài tuyển dụng." });
     }
 
-    if (post.createdBy.toString() !== userId.toString()) {
+    // chỉ chủ post mới được xem danh sách
+    if (post.createdBy._id.toString() !== userId.toString()) {
       return res.status(403).json({
         success: false,
         message: "Bạn không có quyền xem danh sách này.",
       });
     }
 
-    // lấy applications + thông tin user cơ bản
-    const applications = await ApplicationModel.find({ post: postId })
+    // lấy applications + populate user cơ bản
+    const applications = await ApplicationModel.find({ post: post._id })
       .populate(
         "applicant",
-        "name middleName email phone profilePic district province role"
+        "name middleName email phone profilePic district province"
       )
       .sort({ createdAt: -1 });
 
+    // lấy thêm dữ liệu teacher (nếu có)
     const userIds = applications.map((app) => app.applicant._id);
     const teachers = await TeacherModel.find({ userId: { $in: userIds } });
 
@@ -40,19 +48,38 @@ const getApplicationsByPost = async (req, res) => {
       return {
         _id: app._id,
         status: app.status,
-        message: app.message,
         createdAt: app.createdAt,
         applicant: {
           user: app.applicant,
-          teacher,
+          teacher: teacher || null, // tránh undefined
         },
       };
     });
+    // format fullName cho createdBy
+    const fullName = `${post.createdBy.middleName || ""} ${
+      post.createdBy.name || ""
+    }`.trim();
 
     res.status(200).json({
       success: true,
-      count: result.length,
-      data: result,
+      post: {
+        _id: post._id,
+        title: post.title,
+        slug: post.slug,
+        description: post.description,
+        district: post.district,
+        province: post.province,
+        salary: post.salary,
+        workingType: post.workingType,
+        timeType: post.timeType,
+        createdAt: post.createdAt,
+        applicationsCount: post.applicationsCount,
+        createdBy: {
+          ...post.createdBy._doc,
+          fullName,
+        },
+      },
+      applications: result,
     });
   } catch (error) {
     res
@@ -65,10 +92,10 @@ const getApplicationsByPost = async (req, res) => {
 const createApplication = async (req, res) => {
   try {
     const teacherId = req.user.userId; // từ middleware protect
-    const { postId } = req.params;
+    const { slug } = req.params;
 
     // kiểm tra post có tồn tại không
-    const post = await PostModel.findById(postId);
+    const post = await PostModel.findOne({ slug });
     if (!post) {
       return res
         .status(404)
@@ -77,12 +104,12 @@ const createApplication = async (req, res) => {
 
     // tạo đơn ứng tuyển (nhờ unique index nên nếu apply trùng sẽ báo lỗi)
     const application = await ApplicationModel.create({
-      post: postId,
+      post: post._id,
       applicant: teacherId,
     });
 
     // tăng tổng số ứng tuyển
-    await PostModel.findByIdAndUpdate(postId, {
+    await PostModel.findByIdAndUpdate(post._id, {
       $inc: { applicationsCount: 1 },
     });
 

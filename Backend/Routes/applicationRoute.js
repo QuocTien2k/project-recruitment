@@ -8,8 +8,8 @@ const {
   checkApplicationStatus,
 } = require("../controllers/applicationController");
 
-router.get("/post/:postId", protect, authorize("user"), getApplicationsByPost);
-router.post("/apply/:postId", protect, authorize("teacher"), createApplication);
+router.get("/post/:slug", protect, authorize("user"), getApplicationsByPost);
+router.post("/apply/:slug", protect, authorize("teacher"), createApplication);
 router.patch("/approve/:id", protect, authorize("user"), approveApplication);
 router.patch("/reject/:id", protect, authorize("user"), rejectApplication);
 router.get(
