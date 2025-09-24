@@ -47,9 +47,8 @@ const NotificationBell = () => {
 
   //khi click đọc tin
   const handleClickNotification = async (noti) => {
-    // console.log("noti nhận được:", noti);
-    // console.log("slug:", noti.post?.slug);
-    // console.log("link:", noti.link);
+    //console.log("noti nhận được:", noti);
+    //console.log("link:", noti.link);
 
     try {
       if (!noti.isRead) {
@@ -60,7 +59,7 @@ const NotificationBell = () => {
       // Điều hướng theo type
       switch (noti.type) {
         case "APPLICATION_PENDING":
-          navigate(`/bai-viet-ung-tuyen/${noti.post?.slug}`);
+          navigate(noti.link);
           break;
 
         case "POST_APPROVED":

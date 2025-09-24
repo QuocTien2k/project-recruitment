@@ -1,4 +1,4 @@
-import { getPostDetail } from "@api/public";
+import { getByPost } from "@api/application";
 import Loading from "@components-ui/Loading";
 import { setGlobalLoading } from "@redux/loadingSlice";
 import dayjs from "dayjs";
@@ -20,6 +20,7 @@ const avatarDefault =
 const PostApplicationDetail = () => {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
+  const [applications, setApplications] = useState([]);
   const dispatch = useDispatch();
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const currentUser = useSelector((state) => state.currentUser.user);
@@ -27,9 +28,10 @@ const PostApplicationDetail = () => {
   const fetchPost = async () => {
     dispatch(setGlobalLoading(true));
     try {
-      const res = await getPostDetail(slug);
+      const res = await getByPost(slug);
       if (res.success) {
-        setPost(res.data);
+        setPost(res.post); // chỉ lấy post
+        setApplications(res.applications); // lấy danh sách ứng viên
       }
     } catch (err) {
       console.error("Lỗi khi lấy chi tiết bài viết:", err);
@@ -40,13 +42,12 @@ const PostApplicationDetail = () => {
 
   useEffect(() => {
     fetchPost();
-  }, []);
-
-  const authorId = post?.createdBy?._id;
+  }, [slug]);
 
   const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
   //   console.log("Id của người tạo bài: ", authorId);
-  //   console.log("Id của người đang đăng nhập: ", currentUser?._id);
+  //console.log("Id của người đang đăng nhập: ", currentUser?._id);
+  //console.log(post);
 
   return (
     <>

@@ -177,7 +177,7 @@ const PostDetail = () => {
     checkApplicationStatus();
   }, [currentUser, post?._id]);
 
-  const handleApply = async (postId) => {
+  const handleApply = async (slug) => {
     if (!currentUser) {
       toast.error("Vui lòng đăng nhập để ứng tuyển!");
       return;
@@ -189,7 +189,7 @@ const PostDetail = () => {
     }
 
     try {
-      const res = await createApplicationByTeacher(postId);
+      const res = await createApplicationByTeacher(slug);
       if (res.success) {
         toast.success("Ứng tuyển thành công!");
         setApplicationStatus("pending"); // ẩn nút Apply, hiện text chờ duyệt
@@ -199,6 +199,8 @@ const PostDetail = () => {
       toast.error(errorMsg);
     }
   };
+
+  //console.log(post);
 
   return (
     <>
@@ -235,9 +237,7 @@ const PostDetail = () => {
                 />
               )}
               {!applicationStatus && (
-                <Button onClick={() => handleApply(post?._id)}>
-                  Ứng tuyển
-                </Button>
+                <Button onClick={() => handleApply(slug)}>Ứng tuyển</Button>
               )}
 
               {applicationStatus === "pending" && (

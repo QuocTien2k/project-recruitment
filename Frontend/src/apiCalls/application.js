@@ -1,8 +1,8 @@
 import { axiosInstance } from "./index";
 
-export const getByPost = async (postId) => {
+export const getByPost = async (slug) => {
   try {
-    const res = await axiosInstance.get(`/api/apllication/post/${postId}`);
+    const res = await axiosInstance.get(`/api/application/post/${slug}`);
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);
@@ -10,9 +10,9 @@ export const getByPost = async (postId) => {
   }
 };
 
-export const createApplicationByTeacher = async (postId) => {
+export const createApplicationByTeacher = async (slug) => {
   try {
-    const res = await axiosInstance.post(`/api/application/apply/${postId}`);
+    const res = await axiosInstance.post(`/api/application/apply/${slug}`);
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);
@@ -32,7 +32,7 @@ export const approveApplicationByUser = async (id) => {
 
 export const rejectApplicationByUser = async (id) => {
   try {
-    const res = await axiosInstance.patch(`/api/apllication/reject/${id}`);
+    const res = await axiosInstance.patch(`/api/application/reject/${id}`);
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);
