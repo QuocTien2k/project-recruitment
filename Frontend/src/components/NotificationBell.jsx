@@ -68,6 +68,8 @@ const NotificationBell = () => {
           break;
         case "APPLICATION_ACCEPTED":
         case "APPLICATION_REJECTED":
+          navigate(noti.link);
+          break;
         default:
           if (noti.link) navigate(noti.link);
           break;

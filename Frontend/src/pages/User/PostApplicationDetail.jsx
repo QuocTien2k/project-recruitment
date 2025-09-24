@@ -1,5 +1,12 @@
-import { getByPost } from "@api/application";
+import {
+  approveApplicationByUser,
+  getByPost,
+  rejectApplicationByUser,
+} from "@api/application";
+import TeacherApplications from "@components-cards/TeacherApplication";
+import EmptyState from "@components-states/EmptyState";
 import Loading from "@components-ui/Loading";
+import Title from "@components-ui/Title";
 import { setGlobalLoading } from "@redux/loadingSlice";
 import dayjs from "dayjs";
 import {
@@ -11,6 +18,7 @@ import {
   MapPin,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
@@ -23,7 +31,7 @@ const PostApplicationDetail = () => {
   const [applications, setApplications] = useState([]);
   const dispatch = useDispatch();
   const isGlobalLoading = useSelector((state) => state.loading.global);
-  const currentUser = useSelector((state) => state.currentUser.user);
+  // const currentUser = useSelector((state) => state.currentUser.user);
 
   const fetchPost = async () => {
     dispatch(setGlobalLoading(true));
@@ -48,6 +56,46 @@ const PostApplicationDetail = () => {
   //   console.log("Id của người tạo bài: ", authorId);
   //console.log("Id của người đang đăng nhập: ", currentUser?._id);
   //console.log(post);
+  //console.log(applications);
+
+  // Duyệt
+  const handleAccept = async (applicationId) => {
+    try {
+      const res = await approveApplicationByUser(applicationId);
+      if (res.success) {
+        // cập nhật lại UI
+        setApplications((prev) =>
+          prev.map((app) =>
+            app._id === applicationId ? { ...app, status: "accepted" } : app
+          )
+        );
+        toast.success("Đã duyệt đơn ứng tuyển");
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || "Có lỗi khi duyệt đơn";
+      toast.error(msg);
+      console.error("Lỗi khi duyệt đơn:", err.response?.data || err.message);
+    }
+  };
+
+  // Từ chối
+  const handleReject = async (applicationId) => {
+    try {
+      const res = await rejectApplicationByUser(applicationId);
+      if (res.success) {
+        setApplications((prev) =>
+          prev.map((app) =>
+            app._id === applicationId ? { ...app, status: "rejected" } : app
+          )
+        );
+        toast.success("Đã từ chối đơn ứng tuyển");
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || "Có lỗi khi từ chối đơn";
+      toast.error(msg);
+      console.error("Lỗi khi từ chối đơn:", err.response?.data || err.message);
+    }
+  };
 
   return (
     <>
@@ -122,6 +170,21 @@ const PostApplicationDetail = () => {
               </div>
             </div>
           </div>
+        )}
+      </div>
+
+      <div className="my-4 space-y-3">
+        <Title text="Giáo viên ứng tuyển" size="2xl" />
+        {applications.length > 0 ? (
+          <>
+            <TeacherApplications
+              applications={applications}
+              onAccept={handleAccept}
+              onReject={handleReject}
+            />
+          </>
+        ) : (
+          <EmptyState message="Hiện tại chưa có người nào ✍️" />
         )}
       </div>
     </>

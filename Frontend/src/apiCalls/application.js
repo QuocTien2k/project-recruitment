@@ -22,7 +22,7 @@ export const createApplicationByTeacher = async (slug) => {
 
 export const approveApplicationByUser = async (id) => {
   try {
-    const res = await axiosInstance.patch(`/api/apllication/approve/${id}`);
+    const res = await axiosInstance.patch(`/api/application/approve/${id}`);
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);
