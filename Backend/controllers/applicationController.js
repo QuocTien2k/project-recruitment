@@ -150,12 +150,10 @@ const createApplication = async (req, res) => {
 //duyệt ứng tuyển role user
 const approveApplication = async (req, res) => {
   try {
-    const { applicationId } = req.params;
+    const { id } = req.params;
     const userId = req.user.userId; // từ middleware auth
 
-    const application = await ApplicationModel.findById(applicationId).populate(
-      "post"
-    );
+    const application = await ApplicationModel.findById(id).populate("post");
     if (!application) {
       return res
         .status(404)
@@ -190,6 +188,7 @@ const approveApplication = async (req, res) => {
       type: "APPLICATION_ACCEPTED",
       post: application.post._id,
       message: `Đơn ứng tuyển của bạn vào "${application.post.title}" đã được chấp nhận!`,
+      link: `/bai-viet/${application.post.slug}`,
     });
 
     req.app
@@ -212,12 +211,10 @@ const approveApplication = async (req, res) => {
 //từ chối ứng tuyển role user
 const rejectApplication = async (req, res) => {
   try {
-    const { applicationId } = req.params;
+    const { id } = req.params;
     const userId = req.user.userId;
 
-    const application = await ApplicationModel.findById(applicationId).populate(
-      "post"
-    );
+    const application = await ApplicationModel.findById(id).populate("post");
     if (!application) {
       return res
         .status(404)
@@ -246,6 +243,7 @@ const rejectApplication = async (req, res) => {
       type: "APPLICATION_REJECTED",
       post: application.post._id,
       message: `Đơn ứng tuyển của bạn vào "${application.post.title}" đã bị từ chối.`,
+      link: `/bai-viet/${application.post.slug}`,
     });
 
     req.app
