@@ -16,8 +16,20 @@ const DynamicTitle = () => {
 
     if (path === "/bai-viet-cua-toi") return "Bài viết của tôi";
     if (path === "/danh-sach-chan") return "Danh sách chặn";
-    if (path.startsWith("/bai-viet/")) return "Chi tiết bài viết";
-    if (path.startsWith("/giao-vien/")) return "Chi tiết giáo viên";
+    if (path === "/danh-sach-yeu-thich") return "Danh sách yêu thích";
+    if (path === "/danh-sach-bai-viet-da-luu")
+      return "Danh sách bài viết đã lưu";
+
+    if (path === "/giao-vien-khoa-ngoai-ngu") return "Khoa ngoại ngữ";
+    if (path === "/giao-vien-khoa-tu-nhien") return "Khoa tự nhiên";
+    if (path === "/giao-vien-khoa-xa-hoi") return "Khoa xã hội";
+
+    if (path.startsWith("/bai-viet/")) return "Bài viết chi tiết";
+    if (path.startsWith("/giao-vien/")) return "Thông tin giáo viên";
+    if (path.startsWith("/bai-viet-ung-tuyen/")) return "Bài viết ứng tuyển";
+
+    if (path === "/ve-chung-toi") return "Về chúng tôi";
+    if (path === "/dang-nhap") return "Đăng nhập";
 
     if (path === "/admin") return "Trang quản trị";
 
