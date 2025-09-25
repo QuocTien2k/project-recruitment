@@ -28,6 +28,7 @@ const viewerRoute = require("./Routes/viewerRoute");
 const blockRoute = require("./Routes/blockRoute");
 const notificationRoute = require("./Routes/notificationRoute");
 const applicationRoute = require("./Routes/applicationRoute");
+const contractRoute = require("./Routes/contractRoute");
 
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
@@ -40,5 +41,6 @@ app.use("/api/view", viewerRoute);
 app.use("/api/block", blockRoute);
 app.use("/api/notification", notificationRoute);
 app.use("/api/application", applicationRoute);
+app.use("/api/contract", contractRoute);
 
 module.exports = app;

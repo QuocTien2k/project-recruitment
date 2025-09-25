@@ -5,20 +5,25 @@ const contractSchema = new mongoose.Schema(
     postId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
-      required: false, // Không bắt buộc nữa
-      default: null,
+      default: null, // null nếu hợp đồng “trống”
     },
-    hasPost: {
-      type: Boolean,
-      required: true,
-      default: false, // Mặc định là không có bài viết
-    },
-    userId: {
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: true, // Bên A
     },
-    createdByName: String,
+    createdByName: {
+      type: String,
+    },
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null, // Bên B, null nếu chưa chọn
+    },
+    content: {
+      type: String,
+      default: "", // nội dung hợp đồng
+    },
   },
   { timestamps: true }
 );
