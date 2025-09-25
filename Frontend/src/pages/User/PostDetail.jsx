@@ -7,7 +7,7 @@ import { setGlobalLoading } from "@redux/loadingSlice";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import {
   Mail,
@@ -38,6 +38,8 @@ const PostDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [disableFavorite, setDisableFavorite] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState(null); // null / pending / accepted / rejected
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const fetchPost = async () => {
     dispatch(setGlobalLoading(true));
@@ -157,23 +159,23 @@ const PostDetail = () => {
   };
 
   //kiểm tra trạng thái teacher - post
-  useEffect(() => {
-    const checkApplicationStatus = async () => {
-      if (!currentUser || currentUser.role !== "teacher" || !post?._id) return;
+  const checkApplicationStatus = async () => {
+    if (!currentUser || currentUser.role !== "teacher" || !post?._id) return;
 
-      try {
-        const res = await checkStatusTeacherByPost(post?._id);
+    try {
+      const res = await checkStatusTeacherByPost(post?._id);
 
-        if (res.applied) {
-          setApplicationStatus(res.status); // pending | accepted | rejected
-        } else {
-          setApplicationStatus(null); // chưa ứng tuyển
-        }
-      } catch (err) {
-        console.error(err);
+      if (res.applied) {
+        setApplicationStatus(res.status); // pending | accepted | rejected
+      } else {
+        setApplicationStatus(null); // chưa ứng tuyển
       }
-    };
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
+  useEffect(() => {
     checkApplicationStatus();
   }, [currentUser, post?._id]);
 
@@ -199,6 +201,17 @@ const PostDetail = () => {
       toast.error(errorMsg);
     }
   };
+
+  //khi click vào thông báo refesh lại
+  useEffect(() => {
+    if (location.state?.refresh) {
+      fetchPost();
+      checkApplicationStatus();
+
+      // reset state để tránh loop nếu user F5
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location]);
 
   //console.log(post);
 
