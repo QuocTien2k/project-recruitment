@@ -1,9 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap');
+
 @import "tailwindcss";
 
 @layer base {
     :root {
         --font-main: 'Roboto', sans-serif;
+        --font-montserrat: 'Montserrat', sans-serif;
+        --font-poppins: 'Poppins', sans-serif;
         --color-primary: #3b82f6;
         /* Tailwind blue-500 */
         --color-secondary: #f97316;
@@ -113,6 +117,14 @@
     /* nền track trong suốt */
 }
 
+/* font chữ */
+.font-montserrat {
+    font-family: var(--font-montserrat);
+}
+
+.font-poppins {
+    font-family: var(--font-poppins);
+}
 
 /* loading */
 @keyframes spin {

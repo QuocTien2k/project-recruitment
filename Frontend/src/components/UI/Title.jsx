@@ -33,6 +33,7 @@ const Title = ({
   const classes = `
     text-black 
     drop-shadow-md 
+    
     ${sizeClasses[size]} 
     ${alignClass} 
     ${underlineClass} 
