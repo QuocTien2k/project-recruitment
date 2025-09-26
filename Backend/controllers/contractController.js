@@ -4,6 +4,7 @@ const PostModel = require("../models/Post");
 const moment = require("moment-timezone"); // thư viện moment-timezone để xử lý giờ VN
 const path = require("path");
 const fontRoboto = path.join(__dirname, "../fonts/Roboto-Regular.ttf");
+const PDFDocument = require("pdfkit");
 
 // hợp đồng chỉ có thông tin bên A
 const createEmptyContract = async (req, res) => {
@@ -17,10 +18,16 @@ const createEmptyContract = async (req, res) => {
     }
 
     const newContract = new ContractModel({
-      createdBy: user._id,
-      createdByName: `${user.middleName} ${user.name}`,
-      postId: null,
-      recipient: null,
+      partyA: {
+        userId: user._id,
+        name: `${user.middleName} ${user.name}`,
+        email: user.email,
+        phone: user.phone,
+        district: user.district,
+        province: user.province,
+      },
+      partyB: null, // chưa chọn bên B
+      postId: null, // hợp đồng trống
       content: "",
     });
 
@@ -166,16 +173,197 @@ const createContractWithPostAndRecipient = async (req, res) => {
   }
 };
 
-//tải hợp đồng
+// //tải hợp đồng
+// const downloadContract = async (req, res) => {
+//   try {
+//     const { contractId } = req.params;
+//     const userId = req.user.userId;
+
+//     // Lấy hợp đồng, populate postId và recipient nếu có
+//     const contract = await ContractModel.findById(contractId)
+//       .populate("postId")
+//       .populate("recipient");
+
+//     if (!contract) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "Hợp đồng không tồn tại" });
+//     }
+
+//     // Chỉ creator mới tải được
+//     if (contract.createdBy.toString() !== userId) {
+//       return res.status(403).json({
+//         success: false,
+//         message: "Bạn không có quyền tải hợp đồng này",
+//       });
+//     }
+
+//     const doc = new PDFDocument();
+//     const pageWidth = doc.page.width;
+//     const margin = 72;
+
+//     res.setHeader("Content-Type", "application/pdf");
+//     res.setHeader(
+//       "Content-Disposition",
+//       `attachment; filename=contract-${contract._id}.pdf`
+//     );
+
+//     doc.registerFont("Roboto", fontRoboto);
+//     doc.font("Roboto");
+//     doc.pipe(res);
+
+//     // --- Tiêu đề ---
+//     doc.fontSize(20).text("HỢP ĐỒNG TUYỂN DỤNG GIA SƯ", { align: "center" });
+//     doc.moveDown(1.5);
+
+//     // --- Thông tin chung ---
+//     doc.fontSize(12);
+//     doc.text(`Mã hợp đồng: ${contract._id}`);
+//     doc.text(
+//       `Ngày tạo: ${moment(contract.createdAt)
+//         .tz("Asia/Ho_Chi_Minh")
+//         .format("DD/MM/YYYY")}`
+//     );
+//     doc.moveDown(1);
+
+//     // --- BÊN A ---
+//     doc.fontSize(14).text("BÊN A (Người tạo hợp đồng):", { underline: true });
+//     doc.moveDown(0.5);
+//     doc.fontSize(12);
+//     doc.text(`Họ và tên: ${contract.createdByName}`);
+//     doc.text(`Vai trò: Người sử dụng dịch vụ (phụ huynh / người tuyển dụng)`);
+//     doc.moveDown(1);
+
+//     // --- BÊN B ---
+//     doc.fontSize(14).text("BÊN B (Gia sư):", { underline: true });
+//     doc.moveDown(0.5);
+//     doc.fontSize(12);
+
+//     const drawLine = (label) => {
+//       doc.text(label);
+//       doc
+//         .moveTo(margin, doc.y + 5)
+//         .lineTo(pageWidth - margin, doc.y + 5)
+//         .stroke();
+//       doc.moveDown(1.2);
+//     };
+
+//     if (contract.recipient) {
+//       drawLine(
+//         `Họ và tên: ${contract.recipient.middleName || ""} ${
+//           contract.recipient.name || ""
+//         }`
+//       );
+//       drawLine("Ngày sinh:");
+//       drawLine("CMND/CCCD:");
+//       drawLine("Địa chỉ:");
+//       drawLine("Số điện thoại:");
+//       doc.moveDown(1.5);
+//     } else {
+//       // Nếu chưa có Bên B, in dòng trống
+//       for (let i = 0; i < 5; i++) drawLine("");
+//     }
+
+//     // --- Bài tuyển dụng ---
+//     if (contract.postId) {
+//       doc.fontSize(14).text("Thông tin bài tuyển dụng:", { underline: true });
+//       doc.moveDown(0.5);
+
+//       const { title, description, salary, workingType, district, province } =
+//         contract.postId;
+
+//       doc.fontSize(12);
+
+//       const pageContentWidth = doc.page.width - 72 * 2; // margin 72
+
+//       const lines = [
+//         { label: "Tiêu đề", value: title },
+//         { label: "Mô tả", value: description },
+//         { label: "Lương", value: salary },
+//         { label: "Hình thức làm việc", value: workingType },
+//         { label: "Địa điểm", value: `${district || ""}, ${province || ""}` },
+//       ];
+
+//       const maxCharsPerLine = 320; // giới hạn ký tự để tránh quá dài (tuỳ chỉnh)
+
+//       lines.forEach(({ label, value }) => {
+//         if (!value) return;
+//         // cắt nếu quá dài
+//         let textValue =
+//           value.length > maxCharsPerLine
+//             ? value.slice(0, maxCharsPerLine) + "..."
+//             : value;
+
+//         doc.text(`${label}: ${textValue}`, {
+//           lineGap: 6,
+//           width: pageContentWidth, // tự wrap nếu quá dài
+//         });
+//         doc.moveDown(0.5);
+//       });
+
+//       doc.moveDown(1);
+//     } else {
+//       // Nếu không có bài post, in phần trao đổi trống
+//       doc.fontSize(14).text("Thông tin trao đổi:");
+//       doc.moveDown(0.5);
+//       for (let i = 0; i < 5; i++) {
+//         doc
+//           .moveTo(margin, doc.y + 5)
+//           .lineTo(pageWidth - margin, doc.y + 5)
+//           .stroke();
+//         doc.moveDown(1.2);
+//       }
+//     }
+
+//     // --- Điều khoản ---
+//     doc.fontSize(14).text("Điều khoản thỏa thuận:", { underline: true });
+//     doc.moveDown(0.5);
+//     doc.fontSize(12);
+
+//     const terms = [
+//       "1. Bên B cam kết cung cấp dịch vụ gia sư đúng theo nội dung bài tuyển dụng và không vi phạm đạo đức nghề nghiệp.",
+//       "2. Bên A có trách nhiệm thanh toán đúng hạn và đầy đủ tiền công theo mức lương đã thỏa thuận.",
+//       "3. Trong trường hợp xảy ra tranh chấp, hai bên ưu tiên giải quyết bằng thương lượng. Nếu không đạt được thỏa thuận, vụ việc sẽ được đưa ra cơ quan có thẩm quyền.",
+//       "4. Thời gian hợp đồng bắt đầu tính từ ngày hai bên ký tên và có hiệu lực trong suốt quá trình làm việc theo lịch đã thống nhất.",
+//       "5. Hai bên cam kết cung cấp thông tin trung thực và chịu trách nhiệm pháp lý nếu có hành vi gian dối.",
+//       "6. Hợp đồng được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản.",
+//     ];
+//     terms.forEach((line) => doc.text(line, { lineGap: 6 }));
+//     doc.moveDown(1);
+
+//     // Ngày tháng năm
+//     const today = new Date();
+//     doc.text(`Ngày .... tháng .... năm ${today.getFullYear()}`, {
+//       align: "right",
+//     });
+//     doc.moveDown(1);
+
+//     // Ký tên
+//     const signatureY = doc.y;
+//     doc.text("ĐẠI DIỆN BÊN A", margin, signatureY);
+//     doc.text("ĐẠI DIỆN BÊN B", pageWidth - margin - 120, signatureY);
+//     doc.moveDown(2);
+//     const signLineY = doc.y;
+//     doc.text("(Ký và ghi rõ họ tên)", margin, signLineY);
+//     doc.text("(Ký và ghi rõ họ tên)", pageWidth - margin - 135, signLineY);
+
+//     doc.end();
+//   } catch (error) {
+//     console.error("Lỗi khi tải hợp đồng:", error);
+//     res
+//       .status(500)
+//       .json({ success: false, message: "Lỗi server khi tạo hợp đồng PDF" });
+//   }
+// };
+
 const downloadContract = async (req, res) => {
   try {
     const { contractId } = req.params;
     const userId = req.user.userId;
 
-    // Lấy hợp đồng, populate postId và recipient nếu có
-    const contract = await ContractModel.findById(contractId)
-      .populate("postId")
-      .populate("recipient");
+    const contract = await ContractModel.findById(contractId).populate(
+      "postId"
+    );
 
     if (!contract) {
       return res
@@ -183,17 +371,17 @@ const downloadContract = async (req, res) => {
         .json({ success: false, message: "Hợp đồng không tồn tại" });
     }
 
-    // Chỉ creator mới tải được
-    if (contract.createdBy.toString() !== userId) {
+    // Chỉ bên A (người tạo) mới tải được
+    if (contract.partyA.userId.toString() !== userId) {
       return res.status(403).json({
         success: false,
         message: "Bạn không có quyền tải hợp đồng này",
       });
     }
 
-    const doc = new PDFDocument();
+    const doc = new PDFDocument({ size: "A4", margin: 72 });
     const pageWidth = doc.page.width;
-    const margin = 72;
+    const margin = doc.page.margins.left;
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
@@ -205,69 +393,106 @@ const downloadContract = async (req, res) => {
     doc.font("Roboto");
     doc.pipe(res);
 
+    // --- Logo ---
+    try {
+      const logoPath = path.join(__dirname, "../public/logo.png");
+      doc.image(logoPath, margin, 40, { width: 60 });
+      doc.moveDown(3);
+    } catch (err) {
+      console.warn("Logo không tìm thấy, bỏ qua hiển thị logo.");
+    }
+
+    // --- Quốc hiệu ---
+    doc
+      .fontSize(14)
+      .text("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", { align: "center" });
+    doc.text("Độc lập - Tự do - Hạnh phúc", { align: "center" });
+    doc
+      .moveTo(pageWidth / 2 - 80, doc.y + 5)
+      .lineTo(pageWidth / 2 + 80, doc.y + 5)
+      .stroke();
+    doc.moveDown(2);
+
     // --- Tiêu đề ---
     doc.fontSize(20).text("HỢP ĐỒNG TUYỂN DỤNG GIA SƯ", { align: "center" });
     doc.moveDown(1.5);
 
     // --- Thông tin chung ---
     doc.fontSize(12);
-    doc.text(`Mã hợp đồng: ${contract._id}`);
+    doc.text(`Mã hợp đồng: ${contract._id}`, { width: pageWidth - margin * 2 });
     doc.text(
       `Ngày tạo: ${moment(contract.createdAt)
         .tz("Asia/Ho_Chi_Minh")
-        .format("DD/MM/YYYY")}`
+        .format("DD/MM/YYYY")}`,
+      { width: pageWidth - margin * 2 }
     );
     doc.moveDown(1);
 
     // --- BÊN A ---
-    doc.fontSize(14).text("BÊN A (Người tạo hợp đồng):", { underline: true });
+    doc.fontSize(14).text("BÊN A (Người tạo hợp đồng):", {
+      underline: true,
+      width: pageWidth - margin * 2,
+    });
     doc.moveDown(0.5);
+
     doc.fontSize(12);
-    doc.text(`Họ và tên: ${contract.createdByName}`);
-    doc.text(`Vai trò: Người sử dụng dịch vụ (phụ huynh / người tuyển dụng)`);
+    doc.text(`Họ và tên: ${contract.partyA.name || ""}`, {
+      width: pageWidth - margin * 2,
+    });
+    doc.text(`Email: ${contract.partyA.email || ""}`);
+    doc.text(`Số điện thoại: ${contract.partyA.phone || ""}`);
+    doc.text(
+      `Địa chỉ: ${contract.partyA.district || ""}, ${
+        contract.partyA.province || ""
+      }`
+    );
+    doc.text("Vai trò: Người sử dụng dịch vụ (phụ huynh / người tuyển dụng)");
     doc.moveDown(1);
 
     // --- BÊN B ---
-    doc.fontSize(14).text("BÊN B (Gia sư):", { underline: true });
+    doc.fontSize(14).text("BÊN B (Gia sư):", {
+      underline: true,
+      width: pageWidth - margin * 2,
+    });
     doc.moveDown(0.5);
-    doc.fontSize(12);
 
-    const drawLine = (label) => {
-      doc.text(label);
-      doc
-        .moveTo(margin, doc.y + 5)
-        .lineTo(pageWidth - margin, doc.y + 5)
-        .stroke();
-      doc.moveDown(1.2);
+    const drawLabelWithDots = (label = "", value = "") => {
+      const base = `${label}: ${value}`;
+      const remainingWidth = pageWidth - margin * 2 - doc.widthOfString(base);
+      const dotString = ".".repeat(
+        Math.floor(remainingWidth / doc.widthOfString("."))
+      );
+
+      doc.text(base + dotString, { width: pageWidth - margin * 2 });
+      doc.moveDown(0.8);
     };
 
-    if (contract.recipient) {
-      drawLine(
-        `Họ và tên: ${contract.recipient.middleName || ""} ${
-          contract.recipient.name || ""
-        }`
+    if (contract.partyB && contract.partyB.name) {
+      drawLabelWithDots("Họ và tên", contract.partyB.name);
+      drawLabelWithDots("Email", contract.partyB.email);
+      drawLabelWithDots("Số điện thoại", contract.partyB.phone);
+      drawLabelWithDots(
+        "Địa chỉ",
+        `${contract.partyB.district || ""}, ${contract.partyB.province || ""}`
       );
-      drawLine("Ngày sinh:");
-      drawLine("CMND/CCCD:");
-      drawLine("Địa chỉ:");
-      drawLine("Số điện thoại:");
-      doc.moveDown(1.5);
     } else {
-      // Nếu chưa có Bên B, in dòng trống
-      for (let i = 0; i < 5; i++) drawLine("");
+      ["Họ và tên", "Email", "Số điện thoại", "Địa chỉ"].forEach((field) =>
+        drawLabelWithDots(field)
+      );
     }
+
+    doc.moveDown(1.2);
 
     // --- Bài tuyển dụng ---
     if (contract.postId) {
-      doc.fontSize(14).text("Thông tin bài tuyển dụng:", { underline: true });
+      doc.fontSize(14).text("Thông tin bài tuyển dụng:", {
+        underline: true,
+        width: pageWidth - margin * 2,
+      });
       doc.moveDown(0.5);
 
       const { title, description, salary, workingType, district, province } =
         contract.postId;
-
-      doc.fontSize(12);
-
-      const pageContentWidth = doc.page.width - 72 * 2; // margin 72
 
       const lines = [
         { label: "Tiêu đề", value: title },
@@ -277,11 +502,11 @@ const downloadContract = async (req, res) => {
         { label: "Địa điểm", value: `${district || ""}, ${province || ""}` },
       ];
 
-      const maxCharsPerLine = 320; // giới hạn ký tự để tránh quá dài (tuỳ chỉnh)
+      const pageContentWidth = pageWidth - margin * 2;
+      const maxCharsPerLine = 320;
 
       lines.forEach(({ label, value }) => {
         if (!value) return;
-        // cắt nếu quá dài
         let textValue =
           value.length > maxCharsPerLine
             ? value.slice(0, maxCharsPerLine) + "..."
@@ -289,27 +514,40 @@ const downloadContract = async (req, res) => {
 
         doc.text(`${label}: ${textValue}`, {
           lineGap: 6,
-          width: pageContentWidth, // tự wrap nếu quá dài
+          width: pageContentWidth,
         });
         doc.moveDown(0.5);
       });
 
       doc.moveDown(1);
     } else {
-      // Nếu không có bài post, in phần trao đổi trống
-      doc.fontSize(14).text("Thông tin trao đổi:");
+      doc.fontSize(14).text("Thông tin trao đổi:", {
+        underline: true,
+        width: pageWidth - margin * 2,
+      });
       doc.moveDown(0.5);
+      // Hàm vẽ dòng dots trơn
+      const drawDotsOnly = (length = 80) => {
+        const dots = ".".repeat(length);
+        doc.text(dots, {
+          width: pageWidth - margin * 2,
+          align: "left",
+          lineGap: 6,
+        });
+        doc.moveDown(0.8);
+      };
+
       for (let i = 0; i < 5; i++) {
-        doc
-          .moveTo(margin, doc.y + 5)
-          .lineTo(pageWidth - margin, doc.y + 5)
-          .stroke();
-        doc.moveDown(1.2);
+        drawDotsOnly(120);
       }
+      doc.moveDown(0.5);
     }
 
     // --- Điều khoản ---
-    doc.fontSize(14).text("Điều khoản thỏa thuận:", { underline: true });
+    doc.fontSize(14).text("Điều khoản thỏa thuận:", {
+      underline: true,
+      width: pageWidth - margin * 2,
+    });
     doc.moveDown(0.5);
     doc.fontSize(12);
 
@@ -321,24 +559,41 @@ const downloadContract = async (req, res) => {
       "5. Hai bên cam kết cung cấp thông tin trung thực và chịu trách nhiệm pháp lý nếu có hành vi gian dối.",
       "6. Hợp đồng được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản.",
     ];
-    terms.forEach((line) => doc.text(line, { lineGap: 6 }));
+    terms.forEach((line) =>
+      doc.text(line, { lineGap: 6, width: pageWidth - margin * 2 })
+    );
     doc.moveDown(1);
 
-    // Ngày tháng năm
+    // --- Ngày tháng năm ---
     const today = new Date();
     doc.text(`Ngày .... tháng .... năm ${today.getFullYear()}`, {
       align: "right",
+      width: pageWidth - margin * 2,
     });
     doc.moveDown(1);
 
-    // Ký tên
+    // --- Ký tên ---
     const signatureY = doc.y;
+    const offsetXA = 25; //  lùi 50px
     doc.text("ĐẠI DIỆN BÊN A", margin, signatureY);
-    doc.text("ĐẠI DIỆN BÊN B", pageWidth - margin - 120, signatureY);
+    const benBWidth = doc.widthOfString("ĐẠI DIỆN BÊN B");
+    doc.text(
+      "ĐẠI DIỆN BÊN B",
+      pageWidth - margin - benBWidth - offsetXA,
+      signatureY
+    );
+
     doc.moveDown(2);
     const signLineY = doc.y;
-    doc.text("(Ký và ghi rõ họ tên)", margin, signLineY);
-    doc.text("(Ký và ghi rõ họ tên)", pageWidth - margin - 135, signLineY);
+
+    doc.text("(Ký và ghi rõ họ tên)", margin, signLineY + 20);
+    const benBSignWidth = doc.widthOfString("(Ký và ghi rõ họ tên)");
+    const offsetXB = 5;
+    doc.text(
+      "(Ký và ghi rõ họ tên)",
+      pageWidth - margin - benBSignWidth - offsetXB,
+      signLineY + 20
+    );
 
     doc.end();
   } catch (error) {

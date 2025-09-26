@@ -20,9 +20,11 @@ router.post(
   authorize("user"),
   createContractWithPostAndRecipient
 );
-router.post(
+router.get(
   "/download/:contractId",
   protect,
   authorize("user"),
   downloadContract
 );
+
+module.exports = router;

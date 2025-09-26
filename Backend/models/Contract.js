@@ -7,18 +7,29 @@ const contractSchema = new mongoose.Schema(
       ref: "Post",
       default: null, // null nếu hợp đồng “trống”
     },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true, // Bên A
+    partyA: {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      name: { type: String },
+      email: { type: String },
+      phone: { type: String },
+      district: { type: String },
+      province: { type: String },
     },
-    createdByName: {
-      type: String,
-    },
-    recipient: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null, // Bên B, null nếu chưa chọn
+    partyB: {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: null,
+      },
+      name: { type: String },
+      email: { type: String },
+      phone: { type: String },
+      district: { type: String },
+      province: { type: String },
     },
     content: {
       type: String,
