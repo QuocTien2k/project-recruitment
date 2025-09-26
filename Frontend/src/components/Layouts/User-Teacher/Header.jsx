@@ -13,6 +13,9 @@ import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
 import { Ban } from "lucide-react";
 import NotificationBell from "../../NotificationBell";
 import { logout } from "@api/auth";
+import { createEmpty } from "@api/contract";
+import toast from "react-hot-toast";
+import ContractModal from "@contract/ContractModal";
 
 const avatarDefault =
   "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
@@ -28,6 +31,10 @@ const Header = () => {
     useState(false);
   const [openModalUpdateInfo, setOpenModalUpdateInfo] = useState(false);
   const [openMobileNav, setOpenMobileNav] = useState(false);
+  const [creatingContract, setCreatingContract] = useState(false);
+  const [contract, setContract] = useState(null);
+  const [openContractModal, setOpenContractModal] = useState(false);
+
   const navLinks = [
     { path: "/giao-vien-khoa-tu-nhien", label: "Giáo viên Tự nhiên" },
     { path: "/giao-vien-khoa-xa-hoi", label: "Giáo viên Xã hội" },
@@ -112,6 +119,21 @@ const Header = () => {
         // 4. Chuyển hướng
         navigate("/");
       }, 1000);
+    }
+  };
+
+  const handleCreateEmptyContract = async () => {
+    try {
+      setCreatingContract(true);
+      const newContract = await createEmpty(); // API hợp đồng trống
+      setContract(newContract);
+      setOpenContractModal(true);
+      toast.success("Tạo hợp đồng thành công");
+    } catch (err) {
+      console.error(err);
+      toast.error("Tạo hợp đồng thất bại");
+    } finally {
+      setCreatingContract(false);
     }
   };
 
@@ -256,15 +278,20 @@ const Header = () => {
                                 <span>Bài tuyển dụng của tôi</span>
                               </Button>
 
-                              {/*Bài viết */}
+                              {/*Hợp đồng */}
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
-                                onClick={() => {}}
+                                onClick={handleCreateEmptyContract}
+                                disabled={creatingContract}
                               >
                                 <FiEdit className="text-[16px]" />
-                                <span>Tạo hợp đồng</span>
+                                <span>
+                                  {creatingContract
+                                    ? "Đang tạo..."
+                                    : "Tạo hợp đồng"}
+                                </span>
                               </Button>
 
                               {/*My Favorite */}
@@ -338,6 +365,15 @@ const Header = () => {
                 {openModalUpdateChangePassword && (
                   <UpdatePassword
                     onClose={() => setOpenModalUpdateChangePassword(false)}
+                  />
+                )}
+
+                {/*Modal Create Contract */}
+                {openContractModal && (
+                  <ContractModal
+                    open={openContractModal}
+                    onClose={() => setOpenContractModal(false)}
+                    contract={contract}
                   />
                 )}
               </>

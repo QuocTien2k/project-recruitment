@@ -28,6 +28,7 @@ export default defineConfig({
       ),
       "@components-chat": path.resolve(__dirname, "./src/components/Chat/"),
       "@components-cards": path.resolve(__dirname, "./src/components/Cards/"),
+      "@contract": path.resolve(__dirname, "./src/components/Contract/"),
       "@pages": path.resolve(__dirname, "./src/pages/"),
       "@pages-admin": path.resolve(__dirname, "./src/pages/Admin/"),
       "@pages-user": path.resolve(__dirname, "./src/pages/User/"),

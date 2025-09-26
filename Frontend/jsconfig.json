@@ -15,6 +15,7 @@
       "@components-layouts/*": ["src/components/Layouts/*"],
       "@components-chat/*": ["src/components/Chat/*"],
       "@components-cards/*": ["src/components/Cards/*"],
+      "@contract/*": ["src/components/Contract/*"],
       "@pages/*": ["src/pages/*"],
       "@pages-admin/*": ["src/pages/Admin/*"],
       "@pages-user/*": ["src/pages/User/*"],
