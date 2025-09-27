@@ -81,18 +81,24 @@ const createContractWithPost = async (req, res) => {
       });
 
     const newContract = new ContractModel({
-      createdBy: user._id,
-      createdByName: `${user.middleName} ${user.name}`,
       postId: post._id,
-      recipient: null,
+      partyA: {
+        userId: user._id,
+        name: `${user.middleName} ${user.name}`,
+        email: user.email,
+        phone: user.phone,
+        district: user.district,
+        province: user.province,
+      },
       content: "",
     });
 
     const savedContract = await newContract.save();
 
-    const populatedContract = await ContractModel.findById(
-      savedContract._id
-    ).populate("postId");
+    const populatedContract = await ContractModel.findById(savedContract._id)
+      .populate("postId")
+      .populate("partyA.userId")
+      .populate("partyB.userId");
 
     return res.status(201).json({
       success: true,
@@ -397,15 +403,17 @@ const downloadContract = async (req, res) => {
     try {
       const logoPath = path.join(__dirname, "../public/logo.png");
       doc.image(logoPath, margin, 40, { width: 60 });
-      doc.moveDown(3);
+      doc.moveDown(0);
     } catch (err) {
       console.warn("Logo không tìm thấy, bỏ qua hiển thị logo.");
     }
 
     // --- Quốc hiệu ---
-    doc
-      .fontSize(14)
-      .text("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", { align: "center" });
+    doc.fontSize(14).text("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", {
+      align: "center",
+      lineGap: 6,
+    });
+    doc.fontSize(12);
     doc.text("Độc lập - Tự do - Hạnh phúc", { align: "center" });
     doc
       .moveTo(pageWidth / 2 - 80, doc.y + 5)
@@ -428,34 +436,7 @@ const downloadContract = async (req, res) => {
     );
     doc.moveDown(1);
 
-    // --- BÊN A ---
-    doc.fontSize(14).text("BÊN A (Người tạo hợp đồng):", {
-      underline: true,
-      width: pageWidth - margin * 2,
-    });
-    doc.moveDown(0.5);
-
-    doc.fontSize(12);
-    doc.text(`Họ và tên: ${contract.partyA.name || ""}`, {
-      width: pageWidth - margin * 2,
-    });
-    doc.text(`Email: ${contract.partyA.email || ""}`);
-    doc.text(`Số điện thoại: ${contract.partyA.phone || ""}`);
-    doc.text(
-      `Địa chỉ: ${contract.partyA.district || ""}, ${
-        contract.partyA.province || ""
-      }`
-    );
-    doc.text("Vai trò: Người sử dụng dịch vụ (phụ huynh / người tuyển dụng)");
-    doc.moveDown(1);
-
-    // --- BÊN B ---
-    doc.fontSize(14).text("BÊN B (Gia sư):", {
-      underline: true,
-      width: pageWidth - margin * 2,
-    });
-    doc.moveDown(0.5);
-
+    //hàm tạo dấu dots và khoảng cách
     const drawLabelWithDots = (label = "", value = "") => {
       const base = `${label}: ${value}`;
       const remainingWidth = pageWidth - margin * 2 - doc.widthOfString(base);
@@ -467,6 +448,34 @@ const downloadContract = async (req, res) => {
       doc.moveDown(0.8);
     };
 
+    // --- BÊN A ---
+    doc.fontSize(14).text("BÊN A (Người tạo hợp đồng):", {
+      underline: true,
+      width: pageWidth - margin * 2,
+    });
+    doc.moveDown(0.5);
+
+    doc.fontSize(12);
+    drawLabelWithDots("Họ và tên", contract.partyA.name || "");
+    drawLabelWithDots("Email", contract.partyA.email || "");
+    drawLabelWithDots("Số điện thoại", contract.partyA.phone || "");
+    drawLabelWithDots(
+      "Địa chỉ",
+      `${contract.partyA.district || ""}, ${contract.partyA.province || ""}`
+    );
+    drawLabelWithDots(
+      "Vai trò",
+      "Người sử dụng dịch vụ (phụ huynh / người tuyển dụng)"
+    );
+    doc.moveDown(1);
+
+    // --- BÊN B ---
+    doc.fontSize(14).text("BÊN B (Gia sư):", {
+      underline: true,
+      width: pageWidth - margin * 2,
+    });
+    doc.moveDown(0.5);
+    doc.fontSize(12);
     if (contract.partyB && contract.partyB.name) {
       drawLabelWithDots("Họ và tên", contract.partyB.name);
       drawLabelWithDots("Email", contract.partyB.email);
@@ -485,6 +494,7 @@ const downloadContract = async (req, res) => {
 
     // --- Bài tuyển dụng ---
     if (contract.postId) {
+      // Tiêu đề
       doc.fontSize(14).text("Thông tin bài tuyển dụng:", {
         underline: true,
         width: pageWidth - margin * 2,
@@ -503,19 +513,15 @@ const downloadContract = async (req, res) => {
       ];
 
       const pageContentWidth = pageWidth - margin * 2;
-      const maxCharsPerLine = 320;
 
       lines.forEach(({ label, value }) => {
         if (!value) return;
-        let textValue =
-          value.length > maxCharsPerLine
-            ? value.slice(0, maxCharsPerLine) + "..."
-            : value;
 
-        doc.text(`${label}: ${textValue}`, {
-          lineGap: 6,
+        doc.fontSize(12).text(`${label}: ${value}`, {
           width: pageContentWidth,
+          lineGap: 6, // tương đương khoảng 1.5 line spacing
         });
+
         doc.moveDown(0.5);
       });
 
@@ -552,17 +558,25 @@ const downloadContract = async (req, res) => {
     doc.fontSize(12);
 
     const terms = [
-      "1. Bên B cam kết cung cấp dịch vụ gia sư đúng theo nội dung bài tuyển dụng và không vi phạm đạo đức nghề nghiệp.",
-      "2. Bên A có trách nhiệm thanh toán đúng hạn và đầy đủ tiền công theo mức lương đã thỏa thuận.",
-      "3. Trong trường hợp xảy ra tranh chấp, hai bên ưu tiên giải quyết bằng thương lượng. Nếu không đạt được thỏa thuận, vụ việc sẽ được đưa ra cơ quan có thẩm quyền.",
-      "4. Thời gian hợp đồng bắt đầu tính từ ngày hai bên ký tên và có hiệu lực trong suốt quá trình làm việc theo lịch đã thống nhất.",
-      "5. Hai bên cam kết cung cấp thông tin trung thực và chịu trách nhiệm pháp lý nếu có hành vi gian dối.",
-      "6. Hợp đồng được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản.",
+      "1. Bên B có trách nhiệm thực hiện công việc gia sư theo đúng nội dung, yêu cầu và thời gian đã thỏa thuận trong bài tuyển dụng.",
+      "2. Bên B phải đảm bảo phương pháp giảng dạy phù hợp, giữ gìn đạo đức nghề nghiệp và tôn trọng học viên trong suốt quá trình làm việc.",
+      "3. Bên A có nghĩa vụ cung cấp thông tin đầy đủ, chính xác về yêu cầu tuyển dụng và tạo điều kiện thuận lợi để Bên B hoàn thành công việc.",
+      "4. Bên A có trách nhiệm thanh toán đầy đủ và đúng hạn tiền công theo mức lương đã thống nhất trong hợp đồng.",
+      "5. Hai bên cam kết bảo mật thông tin cá nhân và nội dung thỏa thuận, không được tiết lộ cho bên thứ ba nếu không có sự đồng ý của bên còn lại.",
+      "6. Thời gian hợp đồng bắt đầu có hiệu lực kể từ ngày ký và kéo dài đến khi hoàn thành công việc hoặc có thỏa thuận chấm dứt bằng văn bản.",
+      "7. Trong trường hợp một trong hai bên muốn chấm dứt hợp đồng trước thời hạn, phải thông báo bằng văn bản cho bên còn lại ít nhất 07 ngày.",
+      "8. Nếu phát sinh tranh chấp, hai bên ưu tiên giải quyết bằng thương lượng. Trường hợp không đạt thỏa thuận, tranh chấp sẽ được đưa ra cơ quan có thẩm quyền giải quyết.",
+      "9. Mọi hành vi gian lận, cung cấp thông tin sai lệch hoặc vi phạm cam kết trong hợp đồng đều dẫn đến việc hợp đồng bị chấm dứt ngay lập tức và bên vi phạm phải chịu trách nhiệm pháp lý.",
+      "10. Hợp đồng này được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản để thực hiện.",
     ];
     terms.forEach((line) =>
-      doc.text(line, { lineGap: 6, width: pageWidth - margin * 2 })
+      doc.text(line, {
+        lineGap: 6, // giãn dòng 1.5
+        width: pageWidth - margin * 2,
+        align: "justify", // dàn đều
+      })
     );
-    doc.moveDown(1);
+    doc.moveDown(2);
 
     // --- Ngày tháng năm ---
     const today = new Date();
@@ -586,13 +600,13 @@ const downloadContract = async (req, res) => {
     doc.moveDown(2);
     const signLineY = doc.y;
 
-    doc.text("(Ký và ghi rõ họ tên)", margin, signLineY + 20);
+    doc.text("(Ký và ghi rõ họ tên)", margin, signLineY + 30);
     const benBSignWidth = doc.widthOfString("(Ký và ghi rõ họ tên)");
     const offsetXB = 5;
     doc.text(
       "(Ký và ghi rõ họ tên)",
       pageWidth - margin - benBSignWidth - offsetXB,
-      signLineY + 20
+      signLineY + 30
     );
 
     doc.end();
