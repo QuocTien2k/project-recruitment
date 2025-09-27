@@ -21,6 +21,7 @@ import Button from "@components-ui/Button";
 import toast from "react-hot-toast";
 import PostActionUser from "./PostActionUser";
 import PostActionAdmin from "./PostActionAdmin";
+import { FiEdit } from "react-icons/fi";
 
 const PostCard = ({
   post,
@@ -31,6 +32,8 @@ const PostCard = ({
   onViewDetail,
   showFullDescription = false,
   handleUpdatePost,
+  handleCreateContractWithPost,
+  creatingContract,
 }) => {
   const currentUser = useSelector((state) => state.currentUser.user);
   const [showFullReason, setShowFullReason] = useState(false);
@@ -226,6 +229,19 @@ const PostCard = ({
           >
             👉 Xem chi tiết
           </Link>
+        </div>
+      )}
+      {/* Nút tạo hợp đồng từ bài viết (Case 2) */}
+      {isPostOwner && post?.status === "approved" && (
+        <div className="mt-4 flex justify-center">
+          <Button
+            onClick={() => handleCreateContractWithPost(post._id)}
+            className="flex items-center justify-center gap-2"
+            disabled={creatingContract}
+          >
+            <FiEdit className="w-4 h-4" />
+            {creatingContract ? "Đang tạo..." : "Tạo hợp đồng từ bài viết này"}
+          </Button>
         </div>
       )}
     </div>

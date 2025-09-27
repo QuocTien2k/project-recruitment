@@ -10,6 +10,19 @@ export const createEmpty = async () => {
   }
 };
 
+export const createWithPost = async (postId) => {
+  try {
+    const response = await axiosInstance.post(
+      "/api/contract/create-with-post",
+      { postId }
+    );
+    return response?.data?.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
 export const download = async (contractId) => {
   try {
     const response = await axiosInstance.get(

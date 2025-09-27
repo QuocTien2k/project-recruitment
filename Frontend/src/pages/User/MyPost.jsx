@@ -10,6 +10,9 @@ import { useSelector } from "react-redux";
 import Title from "@components-ui/Title";
 import NoResult from "@components-states/NoResult";
 import EmptyState from "@components-states/EmptyState";
+import toast from "react-hot-toast";
+import { createWithPost } from "@api/contract";
+import ContractModal from "@contract/ContractModal";
 
 const MyPost = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
@@ -17,6 +20,11 @@ const MyPost = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [openModalCreatePost, setOpenModalCreatePost] = useState(false);
+
+  const [contract, setContract] = useState(null);
+  const [openContractModal, setOpenContractModal] = useState(false);
+  const [creatingContract, setCreatingContract] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
 
@@ -53,6 +61,21 @@ const MyPost = () => {
     }
     return () => clearTimeout(timer);
   }, [isGlobalLoading]);
+
+  const handleCreateContractWithPost = async (postId) => {
+    try {
+      setCreatingContract(true);
+      const newContract = await createWithPost(postId); // gọi API case 2
+      setContract(newContract);
+      setOpenContractModal(true);
+      toast.success("Tạo hợp đồng thành công từ bài viết");
+    } catch (err) {
+      console.error(err);
+      toast.error("Tạo hợp đồng thất bại");
+    } finally {
+      setCreatingContract(false);
+    }
+  };
 
   return (
     <>
@@ -97,6 +120,8 @@ const MyPost = () => {
               showOwnerActions
               showFullDescription
               handleUpdatePost={handleUpdatePost}
+              handleCreateContractWithPost={handleCreateContractWithPost}
+              creatingContract={creatingContract}
             />
           ))}
         </div>
@@ -113,6 +138,14 @@ const MyPost = () => {
         <CreatePost
           onClose={() => setOpenModalCreatePost(false)}
           handleUpdatePost={handleUpdatePost}
+        />
+      )}
+
+      {openContractModal && (
+        <ContractModal
+          open={openContractModal}
+          onClose={() => setOpenContractModal(false)}
+          contract={contract}
         />
       )}
     </>
