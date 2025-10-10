@@ -22,10 +22,6 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
     },
-    blog: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Blog",
-    },
     message: {
       type: String,
       required: true, // "Bài viết ABC đã được duyệt", ...

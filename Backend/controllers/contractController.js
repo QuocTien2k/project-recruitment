@@ -97,78 +97,11 @@ const createContractWithPost = async (req, res) => {
 
     const populatedContract = await ContractModel.findById(savedContract._id)
       .populate("postId")
-      .populate("partyA.userId")
-      .populate("partyB.userId");
+      .populate("partyA.userId");
 
     return res.status(201).json({
       success: true,
       message: "Tạo hợp đồng thành công (có bài viết)",
-      data: populatedContract,
-    });
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Lỗi server: " + error.message });
-  }
-};
-
-//hợp đồng có thông tin tất cả
-const createContractWithPostAndRecipient = async (req, res) => {
-  try {
-    const userId = req.user.userId;
-    const { postId, recipientId } = req.body;
-
-    const user = await UserModel.findById(userId);
-    if (!user || user.role !== "user")
-      return res
-        .status(403)
-        .json({ success: false, message: "Bạn không có quyền tạo hợp đồng." });
-
-    if (!postId || !recipientId)
-      return res.status(400).json({
-        success: false,
-        message: "Cần cung cấp postId và recipientId.",
-      });
-
-    const post = await PostModel.findById(postId);
-    if (!post)
-      return res
-        .status(404)
-        .json({ success: false, message: "Bài viết không tồn tại." });
-    if (post.status !== "approved")
-      return res
-        .status(400)
-        .json({ success: false, message: "Bài viết chưa được duyệt." });
-    if (post.createdBy.toString() !== userId)
-      return res.status(403).json({
-        success: false,
-        message: "Bạn chỉ có thể tạo hợp đồng từ bài viết của mình.",
-      });
-
-    const recipient = await UserModel.findById(recipientId);
-    if (!recipient || recipient.role !== "teacher")
-      return res
-        .status(404)
-        .json({ success: false, message: "Người nhận không hợp lệ." });
-
-    const newContract = new ContractModel({
-      createdBy: user._id,
-      createdByName: `${user.middleName} ${user.name}`,
-      postId: post._id,
-      recipient: recipient._id,
-      content: "",
-    });
-
-    const savedContract = await newContract.save();
-
-    const populatedContract = await ContractModel.findById(savedContract._id)
-      .populate("postId")
-      .populate("recipient");
-
-    return res.status(201).json({
-      success: true,
-      message: "Tạo hợp đồng thành công (có bài viết + bên B)",
       data: populatedContract,
     });
   } catch (error) {
@@ -476,19 +409,9 @@ const downloadContract = async (req, res) => {
     });
     doc.moveDown(0.5);
     doc.fontSize(12);
-    if (contract.partyB && contract.partyB.name) {
-      drawLabelWithDots("Họ và tên", contract.partyB.name);
-      drawLabelWithDots("Email", contract.partyB.email);
-      drawLabelWithDots("Số điện thoại", contract.partyB.phone);
-      drawLabelWithDots(
-        "Địa chỉ",
-        `${contract.partyB.district || ""}, ${contract.partyB.province || ""}`
-      );
-    } else {
-      ["Họ và tên", "Email", "Số điện thoại", "Địa chỉ"].forEach((field) =>
-        drawLabelWithDots(field)
-      );
-    }
+    ["Họ và tên", "Email", "Số điện thoại", "Địa chỉ"].forEach((field) =>
+      drawLabelWithDots(field)
+    );
 
     doc.moveDown(1.2);
 
@@ -621,6 +544,5 @@ const downloadContract = async (req, res) => {
 module.exports = {
   createEmptyContract,
   createContractWithPost,
-  createContractWithPostAndRecipient,
   downloadContract,
 };

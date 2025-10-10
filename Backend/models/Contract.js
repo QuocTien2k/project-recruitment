@@ -19,18 +19,6 @@ const contractSchema = new mongoose.Schema(
       district: { type: String },
       province: { type: String },
     },
-    partyB: {
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        default: null,
-      },
-      name: { type: String },
-      email: { type: String },
-      phone: { type: String },
-      district: { type: String },
-      province: { type: String },
-    },
     content: {
       type: String,
       default: "", // nội dung hợp đồng
