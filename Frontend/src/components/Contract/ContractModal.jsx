@@ -82,7 +82,7 @@ const ContractModal = ({ open, onClose, contract }) => {
                 <div className="font-medium">
                   {contract.postId
                     ? "Có bài tuyển dụng"
-                    : "Thông tin bài viết trống / Thông tin bên B trống"}
+                    : "Thông tin bài viết trống"}
                 </div>
               </div>
 
