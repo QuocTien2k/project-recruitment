@@ -87,12 +87,9 @@ const Navbar = ({ isOpen, toggleSidebar }) => {
 
       <div className="flex gap-4 items-center relative">
         {/* Notification cho các role được phép */}
-        {["admin", "editor"].includes(currentUser?.role) && (
-          <div className="relative">
-            <MessageNotification />
-          </div>
-        )}
-
+        <div className="relative">
+          <MessageNotification />
+        </div>
         {/* Avatar + Dropdown */}
         <div
           className="relative flex items-center gap-3 cursor-pointer group"

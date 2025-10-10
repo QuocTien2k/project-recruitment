@@ -117,6 +117,82 @@
     /* nền track trong suốt */
 }
 
+/* --- Hiệu ứng slide mượt cho submenu trong sidebar --- */
+/* --- Keyframes cho submenu trượt xuống/lên --- */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: translateY(-4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: translateY(-4px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+
+/* --- Wrapper mặc định --- */
+.sidebar-submenu-wrapper {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: max-height 0.4s ease;
+}
+
+/* --- Khi mở --- */
+.sidebar-submenu-wrapper.open {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Animation class cho submenu wrapper --- */
+.animate-slide-in {
+    animation: slideDown 0.35s ease-out forwards;
+}
+
+.animate-slide-out {
+    animation: slideUp 0.35s ease-in forwards;
+    /* Thêm delay để khớp với animation opacity */
+    transition-delay: 0.1s;
+}
+
+/* --- Các item con --- */
+.sidebar-submenu-item {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.sidebar-submenu-wrapper.open .sidebar-submenu-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
 /* font chữ */
 .font-montserrat {
     font-family: var(--font-montserrat);
