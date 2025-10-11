@@ -78,7 +78,7 @@ export const getListFavorite = async (filters = {}) => {
     });
     return response.data;
   } catch (err) {
-    console.log("Có lỗi khi cập nhật:", err?.message);
+    console.log("Có lỗi khi lấy dữ liệu:", err?.message);
     throw err;
   }
 };
