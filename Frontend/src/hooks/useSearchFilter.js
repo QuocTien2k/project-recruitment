@@ -241,6 +241,11 @@ const initialForms = {
     districtCode: "",
     faculty: "",
   },
+  "admin-report": {
+    //userId: "",
+    email: "",
+    status: "",
+  },
 };
 
 export default function useSearchFilter({
@@ -366,6 +371,9 @@ export default function useSearchFilter({
           filters.district = getDistrictNameSync(form.districtCode);
         if (form.faculty) filters.faculty = form.faculty;
         break;
+      case "admin-report":
+        if (form.email) filters.email = form.email;
+        if (form.status) filters.status = form.status;
     }
     return filters;
   };
