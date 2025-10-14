@@ -8,6 +8,8 @@ import {
   HiUserRemove,
   HiChevronDown,
   HiChevronRight,
+  HiDocumentReport,
+  HiClipboardList,
 } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
 
@@ -95,6 +97,18 @@ const Sidebar = ({ isOpen }) => {
           label: "Bài đã duyệt",
           icon: HiCheckCircle,
           to: "/admin/bai-viet/da-duyet",
+        },
+      ],
+    },
+    {
+      key: "report",
+      label: "Quản lý báo cáo",
+      icon: HiDocumentReport,
+      children: [
+        {
+          label: "Danh sách báo cáo",
+          icon: HiClipboardList,
+          to: "/admin/danh-sach-bao-cao",
         },
       ],
     },

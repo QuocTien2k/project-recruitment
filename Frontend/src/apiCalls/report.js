@@ -1,20 +1,20 @@
 import { axiosInstance } from "./index";
 
-export const listReport = async (filters = {}) => {
+export const listReportByUser = async (filters = {}) => {
   try {
-    const response = await axiosInstance.get("/api/report/lists", {
+    const response = await axiosInstance.get("/api/user/lists", {
       params: filters, // truyền filters lên query
     });
     return response.data;
   } catch (err) {
-    console.log("Có lỗi khi cập nhật:", err?.message);
+    console.log("Có lỗi khi lấy danh sách:", err?.message);
     throw err;
   }
 };
 
 export const createReport = async (formData) => {
   try {
-    const response = await axiosInstance.post("/api/report/create", formData, {
+    const response = await axiosInstance.post("/api/user/create", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -22,6 +22,31 @@ export const createReport = async (formData) => {
     return response.data;
   } catch (err) {
     console.log("Có lỗi khi tạo:", err?.message);
+    throw err;
+  }
+};
+
+/* Admin */
+export const listReportPending = async (filters = {}) => {
+  try {
+    const response = await axiosInstance.get("/api/report/pending", {
+      params: filters, // truyền filters lên query
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi lấy danh sách:", err?.message);
+    throw err;
+  }
+};
+
+export const listReportResolved = async (filters = {}) => {
+  try {
+    const response = await axiosInstance.get("/api/report/resolved", {
+      params: filters, // truyền filters lên query
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi lấy danh sách:", err?.message);
     throw err;
   }
 };

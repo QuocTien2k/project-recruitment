@@ -48,6 +48,7 @@ const BannedTeachers = lazy(() =>
 );
 const PendingPosts = lazy(() => import("@pages-admin/posts/PendingPosts"));
 const ApprovedPosts = lazy(() => import("@pages-admin/posts/ApprovedPosts"));
+const ListReport = lazy(() => import("@pages/Admin/reports/ListReport"));
 
 // --- Layouts ---
 const UserLayout = lazy(() => import("@layouts/UserLayout"));
@@ -123,6 +124,9 @@ function App() {
                 {/* Posts */}
                 <Route path="bai-viet/cho-duyet" element={<PendingPosts />} />
                 <Route path="bai-viet/da-duyet" element={<ApprovedPosts />} />
+
+                {/* Posts */}
+                <Route path="danh-sach-bao-cao" element={<ListReport />} />
               </Route>
             </Route>
 

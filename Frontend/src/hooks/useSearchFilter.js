@@ -243,7 +243,6 @@ const initialForms = {
   },
   "admin-report": {
     email: "",
-    status: "",
     type: "",
   },
   "user-report": {
@@ -376,7 +375,6 @@ export default function useSearchFilter({
         break;
       case "admin-report":
         if (form.email) filters.email = form.email;
-        if (form.status) filters.status = form.status;
         if (form.type) filters.type = form.type;
         break;
       case "user-report":
