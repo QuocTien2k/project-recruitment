@@ -242,8 +242,11 @@ const initialForms = {
     faculty: "",
   },
   "admin-report": {
-    //userId: "",
     email: "",
+    status: "",
+    type: "",
+  },
+  "user-report": {
     status: "",
   },
 };
@@ -374,6 +377,11 @@ export default function useSearchFilter({
       case "admin-report":
         if (form.email) filters.email = form.email;
         if (form.status) filters.status = form.status;
+        if (form.type) filters.type = form.type;
+        break;
+      case "user-report":
+        if (form.status) filters.status = form.status;
+        break;
     }
     return filters;
   };

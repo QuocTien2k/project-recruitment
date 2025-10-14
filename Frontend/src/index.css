@@ -301,7 +301,7 @@
     animation: shine 2s infinite linear;
 }
 
-/* ping */
+/* ping Admin Contact */
 .ping-effect {
     position: relative;
     isolation: isolate;
@@ -336,6 +336,41 @@
         opacity: 0;
     }
 }
+
+/* ping Report */
+.ping-effect-report {
+    position: relative;
+    isolation: isolate;
+}
+
+.ping-effect-report::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background-color: rgba(239, 68, 68, 0.6);
+    transform: scale(1);
+    animation: pingAnimationReport 1.5s ease-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes pingAnimationReport {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    70% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 
 /* shake: lắc chuông*/
 @keyframes shake-bell {
@@ -404,7 +439,6 @@
 .text-blink {
     animation: blink 1.2s ease-in-out infinite;
 }
-
 
 /* bg -modal */
 .bg-modal {

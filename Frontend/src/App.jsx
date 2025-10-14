@@ -8,6 +8,7 @@ import ChatArea from "@components-chat/ChatArea";
 import ContactAdminButton from "./components/ContactAdmin";
 import Loading from "@components-ui/Loading";
 import AboutUs from "@pages/User/AboutUs";
+import Report from "./components/Report";
 
 // --- Public Pages ---
 const Home = lazy(() => import("@pages-user/Home"));
@@ -129,6 +130,7 @@ function App() {
           </Routes>
         </Suspense>
         <ChatArea />
+        <Report />
         <ContactAdminButton />
       </Router>
     </>
