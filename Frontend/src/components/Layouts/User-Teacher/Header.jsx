@@ -10,7 +10,7 @@ import UpdateAvatar from "@modals/UpdateAvatar";
 import UpdatePassword from "@modals/UpdatePassword";
 import UpdateInfo from "@modals/UpdateInfo";
 import { FiImage, FiLock, FiUser, FiEdit, FiList } from "react-icons/fi";
-import { Ban } from "lucide-react";
+import { Ban, ClipboardList } from "lucide-react";
 import NotificationBell from "../../NotificationBell";
 import { logout } from "@api/auth";
 import { createEmpty } from "@api/contract";
@@ -323,6 +323,17 @@ const Header = () => {
                               </Button>
                             </>
                           )}
+
+                          {/*Danh sách báo cáo */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center gap-3 px-3 py-2.5 w-full text-left hover:bg-gray-100"
+                            onClick={() => navigate("/danh-sach-bao-cao")}
+                          >
+                            <ClipboardList className="w-4 h-4" />
+                            <span>Danh sách báo cáo</span>
+                          </Button>
                         </div>
                       </div>
                       {/*Logout */}

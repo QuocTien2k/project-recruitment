@@ -25,6 +25,7 @@ const PostDetail = lazy(() => import("@pages-user/PostDetail"));
 const MyPost = lazy(() => import("@pages-user/MyPost"));
 const MyBlock = lazy(() => import("@pages/User/MyBlock"));
 const MyFavorite = lazy(() => import("@pages/User/MyFavorite"));
+const MyReport = lazy(() => import("@pages/User/MyReport"));
 const MySavePost = lazy(() => import("@pages/User/MySavePost"));
 const TeachersNatural = lazy(() => import("@pages/User/TeachersNatural"));
 const TeachersSocial = lazy(() => import("@pages/User/TeachersSocial"));
@@ -73,6 +74,7 @@ function App() {
               <Route path="/bai-viet-cua-toi" element={<MyPost />} />
               <Route path="/danh-sach-chan" element={<MyBlock />} />
               <Route path="/danh-sach-yeu-thich" element={<MyFavorite />} />
+              <Route path="danh-sach-bao-cao" element={<MyReport />} />
               <Route
                 path="/danh-sach-bai-viet-da-luu"
                 element={<MySavePost />}
