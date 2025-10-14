@@ -3,6 +3,7 @@ const FavoriteModel = require("../models/Favorite");
 const TeacherModel = require("../models/Teacher");
 const SavedPostModel = require("../models/SavedPost.js");
 const PostModel = require("../models/Post.js");
+const ReportModel = require("../models/Report.js");
 const cloudinary = require("../cloudinary");
 const bcrypt = require("bcryptjs");
 
@@ -741,6 +742,103 @@ const checkSavePost = async (req, res) => {
   }
 };
 
+/******** Báo cáo ******** */
+const getUserReports = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { status } = req.query;
+
+    // Kiểm tra người dùng
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+
+    // Chỉ lọc theo trạng thái
+    const filter = {};
+    if (status) filter.status = status;
+
+    const reports = await ReportModel.find(filter)
+      .populate("reporterId", "name email role")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: reports.length,
+      data: reports,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+const createReport = async (req, res) => {
+  try {
+    const { reason, type, reportedEmail } = req.body;
+    const userId = req.user.userId;
+
+    // 1️⃣ Kiểm tra người gửi báo cáo
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+
+    // 2️⃣ Kiểm tra dữ liệu đầu vào
+    if (!reason || !type || !reportedEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập đầy đủ thông tin báo cáo.",
+      });
+    }
+
+    if (!["user", "post"].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: "Loại báo cáo không hợp lệ.",
+      });
+    }
+
+    // 3️⃣ Ảnh báo cáo (middleware upload đã xử lý sẵn)
+    const reportImage = req.image || null;
+    if (reportImage.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng tải lên ít nhất 1 ảnh báo cáo.",
+      });
+    }
+
+    // 4️⃣ Tạo mới báo cáo
+    const newReport = await ReportModel.create({
+      reporterId: userId,
+      type,
+      reportedEmail: reportedEmail.trim().toLowerCase(),
+      reason,
+      reportPic: reportImage,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Gửi báo cáo thành công.",
+      report: newReport,
+    });
+  } catch (error) {
+    console.error("Lỗi khi tạo báo cáo:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   getLogged,
   getUserById,
@@ -755,4 +853,6 @@ module.exports = {
   addSavePost,
   removeSavePost,
   checkSavePost,
+  getUserReports,
+  createReport,
 };

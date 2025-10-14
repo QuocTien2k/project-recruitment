@@ -13,6 +13,8 @@ const {
   addSavePost,
   removeSavePost,
   checkSavePost,
+  getUserReports,
+  createReport,
 } = require("../controllers/userController");
 const { protect, authorize } = require("../middlewares/authMiddleware");
 const uploadSingleToCloud = require("../utils/uploadSingleToCloud");
@@ -63,6 +65,17 @@ router.get(
   protect,
   authorize("teacher"),
   checkSavePost
+);
+
+/******** Báo cáo ******** */
+router.get("/lists", protect, authorize("user", "teacher"), getUserReports);
+router.post(
+  "/create",
+  protect,
+  authorize("user", "teacher"),
+  upload.single("reportPic"),
+  uploadSingleToCloud,
+  createReport
 );
 
 module.exports = router;

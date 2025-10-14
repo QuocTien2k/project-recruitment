@@ -1,36 +1,18 @@
-const UserModel = require("../models/User");
 const ReportModel = require("../models/Report.js");
 
-const getListReport = async (req, res) => {
+const getPendingReports = async (req, res) => {
   try {
-    const userId = req.user.userId;
-    const { status, email, type } = req.query; // filter báo cáo
+    const { email, type } = req.query;
+    const filter = { status: "pending" };
 
-    // Kiểm tra người dùng
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Người dùng không tồn tại",
-      });
-    }
-
-    // Điều kiện lọc cơ bản trong bảng Report
-    const filter = {};
-    if (status) filter.status = status;
     if (type) filter.type = type;
+    if (email) filter.reportedEmail = { $regex: email, $options: "i" };
 
-    // 1️⃣ Nếu có email → lọc theo email người bị báo cáo
-    if (email) {
-      filter.reportedEmail = { $regex: email, $options: "i" };
-    }
-
-    // 2️⃣ Truy vấn báo cáo
     const reports = await ReportModel.find(filter)
       .populate("reporterId", "name email role")
       .sort({ createdAt: -1 });
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       count: reports.length,
       data: reports,
@@ -43,61 +25,25 @@ const getListReport = async (req, res) => {
   }
 };
 
-const createReport = async (req, res) => {
+const getResolvedReports = async (req, res) => {
   try {
-    const { reason, type, reportedEmail } = req.body;
-    const userId = req.user.userId;
+    const { email, type } = req.query;
+    const filter = { status: "resolved" };
 
-    // 1️⃣ Kiểm tra người gửi báo cáo
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Người dùng không tồn tại",
-      });
-    }
+    if (type) filter.type = type;
+    if (email) filter.reportedEmail = { $regex: email, $options: "i" };
 
-    // 2️⃣ Kiểm tra dữ liệu đầu vào
-    if (!reason || !type || !reportedEmail) {
-      return res.status(400).json({
-        success: false,
-        message: "Vui lòng nhập đầy đủ thông tin báo cáo.",
-      });
-    }
+    const reports = await ReportModel.find(filter)
+      .populate("reporterId", "name email role")
+      .sort({ createdAt: -1 });
 
-    if (!["user", "post"].includes(type)) {
-      return res.status(400).json({
-        success: false,
-        message: "Loại báo cáo không hợp lệ.",
-      });
-    }
-
-    // 3️⃣ Ảnh báo cáo (middleware upload đã xử lý sẵn)
-    const reportImage = req.image || null;
-    if (reportImage.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Vui lòng tải lên ít nhất 1 ảnh báo cáo.",
-      });
-    }
-
-    // 4️⃣ Tạo mới báo cáo
-    const newReport = await ReportModel.create({
-      reporterId: userId,
-      type,
-      reportedEmail: reportedEmail.trim().toLowerCase(),
-      reason,
-      reportPic: reportImage,
-    });
-
-    return res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: "Gửi báo cáo thành công.",
-      report: newReport,
+      count: reports.length,
+      data: reports,
     });
   } catch (error) {
-    console.error("Lỗi khi tạo báo cáo:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Lỗi server: " + error.message,
     });
@@ -169,4 +115,4 @@ const handleReport = async (req, res) => {
   }
 };
 
-module.exports = { getListReport, createReport, handleReport };
+module.exports = { getPendingReports, getResolvedReports, handleReport };
