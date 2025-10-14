@@ -1,11 +1,10 @@
 const UserModel = require("../models/User");
-const PostModel = require("../models/Post.js");
 const ReportModel = require("../models/Report.js");
 
 const getListReport = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { status, email } = req.query; // filter theo trạng thái và email người báo cáo
+    const { status, email, type } = req.query; // filter báo cáo
 
     // Kiểm tra người dùng
     const user = await UserModel.findById(userId);
@@ -19,24 +18,16 @@ const getListReport = async (req, res) => {
     // Điều kiện lọc cơ bản trong bảng Report
     const filter = {};
     if (status) filter.status = status;
+    if (type) filter.type = type;
 
-    // 1️⃣ Nếu có email, ta cần tìm userId tương ứng trước
+    // 1️⃣ Nếu có email → lọc theo email người bị báo cáo
     if (email) {
-      const users = await UserModel.find(
-        { email: { $regex: email, $options: "i" } },
-        "_id"
-      );
-      const reporterIds = users.map((u) => u._id);
-      filter.reporterId = { $in: reporterIds };
+      filter.reportedEmail = { $regex: email, $options: "i" };
     }
 
     // 2️⃣ Truy vấn báo cáo
     const reports = await ReportModel.find(filter)
       .populate("reporterId", "name email role")
-      .populate({
-        path: "targetId",
-        select: "title name email province district createdBy", //dữ liệu từ bài viết
-      })
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
@@ -54,10 +45,10 @@ const getListReport = async (req, res) => {
 
 const createReport = async (req, res) => {
   try {
-    const { reason, type, targetId } = req.body;
+    const { reason, type, reportedEmail } = req.body;
     const userId = req.user.userId;
 
-    // 1️⃣ Kiểm tra người dùng
+    // 1️⃣ Kiểm tra người gửi báo cáo
     const user = await UserModel.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -67,18 +58,17 @@ const createReport = async (req, res) => {
     }
 
     // 2️⃣ Kiểm tra dữ liệu đầu vào
-    if (!reason || !type || !targetId) {
+    if (!reason || !type || !reportedEmail) {
       return res.status(400).json({
         success: false,
-        message:
-          "Vui lòng nhập đầy đủ thông tin báo cáo (type, targetId, reason).",
+        message: "Vui lòng nhập đầy đủ thông tin báo cáo.",
       });
     }
 
     if (!["user", "post"].includes(type)) {
       return res.status(400).json({
         success: false,
-        message: "Loại báo cáo không hợp lệ (chỉ chấp nhận user hoặc post).",
+        message: "Loại báo cáo không hợp lệ.",
       });
     }
 
@@ -98,7 +88,7 @@ const createReport = async (req, res) => {
     const newReport = await ReportModel.create({
       reporterId: userId,
       type,
-      targetId,
+      reportedEmail: reportedEmail.trim().toLowerCase(),
       reason,
       reportPic,
     });
@@ -135,24 +125,31 @@ const handleReport = async (req, res) => {
     if (status && !validStatuses.includes(status)) {
       return res.status(400).json({
         success: false,
-        message:
-          "Trạng thái không hợp lệ. Chỉ chấp nhận pending hoặc resolved.",
+        message: "Trạng thái không hợp lệ.",
       });
     }
 
-    // 3️⃣ Tạo object chứa các trường cần cập nhật
+    // 3️⃣ Bắt buộc phải có adminNote nếu chuyển sang resolved
+    if (status === "resolved" && (!adminNote || adminNote.trim() === "")) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập ghi chú xử lý.",
+      });
+    }
+
+    // 4️⃣ Tạo object chứa các trường cần cập nhật
     const updateFields = {};
     if (status) updateFields.status = status;
-    if (adminNote !== undefined) updateFields.adminNote = adminNote;
+    if (adminNote !== undefined) updateFields.adminNote = adminNote.trim();
 
-    // 4️⃣ Cập nhật trực tiếp và trả về document mới
+    // 5️⃣ Cập nhật và trả về document mới
     const updatedReport = await ReportModel.findByIdAndUpdate(
       reportId,
       updateFields,
-      { new: true } // Trả về document sau khi update
+      { new: true }
     );
 
-    // 5️⃣ Kiểm tra tồn tại
+    // 6️⃣ Kiểm tra tồn tại
     if (!updatedReport) {
       return res.status(404).json({
         success: false,
@@ -160,10 +157,10 @@ const handleReport = async (req, res) => {
       });
     }
 
-    // 6️⃣ Trả kết quả
+    // 7️⃣ Trả kết quả
     return res.status(200).json({
       success: true,
-      message: "Cập nhật trạng thái báo cáo thành công.",
+      message: "Xử lý báo cáo thành công.",
       data: updatedReport,
     });
   } catch (error) {
