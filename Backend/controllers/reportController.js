@@ -73,16 +73,13 @@ const createReport = async (req, res) => {
     }
 
     // 3️⃣ Ảnh báo cáo (middleware upload đã xử lý sẵn)
-    const reportImages = req.images || [];
-    if (reportImages.length === 0) {
+    const reportImage = req.image || null;
+    if (reportImage.length === 0) {
       return res.status(400).json({
         success: false,
         message: "Vui lòng tải lên ít nhất 1 ảnh báo cáo.",
       });
     }
-
-    // Ở đây bạn chỉ cho phép 1 ảnh → lấy reportImages[0]
-    const reportPic = reportImages[0];
 
     // 4️⃣ Tạo mới báo cáo
     const newReport = await ReportModel.create({
@@ -90,7 +87,7 @@ const createReport = async (req, res) => {
       type,
       reportedEmail: reportedEmail.trim().toLowerCase(),
       reason,
-      reportPic,
+      reportPic: reportImage,
     });
 
     return res.status(201).json({
