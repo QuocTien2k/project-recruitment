@@ -9,7 +9,8 @@ import {
   HiChevronDown,
   HiChevronRight,
   HiDocumentReport,
-  HiClipboardList,
+  HiExclamationCircle,
+  HiBadgeCheck,
 } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
 
@@ -106,9 +107,14 @@ const Sidebar = ({ isOpen }) => {
       icon: HiDocumentReport,
       children: [
         {
-          label: "Danh sách báo cáo",
-          icon: HiClipboardList,
-          to: "/admin/danh-sach-bao-cao",
+          label: "Báo cáo chưa xử lý",
+          icon: HiExclamationCircle,
+          to: "/admin/bao-cao-chua-xu-ly",
+        },
+        {
+          label: "Báo cáo đã xử lý",
+          icon: HiBadgeCheck,
+          to: "/admin/bao-cao-da-xu-ly",
         },
       ],
     },

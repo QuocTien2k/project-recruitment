@@ -48,7 +48,12 @@ const BannedTeachers = lazy(() =>
 );
 const PendingPosts = lazy(() => import("@pages-admin/posts/PendingPosts"));
 const ApprovedPosts = lazy(() => import("@pages-admin/posts/ApprovedPosts"));
-const ListReport = lazy(() => import("@pages/Admin/reports/ListReport"));
+const ListReportPending = lazy(() =>
+  import("@pages/Admin/reports/ListReportPending")
+);
+const ListReportResolved = lazy(() =>
+  import("@pages/Admin/reports/ListReportResolved")
+);
 
 // --- Layouts ---
 const UserLayout = lazy(() => import("@layouts/UserLayout"));
@@ -126,7 +131,14 @@ function App() {
                 <Route path="bai-viet/da-duyet" element={<ApprovedPosts />} />
 
                 {/* Posts */}
-                <Route path="danh-sach-bao-cao" element={<ListReport />} />
+                <Route
+                  path="bao-cao-chua-xu-ly"
+                  element={<ListReportPending />}
+                />
+                <Route
+                  path="bao-cao-da-xu-ly"
+                  element={<ListReportResolved />}
+                />
               </Route>
             </Route>
 

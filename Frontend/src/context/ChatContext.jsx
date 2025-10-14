@@ -244,7 +244,7 @@ export const ChatProvider = ({ children }) => {
       chat.members.map((m) => m._id).includes(targetUserId)
     );
     if (!chat) return 0;
-    if (chat.lastMessage?.sender !== user._id) {
+    if (chat.lastMessage?.sender !== user?._id) {
       return chat.unreadMessageCount || 0;
     }
     return 0;
