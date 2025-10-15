@@ -80,7 +80,7 @@ function App() {
               <Route path="/bai-viet-cua-toi" element={<MyPost />} />
               <Route path="/danh-sach-chan" element={<MyBlock />} />
               <Route path="/danh-sach-yeu-thich" element={<MyFavorite />} />
-              <Route path="danh-sach-bao-cao" element={<MyReport />} />
+              <Route path="/danh-sach-bao-cao" element={<MyReport />} />
               <Route
                 path="/danh-sach-bai-viet-da-luu"
                 element={<MySavePost />}

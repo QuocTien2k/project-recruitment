@@ -1,28 +1,36 @@
 import React, { useState } from "react";
 import {
-  HiAcademicCap,
-  HiBan,
-  HiCheckCircle,
-  HiDocumentText,
   HiUserGroup,
   HiUserRemove,
-  HiChevronDown,
-  HiChevronRight,
-  HiDocumentReport,
+  HiAcademicCap,
+  HiBan,
+  HiDocumentText,
+  HiCheckCircle,
   HiExclamationCircle,
   HiBadgeCheck,
+  HiChevronDown,
+  HiChevronRight,
 } from "react-icons/hi";
+import {
+  Users2,
+  UserX,
+  GraduationCap,
+  FileText,
+  ShieldAlert,
+  ShieldCheck,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = ({ isOpen }) => {
   const [openGroups, setOpenGroups] = useState({});
 
   const baseClass =
-    "flex items-center gap-3 py-2 transition-all ease-out rounded-md cursor-pointer";
+    "flex items-center gap-3 py-2 transition-all duration-200 ease-out rounded-md cursor-pointer";
   const openClass = "px-4 justify-start";
   const closedClass = "w-14 justify-center";
   const hoverClass = "hover:bg-slate-800";
-  const activeClass = "bg-slate-800";
+  const activeClass =
+    "bg-slate-700 font-semibold border-l-4 border-blue-500 shadow-sm";
 
   const handleOpenGroups = (key) => {
     setOpenGroups((prev) => ({
@@ -53,16 +61,16 @@ const Sidebar = ({ isOpen }) => {
     {
       key: "account",
       label: "Quản lý tài khoản",
-      icon: HiUserGroup,
+      icon: Users2, // lucide: biểu tượng nhóm người
       children: [
         {
           label: "Tài khoản hoạt động",
-          icon: HiUserGroup,
+          icon: HiUserGroup, // heroicon: nhóm người
           to: "/admin/tai-khoan/hoat-dong",
         },
         {
           label: "Tài khoản bị khóa",
-          icon: HiUserRemove,
+          icon: UserX, // lucide: người có dấu X
           to: "/admin/tai-khoan/bi-khoa",
         },
       ],
@@ -70,16 +78,16 @@ const Sidebar = ({ isOpen }) => {
     {
       key: "teacher",
       label: "Quản lý giáo viên",
-      icon: HiAcademicCap,
+      icon: GraduationCap, // lucide: mũ tốt nghiệp
       children: [
         {
           label: "Giáo viên hoạt động",
-          icon: HiAcademicCap,
+          icon: HiAcademicCap, // heroicon: mũ tốt nghiệp
           to: "/admin/giao-vien/hoat-dong",
         },
         {
           label: "Giáo viên bị khóa",
-          icon: HiBan,
+          icon: HiBan, // heroicon: dấu cấm
           to: "/admin/giao-vien/bi-khoa",
         },
       ],
@@ -87,16 +95,16 @@ const Sidebar = ({ isOpen }) => {
     {
       key: "post",
       label: "Quản lý bài viết",
-      icon: HiDocumentText,
+      icon: FileText, // lucide: tài liệu
       children: [
         {
           label: "Bài chờ duyệt",
-          icon: HiDocumentText,
+          icon: HiExclamationCircle, // heroicon: cảnh báo chờ duyệt
           to: "/admin/bai-viet/cho-duyet",
         },
         {
           label: "Bài đã duyệt",
-          icon: HiCheckCircle,
+          icon: HiCheckCircle, // heroicon: đã duyệt
           to: "/admin/bai-viet/da-duyet",
         },
       ],
@@ -104,7 +112,7 @@ const Sidebar = ({ isOpen }) => {
     {
       key: "report",
       label: "Quản lý báo cáo",
-      icon: HiDocumentReport,
+      icon: ShieldAlert, // lucide: khiên cảnh báo
       children: [
         {
           label: "Báo cáo chưa xử lý",
@@ -113,7 +121,7 @@ const Sidebar = ({ isOpen }) => {
         },
         {
           label: "Báo cáo đã xử lý",
-          icon: HiBadgeCheck,
+          icon: ShieldCheck, // lucide: khiên có dấu check
           to: "/admin/bao-cao-da-xu-ly",
         },
       ],
