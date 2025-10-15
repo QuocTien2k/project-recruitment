@@ -1,3 +1,4 @@
+import { handleReport } from "@api/report";
 import PendingReportSearch from "@components-search/admin/PendingReportSearch";
 import EmptyState from "@components-states/EmptyState";
 import NoResult from "@components-states/NoResult";
@@ -6,6 +7,7 @@ import Loading from "@components-ui/Loading";
 import Pagination from "@components-ui/Pagination";
 import Title from "@components-ui/Title";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FiX } from "react-icons/fi";
 import { useSelector } from "react-redux";
 
@@ -16,7 +18,10 @@ const ListReportPending = () => {
   const [showLoader, setShowLoader] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [previewImage, setPreviewImage] = useState(null);
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [adminNote, setAdminNote] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); //loading khi bấm nút
 
   const displayedReport = listReport.slice(
     currentPage * itemsPerPage,
@@ -37,7 +42,40 @@ const ListReportPending = () => {
     return () => clearTimeout(timer);
   }, [isGlobalLoading]);
 
-  console.log(displayedReport);
+  const handleConfirmReport = async () => {
+    if (!adminNote.trim()) {
+      toast.error("Vui lòng nhập ghi chú xử lý!");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const res = await handleReport(selectedReport._id, {
+        status: "resolved",
+        adminNote,
+      });
+
+      if (res.success) {
+        toast.success("Xử lý báo cáo thành công.");
+        // Xóa report đã xử lý khỏi danh sách hiện tại
+        setListReport((prev) =>
+          prev.filter((r) => r._id !== selectedReport._id)
+        );
+        setSelectedReport(null);
+      } else {
+        toast.error("Xử lý thất bại: " + res.message);
+      }
+    } catch (err) {
+      console.error("Lỗi khi xử lý báo cáo:", err);
+      const msg = err?.response?.data?.message || "Lỗi máy chủ khi xử lý";
+      toast.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  //console.log(displayedReport);
 
   return (
     <>
@@ -71,8 +109,10 @@ const ListReportPending = () => {
               <div className="flex justify-end mb-2">
                 {/* Nút xử lý góc phải */}
                 <Button
-                  onClick={() => console.log(item._id)}
-                  className=""
+                  onClick={() => {
+                    setSelectedReport(item);
+                    setAdminNote(""); // reset ghi chú khi mở modal
+                  }}
                   size="sm"
                 >
                   Xử lý
@@ -148,6 +188,74 @@ const ListReportPending = () => {
                 <button
                   onClick={() => setPreviewImage(null)}
                   className="cursor-pointer absolute top-4 right-4 text-white bg-red-500/80 hover:bg-red-600 p-2 rounded-full transition"
+                >
+                  <FiX size={20} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Modal xử lý báo cáo */}
+          {selectedReport && (
+            <div
+              className="bg-modal backdrop-blur-sm"
+              onClick={() => !isSubmitting && setSelectedReport(null)}
+            >
+              <div
+                className="relative bg-white rounded-lg shadow-lg max-w-md w-full p-6"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Tiêu đề */}
+                <h2 className="text-lg font-semibold mb-4 text-gray-800">
+                  Xử lý báo cáo
+                </h2>
+
+                {/* Thông tin ngắn */}
+                <p className="text-sm mb-2">
+                  <span className="font-medium text-gray-600">
+                    Người bị báo cáo:
+                  </span>{" "}
+                  <span className="text-red-600">
+                    {selectedReport.reportedEmail}
+                  </span>
+                </p>
+                <p className="text-sm mb-4">
+                  <span className="font-medium text-gray-600">Lý do:</span>{" "}
+                  {selectedReport.reason}
+                </p>
+
+                {/* Ghi chú */}
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Ghi chú xử lý:
+                </label>
+                <textarea
+                  rows={4}
+                  value={adminNote}
+                  onChange={(e) => setAdminNote(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring focus:ring-blue-200"
+                  placeholder="Nhập ghi chú cho báo cáo này..."
+                />
+
+                {/* Nút hành động */}
+                <div className="flex justify-end gap-3 mt-5">
+                  <Button
+                    variant="danger"
+                    onClick={() => setSelectedReport(null)}
+                    disabled={isSubmitting}
+                  >
+                    Hủy
+                  </Button>
+
+                  <Button onClick={handleConfirmReport} disabled={isSubmitting}>
+                    {isSubmitting ? "Đang xử lý..." : "Xác nhận"}
+                  </Button>
+                </div>
+
+                {/* Nút đóng góc phải */}
+                <button
+                  onClick={() => setSelectedReport(null)}
+                  className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+                  disabled={isSubmitting}
                 >
                   <FiX size={20} />
                 </button>
