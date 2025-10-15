@@ -7,8 +7,7 @@ const getMyNotifications = async (req, res) => {
 
     const notifications = await Notification.find({ user: userId })
       .sort({ createdAt: -1 }) // mới nhất lên đầu
-      .populate("post", "title") // lấy title của bài viết nếu có
-      .populate("blog", "title"); // lấy title của blog nếu có
+      .populate("post", "title"); // lấy title của bài viết nếu có
 
     res.status(200).json({
       success: true,
