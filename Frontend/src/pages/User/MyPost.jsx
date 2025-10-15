@@ -13,9 +13,12 @@ import EmptyState from "@components-states/EmptyState";
 import toast from "react-hot-toast";
 import { createWithPost } from "@api/contract";
 import ContractModal from "@contract/ContractModal";
+import LoginRequired from "../../components/LoginRequired";
 
 const MyPost = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
+  const currentUser = useSelector((state) => state.currentUser.user);
+
   const [myPosts, setMyPosts] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -76,6 +79,8 @@ const MyPost = () => {
       setCreatingContract(false);
     }
   };
+
+  if (!currentUser) return <LoginRequired />;
 
   return (
     <>

@@ -7,9 +7,12 @@ import Pagination from "@components-ui/Pagination";
 import Title from "@components-ui/Title";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import LoginRequired from "../../components/LoginRequired";
 
 const MyBlock = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
+  const currentUser = useSelector((state) => state.currentUser.user);
+
   const [myListBlock, setMyListBlock] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -38,6 +41,8 @@ const MyBlock = () => {
     }
     return () => clearTimeout(timer);
   }, [isGlobalLoading]);
+
+  if (!currentUser) return <LoginRequired />;
 
   return (
     <>

@@ -7,9 +7,11 @@ import Title from "@components-ui/Title";
 import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import LoginRequired from "../../components/LoginRequired";
 
 const MyReport = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
+  const currentUser = useSelector((state) => state.currentUser.user);
   const [listReport, setListReport] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -35,6 +37,8 @@ const MyReport = () => {
     }
     return () => clearTimeout(timer);
   }, [isGlobalLoading]);
+
+  if (!currentUser) return <LoginRequired />;
 
   //console.log(displayedReport);
 

@@ -11,9 +11,12 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import LoginRequired from "../../components/LoginRequired";
 
 const MyFavorite = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
+  const currentUser = useSelector((state) => state.currentUser.user);
+
   const [myList, setMyList] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -63,6 +66,8 @@ const MyFavorite = () => {
       onCancel: () => console.log("Hủy xoá"),
     });
   };
+
+  if (!currentUser) return <LoginRequired />;
 
   return (
     <>
