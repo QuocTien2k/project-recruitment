@@ -1,4 +1,3 @@
-import PendingReportSearch from "@components-search/admin/PendingReportSearch";
 import ResolvedReportSearch from "@components-search/admin/ResolvedReportSearch";
 import EmptyState from "@components-states/EmptyState";
 import NoResult from "@components-states/NoResult";
@@ -9,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { useSelector } from "react-redux";
 
-const ListReportPending = () => {
+const ListReportResolved = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listReport, setListReport] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -41,7 +40,7 @@ const ListReportPending = () => {
 
   return (
     <>
-      <Title text="Danh sách báo cáo chưa xử lý" className="mb-6" />
+      <Title text="Danh sách báo cáo đã xử lý" className="mb-6" />
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
         {/* Search */}
@@ -160,4 +159,4 @@ const ListReportPending = () => {
   );
 };
 
-export default ListReportPending;
+export default ListReportResolved;
