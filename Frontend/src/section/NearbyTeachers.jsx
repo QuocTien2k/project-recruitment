@@ -64,22 +64,30 @@ const NearbyTeachers = () => {
 
   return (
     <>
-      <div className="mx-auto px-2 space-y-4">
-        {/* 📌 Tiêu đề */}
-        <Title text="Giáo viên gần bạn" size="2xl" underline />
+      <section
+        className="py-10 px-2 my-2 rounded-2xl"
+        style={{
+          background: "var(--bg-section-5)",
+          boxShadow: "var(--section-shadow)",
+        }}
+      >
+        <div className="max-w-[var(--width-8xl)] mx-auto my-2 px-2 space-y-4">
+          {/* 📌 Tiêu đề */}
+          <Title text="Giáo viên gần bạn" size="2xl" underline />
 
-        {isGlobalLoading ? (
-          <Loading size="md" />
-        ) : (
-          <Slider {...settings}>
-            {teachers.map((teacher) => (
-              <div key={teacher._id} className="px-2 mb-4">
-                <CardTeacher teacher={teacher} />
-              </div>
-            ))}
-          </Slider>
-        )}
-      </div>
+          {isGlobalLoading ? (
+            <Loading size="md" />
+          ) : (
+            <Slider {...settings}>
+              {teachers.map((teacher) => (
+                <div key={teacher._id} className="px-2 mb-4">
+                  <CardTeacher teacher={teacher} />
+                </div>
+              ))}
+            </Slider>
+          )}
+        </div>
+      </section>
     </>
   );
 };

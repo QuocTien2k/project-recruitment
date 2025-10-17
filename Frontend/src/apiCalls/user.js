@@ -183,3 +183,13 @@ export const checkStatusSavePost = async (postId) => {
     throw err;
   }
 };
+
+export const getListPostNearBy = async () => {
+  try {
+    const response = await axiosInstance.get("api/user/nearby-posts");
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi lấy danh sách:", err?.message);
+    throw err;
+  }
+};

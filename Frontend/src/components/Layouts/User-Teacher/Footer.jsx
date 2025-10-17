@@ -24,7 +24,11 @@ const Footer = () => {
       <div className="max-w-[var(--width-8xl)] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Cột 1: Thông tin công ty */}
         <div className="space-y-4">
-          <img src="/112.png" alt="Logo" className="w-32 h-20 object-contain" />
+          <img
+            src="/logo.png"
+            alt="Logo"
+            className="w-32 h-20 object-contain invert transition-all duration-300"
+          />
           <p className="text-sm text-gray-300">Hotline: 0123 456 789</p>
           <p className="text-sm text-gray-300">
             Email: doquoctien.developer.com

@@ -32,6 +32,15 @@
         --bg-section-3: linear-gradient(180deg,
                 rgb(240, 253, 244) 0%,
                 rgb(220, 252, 231) 100%);
+        --bg-section-4: linear-gradient(180deg,
+                rgb(232, 253, 245) 0%,
+                rgb(209, 250, 229) 40%,
+                rgb(187, 247, 208) 100%);
+        --bg-section-5: linear-gradient(135deg,
+                rgb(232, 253, 245) 0%,
+                rgb(224, 242, 254) 40%,
+                rgb(209, 250, 229) 100%);
+
         /* Shadow chung */
         --section-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }

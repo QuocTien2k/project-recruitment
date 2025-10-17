@@ -4,17 +4,18 @@ import React from "react";
 import SliderTeacher from "@sections/SliderTeacher";
 import { useSelector } from "react-redux";
 import NearbyTeachers from "@sections/NearbyTeachers";
+import NearbyPosts from "@sections/NearbyPosts";
 
 const Home = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
-  console.log(currentUser);
+  //console.log(currentUser);
   return (
     <>
-      <main className="py-8">
+      <main className="py-6">
         {currentUser?.role === "user" && <NearbyTeachers />}
-        {/* {currentUser?.role === "teacher" && <Tạm chưa đặt tên />} */}
+        {currentUser?.role === "teacher" && <NearbyPosts />}
         {/* Grid 12 cột */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div className="my-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
           {/* Left */}
           <div className="xl:col-span-9">
             <ShortListTeacher />
@@ -27,7 +28,7 @@ const Home = () => {
         </div>
 
         {/* Section 3: ShortListPost */}
-        <div className="mt-16">
+        <div className="">
           <ShortListPost />
         </div>
       </main>
