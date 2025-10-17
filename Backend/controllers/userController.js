@@ -516,6 +516,65 @@ const checkFavoriteTeacher = async (req, res) => {
   }
 };
 
+const getNearbyTeachers = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    //lấy user hiện tại từ token
+    const currentUser = await UserModel.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy người dùng",
+      });
+    }
+
+    //lấy tỉnh thành - phường/xã
+    const { province } = currentUser;
+    //console.log("Province:", province);
+
+    // Tìm tất cả user có cùng tỉnh role teacher
+    const nearbyUsers = await UserModel.find({
+      province,
+      isActive: true,
+      role: "teacher",
+    }).select("_id district province");
+
+    if (!nearbyUsers.length) {
+      return res.status(200).json({
+        success: true,
+        message: "Không có giáo viên nào gần bạn.",
+        data: [],
+      });
+    }
+
+    // Lấy danh sách userId của giáo viên cùng tỉnh
+    const teacherUserIds = nearbyUsers.map((u) => u._id);
+
+    // Tìm trong bảng Teacher, populate thông tin userId
+    const teachers = await TeacherModel.find({
+      userId: { $in: teacherUserIds },
+    })
+      .populate({
+        path: "userId",
+        select:
+          "middleName name email phone profilePic district province isActive role",
+      })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách giáo viên gần bạn thành công.",
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 /******** Cá nhân - đối với role Teacher ******** */
 const getSavePosts = async (req, res) => {
   try {
@@ -849,6 +908,7 @@ module.exports = {
   addFavoriteTeacher,
   removeFavoriteTeacher,
   checkFavoriteTeacher,
+  getNearbyTeachers,
   getSavePosts,
   addSavePost,
   removeSavePost,

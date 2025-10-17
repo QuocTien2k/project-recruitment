@@ -9,6 +9,7 @@ const {
   addFavoriteTeacher,
   removeFavoriteTeacher,
   checkFavoriteTeacher,
+  getNearbyTeachers,
   getSavePosts,
   addSavePost,
   removeSavePost,
@@ -55,6 +56,7 @@ router.get(
   authorize("user"),
   checkFavoriteTeacher
 );
+router.get("/nearby", protect, authorize("user"), getNearbyTeachers);
 
 /******** Cá nhân - đối với role Teacher ******** */
 router.get("/saved-posts", protect, authorize("teacher"), getSavePosts);
