@@ -122,6 +122,17 @@ export const checkStatusFavorite = async (teacherId) => {
   }
 };
 
+//danh sách giáo viên gần
+export const getListTeacherNearBy = async () => {
+  try {
+    const response = await axiosInstance.get("api/user/nearby");
+    return response.data;
+  } catch (err) {
+    console.log("Có lỗi khi lấy danh sách:", err?.message);
+    throw err;
+  }
+};
+
 /************** Role Teacher ******************** */
 //Lấy danh sách yêu thích
 export const getListSavedPost = async (filters = {}) => {
