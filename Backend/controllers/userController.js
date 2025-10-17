@@ -801,6 +801,67 @@ const checkSavePost = async (req, res) => {
   }
 };
 
+const getNearbyPostsForTeacher = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // 1️⃣ Lấy user (giáo viên)
+    const currentUser = await UserModel.findById(userId);
+    if (!currentUser || currentUser.role !== "teacher") {
+      return res.status(403).json({
+        success: false,
+        message: "Chỉ giáo viên mới được truy cập chức năng này.",
+      });
+    }
+
+    // 2️⃣ Lấy province từ user
+    const { province } = currentUser;
+
+    // 3️⃣ Tìm bài viết cùng province, đã duyệt
+    const posts = await PostModel.find({
+      province,
+      status: "approved",
+    })
+      .populate({
+        path: "createdBy",
+        select: "middleName name _id role",
+      })
+      .sort({ createdAt: -1 });
+
+    // 4️⃣ Chuẩn hóa dữ liệu (để frontend xài đúng PostCard)
+    const formattedPosts = posts.map((post) => ({
+      _id: post._id,
+      title: post.title,
+      slug: post.slug,
+      description: post.description,
+      district: post.district,
+      province: post.province,
+      salary: post.salary,
+      workingType: post.workingType,
+      timeType: post.timeType,
+      createdAt: post.createdAt,
+      createdByName: `${post.createdBy?.middleName || ""} ${
+        post.createdBy?.name || ""
+      }`.trim(),
+      createdBy: post.createdBy?._id,
+      status: post.status,
+      rejectionReason: post.rejectionReason,
+    }));
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách bài viết gần bạn thành công.",
+      data: formattedPosts,
+    });
+  } catch (error) {
+    console.error("Lỗi khi lấy bài viết gần giáo viên:", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 /******** Báo cáo ******** */
 const getUserReports = async (req, res) => {
   try {
@@ -913,6 +974,7 @@ module.exports = {
   addSavePost,
   removeSavePost,
   checkSavePost,
+  getNearbyPostsForTeacher,
   getUserReports,
   createReport,
 };

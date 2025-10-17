@@ -14,6 +14,7 @@ const {
   addSavePost,
   removeSavePost,
   checkSavePost,
+  getNearbyPostsForTeacher,
   getUserReports,
   createReport,
 } = require("../controllers/userController");
@@ -67,6 +68,12 @@ router.get(
   protect,
   authorize("teacher"),
   checkSavePost
+);
+router.get(
+  "/nearby-posts",
+  protect,
+  authorize("teacher"),
+  getNearbyPostsForTeacher
 );
 
 /******** Báo cáo ******** */
