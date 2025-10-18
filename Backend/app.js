@@ -4,10 +4,25 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 // Cho phép CORS từ frontend React
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://project-recruitment-ten.vercel.app",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true, // cho phép cookie từ frontend
+    origin: function (origin, callback) {
+      // Cho phép Postman hoặc các request không có origin
+      if (!origin) return callback(null, true);
+
+      // Chỉ cho phép những domain nằm trong danh sách
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, //cho phép cookies kèm theo
   })
 );
 
