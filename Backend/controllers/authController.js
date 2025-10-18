@@ -275,7 +275,7 @@ const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true, // không cho JS truy cập
       secure: process.env.NODE_ENV === "production", // chỉ dùng HTTPS khi production
-      sameSite: "strict", // hạn chế CSRF
+      sameSite: "none", // gửi cookie qua các domain khác nhau
       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 ngày
     });
 
