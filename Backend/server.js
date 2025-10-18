@@ -7,10 +7,23 @@ const dbConfig = require("./config/dbConfig");
 const socketIo = require("socket.io");
 
 const server = http.createServer(expressApp); // Tạo HTTP server từ app
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://project-recruitment-ten.vercel.app",
+];
+
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS (socket)"));
+      }
+    },
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
