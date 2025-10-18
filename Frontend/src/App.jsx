@@ -4,7 +4,7 @@ import { Suspense, lazy } from "react";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import DynamicTitle from "@context/DynamicTitle";
 import ScrollToTop from "@components-ui/ScrollToTop";
-import ChatArea from "@components-chat/ChatArea";
+import ChatArea from "@components-chat/ChatArea.jsx";
 import ContactAdminButton from "./components/ContactAdmin";
 import Loading from "@components-ui/Loading";
 import AboutUs from "@pages/User/AboutUs";
