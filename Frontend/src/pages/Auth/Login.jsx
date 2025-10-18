@@ -91,8 +91,14 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <div
+      className="min-h-screen flex justify-center items-center"
+      style={{ background: "var(--bg-auth-login)" }}
+    >
+      <div
+        className="bg-white p-8 rounded w-full max-w-md"
+        style={{ boxShadow: "var(--section-shadow)" }}
+      >
         <h2 className="text-2xl font-bold mb-6 text-center">Đăng nhập</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

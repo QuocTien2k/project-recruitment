@@ -9,8 +9,14 @@ const Signup = () => {
   const toggleRole = () => setIsTeacher((prev) => !prev);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-lg bg-white shadow-md rounded p-6 max-h-screen overflow-hidden">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ background: "var(--bg-auth-signup)" }}
+    >
+      <div
+        className="w-full max-w-lg bg-white rounded p-6 max-h-screen overflow-hidden"
+        style={{ boxShadow: "var(--section-shadow)" }}
+      >
         <h2 className="text-2xl font-bold mb-4 text-center">
           Đăng ký {isTeacher ? "Gia sư" : "Người dùng"}
         </h2>

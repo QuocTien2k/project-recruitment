@@ -17,6 +17,11 @@
         --header-height: 72px;
         --width-8xl: 90rem;
         --width-9xl: 100rem;
+        /* Page backgrounds */
+        --bg-auth-login: linear-gradient(135deg, rgb(224, 242, 254) 0%, rgb(209, 250, 229) 100%);
+        --bg-auth-signup: linear-gradient(135deg, rgb(220, 252, 231) 0%, rgb(187, 247, 208) 100%);
+        --bg-auth-forgot: linear-gradient(135deg, rgb(240, 253, 250) 0%, rgb(224, 242, 254) 100%);
+        --bg-auth-reset: linear-gradient(135deg, rgb(232, 253, 245) 0%, rgb(220, 252, 231) 100%);
         /* Section backgrounds */
         --bg-section-1: linear-gradient(rgba(255, 255, 255, 0) 22.49%,
                 rgb(255, 255, 255) 73.49%),

@@ -6,13 +6,17 @@ import { useSelector } from "react-redux";
 import NearbyTeachers from "@sections/NearbyTeachers";
 import NearbyPosts from "@sections/NearbyPosts";
 import SliderSchool from "@sections/SliderSchool";
+import SliderBanner from "@sections/SliderBanner";
 
 const Home = () => {
   const currentUser = useSelector((state) => state.currentUser.user);
   //console.log(currentUser);
+
   return (
     <>
       <main className="py-4 space-y-8">
+        <SliderBanner />
+
         {/* Section 1: Nearby */}
         {currentUser?.role === "user" && <NearbyTeachers />}
         {currentUser?.role === "teacher" && <NearbyPosts />}

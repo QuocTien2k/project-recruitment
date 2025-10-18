@@ -2,11 +2,33 @@ import Title from "@components-ui/Title";
 import React from "react";
 
 const AboutUs = () => {
+  const dataImg = [
+    {
+      id: 1,
+      link: "https://giasumacdinhchi.vn/wp-content/uploads/2021/07/Untitled-design-15-1.png",
+      title: "Hình ảnh kết nối toàn cầu",
+    },
+    {
+      id: 2,
+      link: "https://giasumacdinhchi.vn/wp-content/uploads/2021/07/Untitled-design-20-1.png",
+      title: "Đội ngũ phát triển",
+    },
+    {
+      id: 3,
+      link: "https://giasumacdinhchi.vn/wp-content/uploads/2021/07/Untitled-design-17-1.png",
+      title: "Nền tảng kết nối học viên với gia sư trực tuyến",
+    },
+    {
+      id: 4,
+      link: "https://giasumacdinhchi.vn/wp-content/uploads/2021/07/Untitled-design-19-1.png",
+      title: "Tự tin xu hướng",
+    },
+  ];
   return (
     <div className="max-w-[var(--width-8xl)] mx-auto px-4 py-10">
       <div className="grid md:grid-cols-12 gap-8">
         {/* Cột trái: nội dung About Us */}
-        <div className="md:col-span-9 space-y-12 bg-white p-6 rounded-lg shadow-sm">
+        <div className="md:col-span-9 space-y-12 bg-white p-6 rounded-lg shadow-sm text-justify">
           {/* Xu thế */}
           <section>
             <Title text="Xu thế" size="2xl" className="mb-4 font-poppins" />
@@ -155,33 +177,18 @@ const AboutUs = () => {
           </section>
         </div>
 
-        {/* Cột phải: blog hoặc hình ảnh */}
+        {/* Cột phải: hình ảnh */}
         <div className="md:col-span-3 space-y-6">
-          {/* Nếu có API blog */}
-          {/* <BlogSidebar /> */}
-
-          {/* Nếu chưa có thì dùng ảnh demo */}
-          <div className="rounded-lg overflow-hidden shadow-sm">
-            <img
-              src="https://giasumacdinhchi.vn/wp-content/uploads/2021/07/Untitled-design-15-1.png"
-              alt="Hình ảnh kết nối toàn cầu"
-              className="w-full object-cover"
-            />
-          </div>
-          <div className="rounded-lg overflow-hidden shadow-sm">
-            <img
-              src="/images/study-2.jpg"
-              alt="Đội ngũ phát triển"
-              className="w-full object-cover"
-            />
-          </div>
-          <div className="rounded-lg overflow-hidden shadow-sm">
-            <img
-              src="/images/study-3.jpg"
-              alt="Nền tảng kết nối học viên với gia sư trực tuyến"
-              className="w-full object-cover"
-            />
-          </div>
+          {/* Hình ảnh */}
+          {dataImg.map((item) => (
+            <div key={item.id} className="rounded-lg overflow-hidden shadow-sm">
+              <img
+                src={item.link}
+                alt={item.title}
+                className="w-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

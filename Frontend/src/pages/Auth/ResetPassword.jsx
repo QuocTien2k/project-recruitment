@@ -62,8 +62,14 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow-md">
+    <div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{ background: "var(--bg-auth-reset)" }}
+    >
+      <div
+        className="w-full max-w-md bg-white p-8 rounded"
+        style={{ boxShadow: "var(--section-shadow)" }}
+      >
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Đặt lại mật khẩu
         </h2>
