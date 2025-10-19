@@ -27,6 +27,7 @@ const SliderSchool = () => {
     autoplaySpeed: 4000,
     pauseOnHover: true,
     cssEase: "ease-in-out",
+    slidesToShow: 5, // mặc định (desktop)
     // responsive breakpoints
     responsive: [
       {
@@ -50,7 +51,6 @@ const SliderSchool = () => {
         settings: { slidesToShow: 7 },
       },
     ],
-    slidesToShow: 5, // mặc định (desktop)
   };
 
   return (
