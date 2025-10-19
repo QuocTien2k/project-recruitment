@@ -93,7 +93,7 @@ const PostCard = ({
       </div>
 
       {/* Tiêu đề */}
-      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+      <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 mb-2 line-clamp-2">
         {post?.title}
       </h2>
 
@@ -111,46 +111,46 @@ const PostCard = ({
       )}
 
       {/* Nội dung chi tiết */}
-      <div className="flex flex-col gap-2 text-sm text-gray-700">
+      <div className="flex flex-col gap-2 sm:gap-2.5 md:gap-3 text-sm md:text-base text-gray-700">
         {/*Địa điểm */}
         <p className="flex items-center gap-2">
-          <MapPin className="text-red-500 w-4 h-4" />
-          <span>
+          <MapPin className="text-red-500 w-4 h-4 flex-shrink-0" />
+          <span className="truncate">
             {post?.district}, {post?.province}
           </span>
         </p>
 
         {/*Lương */}
-        <p className="flex items-center gap-2">
-          <DollarSign className="text-green-500 w-4 h-4" />
-          <strong>Mức lương:</strong>
-          <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm">
+        <p className="flex items-center gap-2 flex-wrap">
+          <DollarSign className="text-green-500 w-4 h-4 flex-shrink-0" />
+          <strong className="whitespace-nowrap">Mức lương:</strong>
+          <strong className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md shadow-sm whitespace-nowrap">
             {post?.salary}
           </strong>
         </p>
 
         {/*hình thức làm việc */}
         <p className="flex items-center gap-2">
-          <Briefcase className="text-blue-500 w-4 h-4" />
-          <span>Hình thức: {post?.workingType}</span>
+          <Briefcase className="text-blue-500 w-4 h-4 flex-shrink-0" />
+          <span className="truncate">Hình thức: {post?.workingType}</span>
         </p>
 
         {/*Thời gian làm việc */}
         <p className="flex items-center gap-2">
-          <Clock className="text-yellow-500 w-4 h-4" />
-          <span>Thời gian: {post?.timeType}</span>
+          <Clock className="text-yellow-500 w-4 h-4 flex-shrink-0" />
+          <span className="truncate">Thời gian: {post?.timeType}</span>
         </p>
 
         {/*Lượt xem */}
         <p className="flex items-center gap-2 mt-2 text-gray-600">
-          <Eye className="text-indigo-500 w-4 h-4" />
-          <span>{views} lượt xem</span>
+          <Eye className="text-indigo-500 w-4 h-4 flex-shrink-0" />
+          <span className="whitespace-nowrap">{views} lượt xem</span>
         </p>
 
         {/*Ngày tạo */}
         <p className="flex items-center gap-2 mt-1 text-gray-600">
-          <CalendarDays className="text-emerald-500 w-4 h-4" />
-          <span>Ngày tạo: {formatted}</span>
+          <CalendarDays className="text-emerald-500 w-4 h-4 flex-shrink-0" />
+          <span className="whitespace-nowrap">Ngày tạo: {formatted}</span>
         </p>
 
         {isAdmin && (

@@ -1,14 +1,73 @@
 import Title from "@components-ui/Title";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 
 const SliderSchool = () => {
-  const [isClient, setIsClient] = useState(false); //for mobile
+  const sliderRef = useRef(null);
+  const [isClient, setIsClient] = useState(false);
+  const [currentBreakpoint, setCurrentBreakpoint] = useState(null);
 
+  // Hàm tính toán số slides dựa trên window width
+  const getSlidesToShow = (width) => {
+    if (width < 375) return 1;
+    if (width < 640) return 2;
+    if (width < 768) return 3;
+    if (width < 1024) return 4;
+    if (width < 1280) return 5;
+    return 6;
+  };
+
+  // Detect breakpoint ban đầu
   useEffect(() => {
-    // chỉ chạy khi client đã mount
+    const initialBreakpoint = getSlidesToShow(window.innerWidth);
+    setCurrentBreakpoint(initialBreakpoint);
     setIsClient(true);
+
+    // Force refresh sau khi mount
+    const timer = setTimeout(() => {
+      if (sliderRef.current) {
+        // Dispatch resize event để slider recalculate
+        window.dispatchEvent(new Event("resize"));
+
+        // Go to first slide
+        sliderRef.current.slickGoTo(0);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, []);
+
+  // Handle resize với debounce
+  useEffect(() => {
+    if (!isClient) return;
+
+    let resizeTimer;
+
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const newBreakpoint = getSlidesToShow(window.innerWidth);
+
+        // Chỉ update khi breakpoint thực sự thay đổi
+        if (newBreakpoint !== currentBreakpoint) {
+          setCurrentBreakpoint(newBreakpoint);
+
+          if (sliderRef.current) {
+            sliderRef.current.slickGoTo(
+              sliderRef.current.innerSlider.state.currentSlide
+            );
+          }
+        }
+      }, 150);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimer);
+    };
+  }, [isClient, currentBreakpoint]);
 
   const dataImg = [
     "https://giasumacdinhchi.vn/wp-content/uploads/2024/06/logo-dhkt.jpg",
@@ -23,10 +82,10 @@ const SliderSchool = () => {
     "https://imgcdn.tapchicongthuong.vn/thumb/w_1000/tcct-media/mr-trung/truong-dai-hoc-cong-nghiep-thuc-pham-tp-hcm-hufi-chinh-thuc-doi-ten-thanh-truong-dai-hoc-cong-thuong-tp-hcm-huit-2.jpg",
   ];
 
-  // cấu hình slider
   const settings = {
+    ref: sliderRef,
     arrows: false,
-    dots: false, // ẩn chấm tròn
+    dots: false,
     infinite: true,
     speed: 1500,
     slidesToScroll: 1,
@@ -34,66 +93,88 @@ const SliderSchool = () => {
     autoplaySpeed: 4000,
     pauseOnHover: true,
     cssEase: "ease-in-out",
-    slidesToShow: 5, // mặc định (desktop)
-    // responsive breakpoints
-
+    slidesToShow: currentBreakpoint || 6, // Sử dụng state breakpoint
+    swipeToSlide: true,
+    touchThreshold: 10, //độ nhạy khi vuốt
+    adaptiveHeight: false, //chieu cao co dinh o mobile
+    lazyLoad: "ondemand", //chỉ load khi co hinh
     responsive: [
       {
-        breakpoint: 1536, // 2xl ↓
-        settings: { slidesToShow: 7 },
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 1,
+        },
       },
       {
-        breakpoint: 1280, // xl ↓
-        settings: { slidesToShow: 6 },
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+        },
       },
       {
-        breakpoint: 1024, // lg ↓
-        settings: { slidesToShow: 5 },
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
       },
       {
-        breakpoint: 768, // md ↓
-        settings: { slidesToShow: 4 },
+        breakpoint: 640,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
       },
       {
-        breakpoint: 640, // sm ↓
-        settings: { slidesToShow: 3 },
-      },
-      {
-        breakpoint: 480, // xs ↓
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 360, // rất nhỏ ↓
-        settings: { slidesToShow: 1 },
+        breakpoint: 375,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
       },
     ],
   };
 
-  if (!isClient) return null;
+  if (!isClient || currentBreakpoint === null) {
+    return (
+      <section className="py-10 px-2 mx-2 rounded-2xl bg-white">
+        <div className="max-w-7xl mx-auto px-2 space-y-8">
+          <Title text="Đối tác liên kết" align="center" size="2xl" />
+          <div className="h-36 flex items-center justify-center">
+            <p className="text-gray-400">Đang tải...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
       className="py-10 px-2 mx-2 rounded-2xl bg-white"
       style={{
-        boxShadow: "var(--section-shadow)",
+        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
       }}
     >
-      <div className="max-w-[var(--width-8xl)] mx-auto px-2 space-y-8">
-        <Title text="Đối tác liên kết" size="2xl" align="center" />
-        <Slider {...settings}>
-          {dataImg.map((src, index) => (
-            <div key={index} className="px-3">
-              <div className="flex justify-center items-center">
-                <img
-                  src={src}
-                  alt={`Logo trường ${index + 1}`}
-                  className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-contain"
-                  loading="lazy"
-                />
+      <div className="max-w-7xl mx-auto px-2 space-y-8">
+        <Title text="Đối tác liên kết" align="center" size="2xl" />
+        <div className="slider-wrapper w-full overflow-hidden">
+          <Slider {...settings} key={currentBreakpoint}>
+            {dataImg.map((src, index) => (
+              <div key={index} className="px-3">
+                <div className="flex justify-center items-center h-28 sm:h-32 md:h-36">
+                  <img
+                    src={src}
+                    alt={`Logo trường ${index + 1}`}
+                    className="max-w-full max-h-full w-auto h-auto object-contain"
+                    loading="lazy"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
       </div>
     </section>
   );
