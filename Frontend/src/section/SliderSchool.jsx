@@ -1,8 +1,15 @@
 import Title from "@components-ui/Title";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 
 const SliderSchool = () => {
+  const [isClient, setIsClient] = useState(false); //for mobile
+
+  useEffect(() => {
+    // chỉ chạy khi client đã mount
+    setIsClient(true);
+  }, []);
+
   const dataImg = [
     "https://giasumacdinhchi.vn/wp-content/uploads/2024/06/logo-dhkt.jpg",
     "https://giasumacdinhchi.vn/wp-content/uploads/2024/06/logo-dhyd.jpg",
@@ -61,6 +68,8 @@ const SliderSchool = () => {
       },
     ],
   };
+
+  if (!isClient) return null;
 
   return (
     <section
