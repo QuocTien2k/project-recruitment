@@ -13,6 +13,7 @@ const Pagination = ({
   // react-paginate sẽ trả về event.selected (index bắt đầu từ 0)
   const handlePageClick = (event) => {
     onPageChange(event.selected);
+    window.scrollTo({ top: 20, behavior: "smooth" }); //khi chuyển lướt lên đầu trang
   };
 
   if (pageCount <= 1) return null; // Không hiển thị nếu chỉ có 1 trang
