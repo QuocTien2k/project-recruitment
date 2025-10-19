@@ -29,26 +29,35 @@ const SliderSchool = () => {
     cssEase: "ease-in-out",
     slidesToShow: 5, // mặc định (desktop)
     // responsive breakpoints
+
     responsive: [
       {
-        breakpoint: 640, // sm
-        settings: { slidesToShow: 3 },
+        breakpoint: 1536, // 2xl ↓
+        settings: { slidesToShow: 7 },
       },
       {
-        breakpoint: 768, // md
-        settings: { slidesToShow: 4 },
-      },
-      {
-        breakpoint: 1024, // lg
-        settings: { slidesToShow: 5 },
-      },
-      {
-        breakpoint: 1280, // xl
+        breakpoint: 1280, // xl ↓
         settings: { slidesToShow: 6 },
       },
       {
-        breakpoint: 1536, // 2xl
-        settings: { slidesToShow: 7 },
+        breakpoint: 1024, // lg ↓
+        settings: { slidesToShow: 5 },
+      },
+      {
+        breakpoint: 768, // md ↓
+        settings: { slidesToShow: 4 },
+      },
+      {
+        breakpoint: 640, // sm ↓
+        settings: { slidesToShow: 3 },
+      },
+      {
+        breakpoint: 480, // xs ↓
+        settings: { slidesToShow: 2 },
+      },
+      {
+        breakpoint: 360, // rất nhỏ ↓
+        settings: { slidesToShow: 1 },
       },
     ],
   };
@@ -69,7 +78,7 @@ const SliderSchool = () => {
                 <img
                   src={src}
                   alt={`Logo trường ${index + 1}`}
-                  className="w-30 h-30 md:w-32 md:h-32 object-contain"
+                  className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-contain"
                   loading="lazy"
                 />
               </div>
