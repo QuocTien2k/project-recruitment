@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@components-ui/Button";
 import { login } from "@api/auth";
+import InputField from "@components-ui/Input";
 //import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
@@ -105,12 +106,12 @@ const Login = () => {
           {/*Field email */}
           <div>
             <label className="block mb-1 font-medium">Email</label>
-            <input
+            <InputField
               type="text"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full"
             />
             {errors.email && (
               <span className="text-red-500 text-sm">{errors.email}</span>
@@ -120,12 +121,12 @@ const Login = () => {
           {/*Field password */}
           <div>
             <label className="block mb-1 font-medium">Mật khẩu</label>
-            <input
+            <InputField
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full"
             />
             {errors.password && (
               <span className="text-red-500 text-sm">{errors.password}</span>

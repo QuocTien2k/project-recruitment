@@ -253,7 +253,7 @@ const ChatArea = () => {
             {fullName || "Người dùng"}
           </span>
         </div>
-        <div className="flex gap-3 text-sm">
+        <div className="flex gap-5 text-sm">
           {!isBlocked && receiverInfo?.data?._id !== ADMIN_ID && (
             <button
               onClick={handleBlock}
