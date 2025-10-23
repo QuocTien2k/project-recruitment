@@ -1,4 +1,5 @@
 const PostModel = require("../models/Post");
+const UserModel = require("../models/User");
 const TeacherModel = require("../models/Teacher");
 const ApplicationModel = require("../models/Application");
 const Notification = require("../models/Notification");
@@ -8,6 +9,15 @@ const getApplicationsByPost = async (req, res) => {
   try {
     const { slug } = req.params;
     const userId = req.user.userId;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const user = await UserModel.findById(userId).select("isActive");
+    if (!user || !user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     // tìm post theo slug
     const post = await PostModel.findOne({ slug }).populate(
@@ -153,6 +163,15 @@ const approveApplication = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.userId; // từ middleware auth
 
+    // --- Kiểm tra trạng thái hoạt động ---
+    const user = await UserModel.findById(userId).select("isActive");
+    if (!user || !user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
+
     const application = await ApplicationModel.findById(id).populate("post");
     if (!application) {
       return res
@@ -213,6 +232,15 @@ const rejectApplication = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.userId;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const user = await UserModel.findById(userId).select("isActive");
+    if (!user || !user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     const application = await ApplicationModel.findById(id).populate("post");
     if (!application) {

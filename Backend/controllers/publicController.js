@@ -34,7 +34,10 @@ const getAllApprovedPosts = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate("createdBy", "middleName name");
 
-    const formattedPosts = posts.map((post) => {
+    //lấy những bài mà tác giả còn hoạt động
+    const visiblePosts = posts.filter((post) => post.createdBy.isActive);
+
+    const formattedPosts = visiblePosts.map((post) => {
       const { _id } = post.createdBy;
       const fullName = `${post.createdBy.middleName} ${post.createdBy.name}`;
       return {
@@ -67,7 +70,10 @@ const getApproveShortList = async (req, res) => {
       .limit(12)
       .populate("createdBy", "middleName name");
 
-    const formattedPosts = posts.map((post) => {
+    //lấy những bài mà tác giả còn hoạt động
+    const visiblePosts = posts.filter((post) => post.createdBy.isActive);
+
+    const formattedPosts = visiblePosts.map((post) => {
       const { _id } = post.createdBy;
       const fullName = `${post.createdBy.middleName} ${post.createdBy.name}`;
 
@@ -187,13 +193,16 @@ const getRelatedPostsByProvince = async (req, res) => {
       province: currentPost.province, // cùng province
       status: "approved", // chỉ lấy bài đã duyệt
     })
-      .populate("createdBy", "middleName name email profilePic")
+      .populate("createdBy", "middleName name email profilePic isActive")
       .sort({ createdAt: -1 })
       .limit(6)
       .lean();
 
+    //lấy những bài mà tác giả còn hoạt động
+    const visiblePosts = relatedPosts.filter((post) => post.createdBy.isActive);
+
     // Chuẩn hóa dữ liệu trả về
-    const data = relatedPosts.map((post) => {
+    const data = visiblePosts.map((post) => {
       const fullName = post.createdBy
         ? `${post.createdBy.middleName || ""} ${
             post.createdBy.name || ""

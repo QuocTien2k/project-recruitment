@@ -1,10 +1,20 @@
 const BlockModel = require("../models/Block");
+const UserModel = require("../models/User");
 
 // Chặn user
 const blockUser = async (req, res) => {
   try {
     const blockedBy = req.user.userId; // lấy từ authMiddleware
     const { blockedUser } = req.body;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const checkUser = await UserModel.findById(blockedBy).select("isActive");
+    if (!checkUser || !checkUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     if (!blockedUser) {
       return res
@@ -44,6 +54,15 @@ const unblockUser = async (req, res) => {
     const blockedBy = req.user.userId;
     const blockedUser = req.params.blockedUserId;
 
+    // --- Kiểm tra trạng thái hoạt động ---
+    const checkUser = await UserModel.findById(blockedBy).select("isActive");
+    if (!checkUser || !checkUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
+
     if (!blockedUser) {
       return res
         .status(400)
@@ -77,6 +96,15 @@ const getBlockedUsers = async (req, res) => {
   try {
     const blockedBy = req.user.userId;
     const { name, email } = req.query;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const checkUser = await UserModel.findById(blockedBy).select("isActive");
+    if (!checkUser || !checkUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     // Tạo điều kiện match cho populate
     let match = {};

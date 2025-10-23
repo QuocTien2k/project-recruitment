@@ -17,6 +17,14 @@ const createEmptyContract = async (req, res) => {
         .json({ success: false, message: "Bạn không có quyền tạo hợp đồng." });
     }
 
+    // kiểm tra trạng thái hoạt động
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề. Vui lòng đăng nhập lại!",
+      });
+    }
+
     const newContract = new ContractModel({
       partyA: {
         userId: user._id,
@@ -57,6 +65,13 @@ const createContractWithPost = async (req, res) => {
       return res
         .status(403)
         .json({ success: false, message: "Bạn không có quyền tạo hợp đồng." });
+    }
+    // kiểm tra trạng thái hoạt động
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề. Vui lòng đăng nhập lại!",
+      });
     }
 
     if (!postId) {

@@ -1,9 +1,19 @@
 const Notification = require("../models/Notification");
+const UserModel = require("../models/User");
 
 //lấy tất cả thông báo
 const getMyNotifications = async (req, res) => {
   try {
     const userId = req.user.userId;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const checkUser = await UserModel.findById(userId).select("isActive");
+    if (!checkUser || !checkUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     const notifications = await Notification.find({ user: userId })
       .sort({ createdAt: -1 }) // mới nhất lên đầu
@@ -26,6 +36,15 @@ const markAsRead = async (req, res) => {
   try {
     const userId = req.user.userId;
     const { notificationId } = req.params;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const checkUser = await UserModel.findById(userId).select("isActive");
+    if (!checkUser || !checkUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     const notification = await Notification.findOneAndUpdate(
       { _id: notificationId, user: userId },
@@ -57,6 +76,15 @@ const markAllAsRead = async (req, res) => {
   try {
     const userId = req.user.userId;
 
+    // --- Kiểm tra trạng thái hoạt động ---
+    const checkUser = await UserModel.findById(userId).select("isActive");
+    if (!checkUser || !checkUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
+
     await Notification.updateMany(
       { user: userId, isRead: false },
       { isRead: true }
@@ -79,6 +107,15 @@ const deleteNotification = async (req, res) => {
   try {
     const userId = req.user.userId;
     const { notificationId } = req.params;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const checkUser = await UserModel.findById(userId).select("isActive");
+    if (!checkUser || !checkUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     const notification = await Notification.findOneAndDelete({
       _id: notificationId,

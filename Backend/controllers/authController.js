@@ -272,11 +272,14 @@ const login = async (req, res) => {
       }
     );
 
+    // ✅ Kiểm tra môi trường dựa vào CLIENT_URL
+    const isProduction = !process.env.CLIENT_URL?.includes("localhost");
+
     res.cookie("token", token, {
-      httpOnly: true, // không cho JS truy cập
-      secure: process.env.NODE_ENV === "production", // chỉ dùng HTTPS khi production
-      sameSite: "none", // gửi cookie qua các domain khác nhau
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 ngày
+      httpOnly: true,
+      secure: isProduction, // true nếu không phải localhost
+      sameSite: isProduction ? "none" : "lax", // ✅ Quan trọng!
+      maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -344,7 +347,7 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordToken = resetToken;
     await user.save();
 
-    const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+    const resetLink = `${process.env.CLIENT_URL}/khoi-phuc-mat-khau?token=${resetToken}`;
     const htmlContent = `
       <h2>Yêu cầu đặt lại mật khẩu</h2>
       <p>Bạn đã yêu cầu đặt lại mật khẩu. Nhấn vào link bên dưới để tiếp tục:</p>

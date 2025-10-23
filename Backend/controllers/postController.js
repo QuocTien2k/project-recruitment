@@ -47,6 +47,15 @@ const createPost = async (req, res) => {
         message: "Không tìm thấy người dùng.",
       });
     }
+
+    // kiểm tra trạng thái hoạt động
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề. Vui lòng đăng nhập lại!",
+      });
+    }
+
     const fullName = `${user.middleName} ${user.name}`.trim();
 
     const newPost = new PostModel({
@@ -82,6 +91,15 @@ const updatePost = async (req, res) => {
   try {
     const { postId } = req.params;
     const userId = req.user.userId; // lấy từ middleware xác thực
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const user = await UserModel.findById(userId).select("isActive");
+    if (!user || !user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     const {
       title,
@@ -147,6 +165,15 @@ const getMyPosts = async (req, res) => {
       });
     }
 
+    // --- Kiểm tra trạng thái hoạt động ---
+    const user = await UserModel.findById(userId).select("isActive");
+    if (!user || !user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
+
     // Lấy params lọc từ query
     const { title, status } = req.query;
 
@@ -183,6 +210,15 @@ const deletePost = async (req, res) => {
   try {
     const { postId } = req.params;
     const userId = req.user.userId;
+
+    // --- Kiểm tra trạng thái hoạt động ---
+    const user = await UserModel.findById(userId).select("isActive");
+    if (!user || !user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề! Vui lòng đăng nhập lại.",
+      });
+    }
 
     const post = await PostModel.findById(postId);
 

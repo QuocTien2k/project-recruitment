@@ -876,6 +876,12 @@ const getUserReports = async (req, res) => {
         message: "Người dùng không tồn tại",
       });
     }
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề. Vui lòng đăng nhập lại.",
+      });
+    }
 
     // Chỉ lọc theo trạng thái
     const filter = {};
@@ -909,6 +915,12 @@ const createReport = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Người dùng không tồn tại",
+      });
+    }
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Tài khoản của bạn có vấn đề. Vui lòng đăng nhập lại!",
       });
     }
 

@@ -17,7 +17,10 @@ const createNewMessage = async (req, res) => {
     }
 
     // --- 1. Lấy thông tin chat để biết 2 thành viên ---
-    const chat = await ChatModel.findById(chatId).populate("members", "_id");
+    const chat = await ChatModel.findById(chatId).populate(
+      "members",
+      "_id isActive"
+    );
     if (!chat) {
       return res
         .status(404)
@@ -32,6 +35,23 @@ const createNewMessage = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Chat không hợp lệ!", success: false });
+    }
+
+    //  Kiểm tra trạng thái tài khoản
+    const sender = chat.members.find(
+      (m) => m._id.toString() === userId.toString()
+    );
+    if (!sender.isActive) {
+      return res.status(403).json({
+        message: "Tài khoản của bạn có vấn đề. Vui lòng đăng nhập lại!",
+        success: false,
+      });
+    }
+    if (!receiverId.isActive) {
+      return res.status(403).json({
+        message: "Không thể gửi tin nhắn vì người nhận đã bị khóa tài khoản!",
+        success: false,
+      });
     }
 
     // --- 2. Kiểm tra block (cả 2 chiều) ---
