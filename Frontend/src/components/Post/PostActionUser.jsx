@@ -20,7 +20,8 @@ const PostActionUser = ({ post, handleUpdatePost }) => {
 
     showCustomConfirm({
       title: "Xác nhận xóa bài viết",
-      message: "Bạn có chắc chắn muốn xóa bài viết này không?",
+      message:
+        "Bạn có chắc chắn muốn xóa bài viết này không? Hành động này không thể hoàn tác.",
       onConfirm: async () => {
         try {
           const res = await deletePost(post._id);

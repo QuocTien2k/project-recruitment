@@ -54,7 +54,8 @@ const ApprovedPosts = () => {
   const handleDelete = (postId) => {
     showCustomConfirm({
       title: "Xóa bài tuyển dụng",
-      message: "Bạn có chắc chắn muốn xóa bài tuyển dụng này không?",
+      message:
+        "Bạn có chắc muốn xóa bài tuyển dụng này? Hành động này có thể ảnh hưởng đến các tính năng khác trên website.",
       onConfirm: async () => {
         try {
           const res = await postDelete(postId);
