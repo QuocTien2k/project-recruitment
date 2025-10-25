@@ -46,7 +46,7 @@ const TeacherDetail = () => {
 
   useEffect(() => {
     fetchDetail();
-  }, []);
+  }, [teacherId]);
 
   const {
     userId,

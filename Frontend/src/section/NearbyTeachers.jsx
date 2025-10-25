@@ -90,6 +90,8 @@ const NearbyTeachers = () => {
   };
   //console.log(teachers);
 
+  if (!isGlobalLoading && teachers.length === 0) return null;
+
   return (
     <>
       <section

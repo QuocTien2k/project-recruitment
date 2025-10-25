@@ -16,7 +16,7 @@ const Report = () => {
 
   return (
     <>
-      <div className="fixed bottom-20 left-6 z-50">
+      <div className="fixed bottom-20 left-6 z-30">
         <button
           onClick={() => setOpenModal(true)}
           className="ping-effect-report cursor-pointer bg-red-500 text-white p-4 rounded-full shadow-lg hover:bg-red-600 transition-all relative"

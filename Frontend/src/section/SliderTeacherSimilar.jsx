@@ -23,7 +23,7 @@ const SliderTeacherSimilar = ({ idTeacherDetail }) => {
 
   useEffect(() => {
     fetchSimilar();
-  }, []);
+  }, [idTeacherDetail]);
 
   const [slidesToShow, setSlidesToShow] = useState(4);
 

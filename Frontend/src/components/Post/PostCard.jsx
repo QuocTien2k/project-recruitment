@@ -66,6 +66,12 @@ const PostCard = ({
 
   const formatted = dayjs(post?.createdAt).format("DD/MM/YYYY");
 
+  const vietsubWorkingType = {
+    offline: "Offline",
+    online: "Online",
+    both: "Cả hai (Online và Offline)",
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg border border-gray-200 p-5 mb-4 hover:shadow-lg transition-shadow duration-300">
       {/* Post actions (User hoặc Admin) */}
@@ -132,7 +138,9 @@ const PostCard = ({
         {/*hình thức làm việc */}
         <p className="flex items-center gap-2">
           <Briefcase className="text-blue-500 w-4 h-4 flex-shrink-0" />
-          <span className="truncate">Hình thức: {post?.workingType}</span>
+          <span className="truncate">
+            Hình thức: {vietsubWorkingType[post?.workingType]}
+          </span>
         </p>
 
         {/*Thời gian làm việc */}
@@ -154,20 +162,23 @@ const PostCard = ({
         </p>
 
         {isAdmin && (
-          <div className="flex items-center gap-4 mt-1 text-gray-600">
-            <span className="flex items-center gap-1">
+          <>
+            {/* Hiển thị tác giả */}
+            <div className="flex items-center gap-2 mt-1 text-gray-600">
               <User className="text-blue-500 w-4 h-4" />
-              {post?.createdByName}
-            </span>
-            <span
+              <span>Tác giả: {post?.createdByName}</span>
+            </div>
+
+            {/* ID của tác giả */}
+            <div
               onClick={handleCopyId}
               title="Click để copy ID"
-              className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors"
+              className="flex items-center gap-2 cursor-pointer text-gray-600 hover:text-blue-500 transition-colors"
             >
               <Hash className="text-gray-500 w-4 h-4" />
-              {post?.createdBy}
-            </span>
-          </div>
+              <span>ID tác giả: {post?.createdBy}</span>
+            </div>
+          </>
         )}
 
         {/* Trạng thái */}

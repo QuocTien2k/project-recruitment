@@ -1,4 +1,5 @@
 import { getPostSimilar } from "@api/public";
+import PostCard from "@components-post/PostCard";
 import Loading from "@components-ui/Loading";
 import Title from "@components-ui/Title";
 import React, { useEffect, useState } from "react";

@@ -67,7 +67,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     fetchPost();
-  }, []);
+  }, [slug]);
 
   useEffect(() => {
     if (post?._id && currentUser?._id) {
@@ -213,6 +213,11 @@ const PostDetail = () => {
     }
   }, [location]);
 
+  const vietsubWorkingType = {
+    offline: "Offline",
+    online: "Online",
+    both: "Cả hai (Online và Offline)",
+  };
   //console.log(post);
 
   return (
@@ -281,7 +286,10 @@ const PostDetail = () => {
 
               <p className="flex items-center gap-2 text-sm text-gray-600">
                 <Briefcase className="text-blue-500 w-4 h-4" />
-                <span>Hình thức: {post?.workingType}</span>
+                <span>
+                  Hình thức:{" "}
+                  {vietsubWorkingType[post?.workingType] || post?.workingType}
+                </span>
                 <Clock className="text-yellow-500 w-4 h-4" />
                 <span>{post?.timeType}</span>
               </p>
