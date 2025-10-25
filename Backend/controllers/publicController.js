@@ -32,7 +32,7 @@ const getAllApprovedPosts = async (req, res) => {
 
     const posts = await PostModel.find(filters)
       .sort({ createdAt: -1 })
-      .populate("createdBy", "middleName name");
+      .populate("createdBy", "middleName name isActive");
 
     //lấy những bài mà tác giả còn hoạt động
     const visiblePosts = posts.filter((post) => post.createdBy.isActive);
@@ -68,7 +68,7 @@ const getApproveShortList = async (req, res) => {
     const posts = await PostModel.find({ status: "approved" })
       .sort({ createdAt: -1 }) //mới nhất
       .limit(12)
-      .populate("createdBy", "middleName name");
+      .populate("createdBy", "middleName name isActive");
 
     //lấy những bài mà tác giả còn hoạt động
     const visiblePosts = posts.filter((post) => post.createdBy.isActive);

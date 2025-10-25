@@ -9,7 +9,11 @@ const postSchema = new mongoose.Schema(
     district: { type: String, required: true },
     province: { type: String, required: true },
     salary: { type: String, required: true },
-    workingType: { type: String, enum: ["online", "offline"], required: true },
+    workingType: {
+      type: String,
+      enum: ["online", "offline", "both"],
+      required: true,
+    },
     timeType: {
       type: String,
       enum: ["full-time", "part-time"],
