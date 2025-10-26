@@ -62,12 +62,12 @@ const getAllApprovedPosts = async (req, res) => {
   }
 };
 
-//lấy 12 bài viết đã duyệt
+//lấy 9 bài viết đã duyệt
 const getApproveShortList = async (req, res) => {
   try {
     const posts = await PostModel.find({ status: "approved" })
       .sort({ createdAt: -1 }) //mới nhất
-      .limit(12)
+      .limit(9)
       .populate("createdBy", "middleName name isActive");
 
     //lấy những bài mà tác giả còn hoạt động
