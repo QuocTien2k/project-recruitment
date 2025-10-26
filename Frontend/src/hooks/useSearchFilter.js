@@ -322,7 +322,7 @@ export default function useSearchFilter({
         if (form.timeType) filters.timeType = form.timeType;
         break;
 
-      case "mypost":
+      case "my-post":
         if (form.title) filters.title = form.title;
         if (form.status) filters.status = form.status;
         break;

@@ -432,7 +432,7 @@
 }
 
 .animate-shake-bell {
-    animation: shake-bell 0.8s ease-in-out infinite;
+    animation: shake-bell 1.2s ease-in-out infinite;
     transform-origin: top center;
     /* xoay từ đỉnh chuông để tự nhiên hơn */
 }

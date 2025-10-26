@@ -12,7 +12,7 @@ const ListPosts = () => {
   const isGlobalLoading = useSelector((state) => state.loading.global);
   const [listPost, setListPost] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 12;
+  const itemsPerPage = 6;
   const [hasSearched, setHasSearched] = useState(false);
 
   const navigate = useNavigate();
