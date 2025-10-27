@@ -651,11 +651,12 @@ const addSavePost = async (req, res) => {
     const teacher = await UserModel.findOne({
       _id: teacherId,
       role: "teacher",
+      isActive: true,
     });
     if (!teacher) {
       return res.status(403).json({
         success: false,
-        message: "Chỉ giáo viên mới có quyền lưu bài viết.",
+        message: "Tài khoản giáo viên không hợp lệ! Vui lòng đăng nhập lại.",
       });
     }
 
@@ -712,11 +713,12 @@ const removeSavePost = async (req, res) => {
     const teacher = await UserModel.findOne({
       _id: teacherId,
       role: "teacher",
+      isActive: true,
     });
     if (!teacher) {
       return res.status(403).json({
         success: false,
-        message: "Chỉ giáo viên mới có quyền xóa bài đã lưu.",
+        message: "Tài khoản giáo viên không hợp lệ! Vui lòng đăng nhập lại.",
       });
     }
 
@@ -807,7 +809,11 @@ const getNearbyPostsForTeacher = async (req, res) => {
 
     // 1️⃣ Lấy user (giáo viên)
     const currentUser = await UserModel.findById(userId);
-    if (!currentUser || currentUser.role !== "teacher") {
+    if (
+      !currentUser ||
+      currentUser.role !== "teacher" ||
+      !currentUser.isActive
+    ) {
       return res.status(403).json({
         success: false,
         message: "Chỉ giáo viên mới được truy cập chức năng này.",
