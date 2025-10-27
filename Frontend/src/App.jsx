@@ -9,6 +9,8 @@ import ContactAdminButton from "./components/ContactAdmin";
 import Loading from "@components-ui/Loading";
 import AboutUs from "@pages/User/AboutUs";
 import Report from "./components/Report";
+import Contact from "@pages/User/Contact";
+import Blog from "@pages/User/Blog";
 
 // --- Public Pages ---
 const Home = lazy(() => import("@pages-user/Home"));
@@ -100,6 +102,8 @@ function App() {
               <Route path="/danh-sach-giao-vien" element={<ListTeachers />} />
               <Route path="/danh-sach-bai-viet" element={<ListPosts />} />
               <Route path="/ve-chung-toi" element={<AboutUs />} />
+              <Route path="/lien-he" element={<Contact />} />
+              <Route path="/blog" element={<Blog />} />
             </Route>
 
             <Route path="dang-nhap" element={<Login />} />

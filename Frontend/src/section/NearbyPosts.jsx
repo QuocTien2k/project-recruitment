@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const NearbyPosts = () => {
   const [listPost, setListPost] = useState([]);
@@ -86,7 +87,7 @@ const NearbyPosts = () => {
     speed: 1500, // tốc độ chuyển (ms)
     slidesToShow, // số card hiển thị trên màn hình
     slidesToScroll: 1, // số card trượt mỗi lần
-    autoplay: true, // bật auto chạy
+    autoplay: false, // bật auto chạy
   };
 
   //Nếu ít bài hơn số slide → hiển thị flex thay vì slider
