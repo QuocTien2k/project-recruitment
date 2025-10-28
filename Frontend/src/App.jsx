@@ -11,6 +11,7 @@ import AboutUs from "@pages/User/AboutUs";
 import Report from "./components/Report";
 import Contact from "@pages/User/Contact";
 import Blog from "@pages/User/Blog";
+import List from "@pages/Admin/blog/List";
 
 // --- Public Pages ---
 const Home = lazy(() => import("@pages-user/Home"));
@@ -56,6 +57,7 @@ const ListReportPending = lazy(() =>
 const ListReportResolved = lazy(() =>
   import("@pages/Admin/reports/ListReportResolved")
 );
+const ListBlog = lazy(() => import("@pages/Admin/blog/List"));
 
 // --- Layouts ---
 const UserLayout = lazy(() => import("@layouts/UserLayout"));
@@ -134,7 +136,7 @@ function App() {
                 <Route path="bai-viet/cho-duyet" element={<PendingPosts />} />
                 <Route path="bai-viet/da-duyet" element={<ApprovedPosts />} />
 
-                {/* Posts */}
+                {/* Report */}
                 <Route
                   path="bao-cao-chua-xu-ly"
                   element={<ListReportPending />}
@@ -143,6 +145,9 @@ function App() {
                   path="bao-cao-da-xu-ly"
                   element={<ListReportResolved />}
                 />
+
+                {/* Blog */}
+                <Route path="danh-sach-blog" element={<ListBlog />} />
               </Route>
             </Route>
 

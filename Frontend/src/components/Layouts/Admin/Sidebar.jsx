@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import {
   HiUserGroup,
-  HiUserRemove,
   HiAcademicCap,
   HiBan,
-  HiDocumentText,
   HiCheckCircle,
   HiExclamationCircle,
-  HiBadgeCheck,
   HiChevronDown,
   HiChevronRight,
 } from "react-icons/hi";
@@ -18,6 +15,8 @@ import {
   FileText,
   ShieldAlert,
   ShieldCheck,
+  PenSquare,
+  Newspaper,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -123,6 +122,18 @@ const Sidebar = ({ isOpen }) => {
           label: "Báo cáo đã xử lý",
           icon: ShieldCheck, // lucide: khiên có dấu check
           to: "/admin/bao-cao-da-xu-ly",
+        },
+      ],
+    },
+    {
+      key: "blog",
+      label: "Quản lý bài viết",
+      icon: Newspaper,
+      children: [
+        {
+          label: "Bài viết",
+          icon: PenSquare,
+          to: "/admin/danh-sach-blog",
         },
       ],
     },
