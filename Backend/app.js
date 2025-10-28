@@ -45,6 +45,7 @@ const notificationRoute = require("./Routes/notificationRoute");
 const applicationRoute = require("./Routes/applicationRoute");
 const contractRoute = require("./Routes/contractRoute");
 const reportRoute = require("./Routes/reportRoute");
+const blogRoute = require("./Routes/blogRoute");
 
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
@@ -59,5 +60,6 @@ app.use("/api/notification", notificationRoute);
 app.use("/api/application", applicationRoute);
 app.use("/api/contract", contractRoute);
 app.use("/api/report", reportRoute);
+app.use("/api/blog", blogRoute);
 
 module.exports = app;

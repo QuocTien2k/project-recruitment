@@ -37,4 +37,4 @@ blogSchema.pre("save", async function (next) {
   next();
 });
 
-export default mongoose.model("Blog", blogSchema);
+module.exports = mongoose.model("Blog", blogSchema);
