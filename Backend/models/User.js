@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "teacher", "admin", "editor"],
+      enum: ["user", "teacher", "admin"],
       default: "user",
     },
     district: { type: String, required: true },

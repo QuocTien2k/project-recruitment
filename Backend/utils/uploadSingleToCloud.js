@@ -26,10 +26,15 @@ const uploadSingle = asyncHandler(async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .send(`Internal error at: uploadSingleToCloudinary.js - ${error}`);
+    //xóa file nếu upload thất bại
+    if (fs.existsSync(file?.path)) fs.unlinkSync(file.path);
+
+    console.error("❌ Lỗi upload Cloudinary:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi upload ảnh lên Cloudinary.",
+      error: error.message,
+    });
   }
 });
 

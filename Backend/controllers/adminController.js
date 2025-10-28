@@ -1,4 +1,5 @@
 const UserModel = require("../models/User");
+const BlogModel = require("../models/Blog");
 const TeacherModel = require("../models/Teacher");
 const PostModel = require("../models/Post");
 const Notification = require("../models/Notification");
@@ -490,6 +491,229 @@ const deletePostByAdmin = async (req, res) => {
   }
 };
 
+/********************* Blog ************************** */
+const createBlogByAdmin = async (req, res) => {
+  try {
+    const userId = req.user.userId; // lấy user từ token
+    const { title, desc1, desc2 } = req.body;
+
+    //1️⃣ Kiểm tra người tạo
+    const admin = await UserModel.findById(userId);
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+
+    // 2️⃣ Kiểm tra dữ liệu đầu vào
+    if (!title || !desc1 || !desc2) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập đầy đủ thông tin.",
+      });
+    }
+
+    //3️⃣ Ảnh blog
+    const blogImage = req.image;
+    if (!blogImage || !blogImage.url || !blogImage.public_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng tải lên 1 ảnh.",
+      });
+    }
+
+    // 4️⃣ Tạo blog mới
+    const blog = await BlogModel.create({
+      title,
+      blogPic: blogImage,
+      desc1,
+      desc2,
+      createdBy: userId,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Tạo blog thành công.",
+      data: blog,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+const updateBlogByAdmin = async (req, res) => {
+  try {
+    const userId = req.user.userId; // lấy user từ token
+    const { blogId } = req.params;
+    const { title, desc1, desc2 } = req.body;
+
+    //1️⃣ Kiểm tra người cập nhật
+    const admin = await UserModel.findById(userId);
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+
+    // 2️⃣ Tìm bài blog
+    const blog = await BlogModel.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bài blog này.",
+      });
+    }
+
+    // 3️⃣ Kiểm tra có ảnh mới không
+    if (req.image && req.image.url) {
+      // Nếu có ảnh mới → xoá ảnh cũ + cập nhật
+      if (blog.blogPic?.public_id) {
+        await cloudinary.uploader.destroy(blog.blogPic.public_id);
+      }
+
+      //4️⃣ Cập nhật ảnh mới
+      blog.blogPic = {
+        url: req.image.url,
+        public_id: req.image.public_id,
+      };
+    }
+
+    // Cập nhật dữ liệu
+    blog.title = title || blog.title;
+    blog.desc1 = desc1 || blog.desc1;
+    blog.desc2 = desc2 || blog.desc2;
+
+    await blog.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Cập nhật bài blog thành công.",
+      data: blog,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+const deleteBlogByAdmin = async (req, res) => {
+  try {
+    const userId = req.user.userId; // lấy user từ token
+    const { blogId } = req.params;
+
+    // 1️⃣ Kiểm tra người thực hiện
+    const admin = await UserModel.findById(userId);
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+
+    // 2️⃣ Tìm blog
+    const blog = await BlogModel.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bài blog này.",
+      });
+    }
+
+    // 3️⃣ Xoá ảnh trên Cloudinary (nếu có)
+    if (blog.blogPic?.public_id) {
+      try {
+        await cloudinary.uploader.destroy(blog.blogPic.public_id);
+      } catch (error) {
+        console.error("❌ Lỗi xoá ảnh Cloudinary:", error.message);
+      }
+    }
+
+    // 4️⃣ Xoá blog trong DB
+    await blog.deleteOne();
+
+    // 5️⃣ Lấy danh sách blog còn lại
+    const blogs = await BlogModel.find().sort({ createdAt: -1 });
+
+    // 6️⃣ Trả phản hồi
+    return res.status(200).json({
+      success: true,
+      message: "Xoá bài blog thành công.",
+      data: blogs,
+    });
+  } catch (error) {
+    console.error("❌ Lỗi khi xoá blog:", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+const getAllBlogs = async (req, res) => {
+  try {
+    const { search } = req.query; // /api/blogs?search=abc
+
+    // 1️⃣ Tạo điều kiện tìm kiếm
+    let query = {};
+    if (search) {
+      query.title = { $regex: search, $options: "i" }; // không phân biệt hoa thường
+    }
+
+    // 2️⃣ Truy vấn DB
+    const blogs = await BlogModel.find(query).sort({ createdAt: -1 });
+
+    // 3️⃣ Trả về
+    res.status(200).json({
+      success: true,
+      message: search
+        ? `Kết quả tìm kiếm cho "${search}"`
+        : "Lấy danh sách blog thành công.",
+      data: blogs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+const getBlogDetailBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    // 1️⃣ Tìm blog theo slug
+    const blog = await BlogModel.findOne({ slug });
+
+    // 2️⃣ Kiểm tra tồn tại
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy bài blog này.",
+      });
+    }
+
+    // 3️⃣ Trả về dữ liệu
+    res.status(200).json({
+      success: true,
+      message: "Lấy chi tiết blog thành công.",
+      data: blog,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   getActiveUsers,
   getInActiveUsers,
@@ -502,4 +726,9 @@ module.exports = {
   approvePostByAdmin,
   rejectPost,
   deletePostByAdmin,
+  createBlogByAdmin,
+  updateBlogByAdmin,
+  deleteBlogByAdmin,
+  getAllBlogs,
+  getBlogDetailBySlug,
 };
