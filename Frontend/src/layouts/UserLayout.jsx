@@ -3,12 +3,14 @@ import Footer from "@components-layouts/User-Teacher/Footer";
 import Header from "@components-layouts/User-Teacher/Header";
 import { setUser } from "@redux/currentUserSlice";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Outlet } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const UserLayout = () => {
   const dispatch = useDispatch();
-
+  const currentUser = useSelector((state) => state.currentUser.user);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -30,6 +32,11 @@ const UserLayout = () => {
 
     fetchUser();
   }, []);
+
+  if (currentUser?.role === "admin") {
+    toast.error("Bạn đang là admin, không vào trang chủ!");
+    navigate("/admin");
+  }
 
   return (
     <div className="flex flex-col min-h-screen">

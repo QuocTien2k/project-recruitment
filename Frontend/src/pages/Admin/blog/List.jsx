@@ -11,10 +11,12 @@ import CreateBlog from "@modals/CreateBlog";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 const List = () => {
-  const isGlobalLoading = useSelector((state) => state.loading.global);
+  const isGlobalLoading = useSelector((state) => state.loading.user);
   const [modalCreate, setModalCreate] = useState(false);
+  const [modalUpdate, setModalUpdate] = useState(false);
   const [listBlog, setListBlog] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -114,12 +116,61 @@ const List = () => {
           <EmptyState message="Hiện tại chưa có bài viết nào ✍️" />
         )
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {/*Tại đây bạn có thể dùng displayBlogs map() qua từng item hiể thị. Tôi muốn hiển thị đầy đủ
-            desc1, desc2 nếu dài quá thì ta giới hạn và thay vào đó là dấu dots , bên trên có 2 nút là cập nhật và xóa*/}
-        </div>
-      )}
+        displayedBlogs.map((blog) => (
+          <div
+            key={blog._id}
+            className="bg-white shadow-md rounded-lg p-5 border border-gray-200 flex flex-col gap-4"
+          >
+            {/* Ảnh blog */}
+            <div className="w-full h-64 overflow-hidden rounded-md">
+              <img
+                src={blog.blogPic?.url}
+                alt={blog.title}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </div>
 
+            {/* Tiêu đề */}
+            <h2 className="text-2xl font-semibold text-gray-800 line-clamp-2">
+              {blog.title}
+            </h2>
+
+            {/* Thông tin phụ */}
+            <div className="text-sm text-gray-500 flex items-center gap-2">
+              <span>Người tạo: {blog.createdBy?.role || "Không rõ"}</span>
+              <span>•</span>
+              <span>{dayjs(blog.createdAt).format("DD/MM/YYYY")}</span>
+            </div>
+
+            {/* Mô tả */}
+            <div className="space-y-2">
+              <p className="text-gray-700 text-justify">
+                {blog.desc1.length > 180
+                  ? blog.desc1.slice(0, 180) + "..."
+                  : blog.desc1}
+              </p>
+              <p className="text-gray-700 text-justify">
+                {blog.desc2.length > 180
+                  ? blog.desc2.slice(0, 180) + "..."
+                  : blog.desc2}
+              </p>
+            </div>
+
+            {/* Nút hành động */}
+            <div className="flex justify-end gap-3 border-t pt-4 mt-2">
+              <Button onClick={() => handleListChange("update", blog)}>
+                Cập nhật
+              </Button>
+              <Button
+                variant="danger"
+                onClick={() => handleListChange("delete", blog._id)}
+              >
+                Xóa
+              </Button>
+            </div>
+          </div>
+        ))
+      )}
       <Pagination
         itemsPerPage={itemsPerPage}
         totalItems={listBlog.length}

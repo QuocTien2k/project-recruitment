@@ -2,7 +2,11 @@ import { axiosInstance } from "./index";
 
 export const createBlog = async (formData) => {
   try {
-    const res = await axiosInstance.post("/api/blog/create", formData);
+    const res = await axiosInstance.post("/api/blog/create", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);

@@ -1,6 +1,6 @@
 import { createBlog } from "@api/blog";
 import Button from "@components-ui/Button";
-import { setGlobalLoading } from "@redux/loadingSlice";
+import { setUserLoading } from "@redux/loadingSlice";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { MdClose } from "react-icons/md";
@@ -58,7 +58,7 @@ const CreateBlog = ({ onClose, onChangeList }) => {
       return;
     }
 
-    dispatch(setGlobalLoading(true));
+    dispatch(setUserLoading(true));
 
     try {
       const form = new FormData();
@@ -81,7 +81,7 @@ const CreateBlog = ({ onClose, onChangeList }) => {
         "Tạo bài viết thất bại. Vui lòng thử lại.";
       toast.error(errorMsg);
     } finally {
-      dispatch(setGlobalLoading(false));
+      dispatch(setUserLoading(false));
     }
   };
 

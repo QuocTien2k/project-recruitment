@@ -11,7 +11,6 @@ import AboutUs from "@pages/User/AboutUs";
 import Report from "./components/Report";
 import Contact from "@pages/User/Contact";
 import Blog from "@pages/User/Blog";
-import List from "@pages/Admin/blog/List";
 
 // --- Public Pages ---
 const Home = lazy(() => import("@pages-user/Home"));
@@ -116,7 +115,7 @@ function App() {
             {/* Layout Admin riêng biệt */}
             <Route
               path="/admin"
-              element={<ProtectedRoutes allowedRoles={["admin", "editor"]} />}
+              element={<ProtectedRoutes allowedRoles={["admin"]} />}
             >
               <Route element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
