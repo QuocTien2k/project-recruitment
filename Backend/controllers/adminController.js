@@ -658,22 +658,24 @@ const deleteBlogByAdmin = async (req, res) => {
 
 const getAllBlogs = async (req, res) => {
   try {
-    const { search } = req.query; // /api/blogs?search=abc
+    const { title } = req.query;
 
     // 1️⃣ Tạo điều kiện tìm kiếm
     let query = {};
-    if (search) {
-      query.title = { $regex: search, $options: "i" }; // không phân biệt hoa thường
+    if (title) {
+      query.title = { $regex: title, $options: "i" }; // không phân biệt hoa thường
     }
 
     // 2️⃣ Truy vấn DB
-    const blogs = await BlogModel.find(query).sort({ createdAt: -1 });
+    const blogs = await BlogModel.find(query)
+      .populate("createdBy", "role")
+      .sort({ createdAt: -1 });
 
     // 3️⃣ Trả về
     res.status(200).json({
       success: true,
-      message: search
-        ? `Kết quả tìm kiếm cho "${search}"`
+      message: title
+        ? `Kết quả tìm kiếm cho "${title}"`
         : "Lấy danh sách blog thành công.",
       data: blogs,
     });
@@ -690,7 +692,10 @@ const getBlogDetailBySlug = async (req, res) => {
     const { slug } = req.params;
 
     // 1️⃣ Tìm blog theo slug
-    const blog = await BlogModel.findOne({ slug });
+    const blog = await BlogModel.findOne({ slug }).populate(
+      "createdBy",
+      "role"
+    );
 
     // 2️⃣ Kiểm tra tồn tại
     if (!blog) {
