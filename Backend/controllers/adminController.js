@@ -4,6 +4,7 @@ const TeacherModel = require("../models/Teacher");
 const PostModel = require("../models/Post");
 const Notification = require("../models/Notification");
 const deleteImage = require("../utils/deleteFromCloudinary");
+const cloudinary = require("../cloudinary");
 
 /********************* Account ************************** */
 // lấy danh sách user hoạt động
@@ -532,10 +533,13 @@ const createBlogByAdmin = async (req, res) => {
       createdBy: userId,
     });
 
+    // Populate người tạo để frontend có dữ liệu đầy đủ
+    const populatedBlog = await blog.populate("createdBy", "role");
+
     return res.status(201).json({
       success: true,
       message: "Tạo blog thành công.",
-      data: blog,
+      data: populatedBlog,
     });
   } catch (error) {
     res.status(500).json({
