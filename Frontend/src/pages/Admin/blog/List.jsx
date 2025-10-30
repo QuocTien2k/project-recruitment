@@ -12,11 +12,13 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
+import EditBlog from "@modals/EditBlog";
 
 const List = () => {
   const isGlobalLoading = useSelector((state) => state.loading.user);
   const [modalCreate, setModalCreate] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState(null); //chọn 1 blog
   const [listBlog, setListBlog] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -41,7 +43,9 @@ const List = () => {
           const res = await deleteBlog(blogId);
           if (res.success) {
             toast.success(res.message);
+
             // Sau khi xóa cần cập nhật lại danh sách
+            handleListChange("delete", blogId);
           } else {
             toast.error(res.message || "Không thể xóa bài");
           }
@@ -158,13 +162,15 @@ const List = () => {
 
             {/* Nút hành động */}
             <div className="flex justify-end gap-3 border-t pt-4 mt-2">
-              <Button onClick={() => handleListChange("update", blog)}>
+              <Button
+                onClick={() => {
+                  setSelectedBlog(blog);
+                  setModalUpdate(true);
+                }}
+              >
                 Cập nhật
               </Button>
-              <Button
-                variant="danger"
-                onClick={() => handleListChange("delete", blog._id)}
-              >
+              <Button variant="danger" onClick={() => handleDelete(blog._id)}>
                 Xóa
               </Button>
             </div>
@@ -181,6 +187,13 @@ const List = () => {
       {modalCreate && (
         <CreateBlog
           onClose={() => setModalCreate(false)}
+          onChangeList={handleListChange}
+        />
+      )}
+      {modalUpdate && (
+        <EditBlog
+          blog={selectedBlog}
+          onClose={() => setModalUpdate(false)}
           onChangeList={handleListChange}
         />
       )}

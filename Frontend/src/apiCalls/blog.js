@@ -14,9 +14,17 @@ export const createBlog = async (formData) => {
   }
 };
 
-export const updateBlog = async (blogId) => {
+export const updateBlog = async (blogId, formData) => {
   try {
-    const res = await axiosInstance.patch(`/api/blog/update/${blogId}`);
+    const res = await axiosInstance.patch(
+      `/api/blog/update/${blogId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return res.data;
   } catch (err) {
     console.log("Có lỗi: ", err?.message);
