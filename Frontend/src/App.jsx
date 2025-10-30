@@ -20,6 +20,7 @@ const Login = lazy(() => import("@pages-auth/Login"));
 const Signup = lazy(() => import("@pages-auth/Signup"));
 const ForgotPassword = lazy(() => import("@pages-auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("@pages-auth/ResetPassword"));
+const BlogDetail = lazy(() => import("@pages-user/BlogDetail"));
 
 // --- User Layout Pages ---
 const TeacherDetail = lazy(() => import("@pages-user/TeacherDetail"));
@@ -104,7 +105,9 @@ function App() {
               <Route path="/danh-sach-bai-viet" element={<ListPosts />} />
               <Route path="/ve-chung-toi" element={<AboutUs />} />
               <Route path="/lien-he" element={<Contact />} />
+
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog-chi-tiet/:slug" element={<BlogDetail />} />
             </Route>
 
             <Route path="dang-nhap" element={<Login />} />

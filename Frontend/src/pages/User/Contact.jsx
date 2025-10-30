@@ -24,7 +24,7 @@ const Contact = () => {
   ];
 
   return (
-    <div className="max-w-[var(--width-8xl)] mx-auto px-4 py-10 space-y-12">
+    <div className="max-w-[var(--width-8xl)] mx-auto p-4 space-y-12">
       {/* ===== Phần 1: Thông tin liên hệ ===== */}
       <section className="text-center">
         <Title
@@ -54,7 +54,7 @@ const Contact = () => {
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3519983737297!2d106.63908507490792!3d10.78432938936495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752eb1cd7d4e49%3A0x411ab56b2abeaf38!2zNjEzIMSQLiDDgnUgQ8ahLCBQaMO6IFRydW5nLCBUw6JuIFBow7osIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCA3MDAwMDAsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1761538606079!5m2!1svi!2s"
             width="100%"
-            height="450"
+            height="650"
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"

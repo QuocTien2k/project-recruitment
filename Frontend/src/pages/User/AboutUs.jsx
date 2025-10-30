@@ -25,7 +25,7 @@ const AboutUs = () => {
     },
   ];
   return (
-    <div className="max-w-[var(--width-8xl)] mx-auto px-4 py-10">
+    <div className="max-w-[var(--width-8xl)] mx-auto p-4">
       <div className="grid md:grid-cols-12 gap-8">
         {/* Cột trái: nội dung About Us */}
         <div className="md:col-span-9 space-y-12 bg-white p-6 rounded-lg shadow-sm text-justify">
