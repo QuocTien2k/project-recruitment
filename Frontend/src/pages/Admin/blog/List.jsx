@@ -10,12 +10,15 @@ import Title from "@components-ui/Title";
 import CreateBlog from "@modals/CreateBlog";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import EditBlog from "@modals/EditBlog";
+import { setUserLoading } from "@redux/loadingSlice";
 
 const List = () => {
   const isGlobalLoading = useSelector((state) => state.loading.user);
+  const dispatch = useDispatch();
+
   const [modalCreate, setModalCreate] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null); //chọn 1 blog
@@ -40,6 +43,7 @@ const List = () => {
       message: "Bạn có chắc muốn xóa bài blog này?",
       onConfirm: async () => {
         try {
+          dispatch(setUserLoading(true));
           const res = await deleteBlog(blogId);
           if (res.success) {
             toast.success(res.message);
@@ -51,6 +55,8 @@ const List = () => {
           }
         } catch (err) {
           toast.error(err?.response?.data?.message || "Lỗi khi xóa bài");
+        } finally {
+          dispatch(setUserLoading(false));
         }
       },
       onCancel: () => {
@@ -79,12 +85,12 @@ const List = () => {
         case "update":
           // Cập nhật blog theo id
           return prev.map((blog) =>
-            blog.id === data.id ? { ...blog, ...data } : blog
+            blog._id === data._id ? { ...blog, ...data } : blog
           );
 
         case "delete":
           // Xóa blog theo id
-          return prev.filter((blog) => blog.id !== data);
+          return prev.filter((blog) => blog._id !== data);
 
         default:
           return prev;
@@ -170,8 +176,12 @@ const List = () => {
               >
                 Cập nhật
               </Button>
-              <Button variant="danger" onClick={() => handleDelete(blog._id)}>
-                Xóa
+              <Button
+                variant="danger"
+                onClick={() => handleDelete(blog._id)}
+                disabled={isGlobalLoading}
+              >
+                {isGlobalLoading ? "Đang xóa..." : "Xóa"}
               </Button>
             </div>
           </div>
