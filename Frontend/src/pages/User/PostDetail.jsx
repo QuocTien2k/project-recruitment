@@ -224,7 +224,7 @@ const PostDetail = () => {
     <>
       <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow">
         <Link
-          to="/"
+          to="/danh-sach-bai-viet"
           className="text-sm text-blue-600 hover:underline block mb-4"
         >
           ← Quay lại danh sách

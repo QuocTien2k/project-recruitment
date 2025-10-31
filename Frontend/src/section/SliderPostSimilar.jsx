@@ -43,28 +43,42 @@ const SliderPostSimilar = ({ postId }) => {
   //console.log("Danh sách: ", postSimilar);
 
   return (
-    <>
-      <div className="my-4 mx-auto px-2 space-y-4">
-        {/* 📌 Tiêu đề slider */}
-        <Title text="Bài viết tương tự" size="2xl" underline />
-        {loading ? (
-          <Loading size="md" />
-        ) : (
-          <>
-            <Slider {...settings}>
-              {postSimilar.map((post) => (
-                <div key={post._id} className="px-2 mb-4">
-                  <PostCard
-                    post={post}
-                    onViewDetail={() => navigate(`/bai-viet/${post.slug}`)}
-                  />
-                </div>
-              ))}
-            </Slider>
-          </>
-        )}
-      </div>
-    </>
+    <div className="my-4 mx-auto px-2 space-y-4">
+      <Title text="Bài viết tương tự" size="2xl" underline />
+
+      {loading ? (
+        <Loading size="md" />
+      ) : postSimilar.length === 0 ? (
+        <p className="text-center text-gray-500">Không có bài viết tương tự.</p>
+      ) : postSimilar.length < 4 ? (
+        // ⚡ Nếu ít hơn 4 bài → dùng flex
+        <div className="flex flex-wrap justify-start gap-4">
+          {postSimilar.map((post) => (
+            <div
+              key={post._id}
+              className="w-full sm:w-[48%] md:w-[30%] lg:w-[22%]"
+            >
+              <PostCard
+                post={post}
+                onViewDetail={() => navigate(`/bai-viet/${post.slug}`)}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        // ⚡ Nếu đủ 4 bài trở lên → dùng slider
+        <Slider {...settings}>
+          {postSimilar.map((post) => (
+            <div key={post._id} className="px-2 mb-4">
+              <PostCard
+                post={post}
+                onViewDetail={() => navigate(`/bai-viet/${post.slug}`)}
+              />
+            </div>
+          ))}
+        </Slider>
+      )}
+    </div>
   );
 };
 

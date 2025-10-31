@@ -159,7 +159,7 @@ const TeacherDetail = () => {
     <>
       <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow">
         <Link
-          to="/"
+          to="/danh-sach-giao-vien"
           className="text-sm text-blue-600 hover:underline block mb-4"
         >
           ← Quay lại danh sách
