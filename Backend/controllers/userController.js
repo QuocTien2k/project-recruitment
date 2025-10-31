@@ -890,7 +890,7 @@ const getUserReports = async (req, res) => {
     }
 
     // Chỉ lọc theo trạng thái
-    const filter = {};
+    const filter = { reporterId: userId };
     if (status) filter.status = status;
 
     const reports = await ReportModel.find(filter)
