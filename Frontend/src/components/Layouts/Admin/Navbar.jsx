@@ -9,8 +9,7 @@ import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import MessageNotification from "@components-chat/MessageNotification";
 import { logout } from "@api/auth";
 
-const avatarDefault =
-  "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000";
+const avatarDefault = "https://cdn-icons-png.flaticon.com/512/3781/3781986.png";
 
 const Navbar = ({ isOpen, toggleSidebar }) => {
   const currentUser = useSelector((state) => state.currentUser.user);

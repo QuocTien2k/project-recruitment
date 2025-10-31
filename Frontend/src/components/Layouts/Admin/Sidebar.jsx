@@ -127,11 +127,11 @@ const Sidebar = ({ isOpen }) => {
     },
     {
       key: "blog",
-      label: "Quản lý bài viết",
+      label: "Quản lý bài blog",
       icon: Newspaper,
       children: [
         {
-          label: "Bài viết",
+          label: "Bài blog",
           icon: PenSquare,
           to: "/admin/danh-sach-blog",
         },
