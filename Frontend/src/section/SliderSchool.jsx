@@ -91,7 +91,7 @@ const SliderSchool = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 4000,
-    pauseOnHover: true,
+    pauseOnHover: false,
     cssEase: "ease-in-out",
     slidesToShow: currentBreakpoint || 6, // Sử dụng state breakpoint
     swipeToSlide: true,
