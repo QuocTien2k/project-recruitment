@@ -46,7 +46,7 @@ const SliderBanner = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 6000,
-    pauseOnHover: true,
+    pauseOnHover: false,
     cssEase: "ease",
     slidesToShow: 1, // mặc định (desktop)
     lazyLoad: "progressive",
