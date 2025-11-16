@@ -34,9 +34,9 @@ const Footer = () => {
             Email: doquoctien.developer.com
           </p>
           <p className="text-sm text-gray-300">
-            Địa chỉ: 123 Nguyễn Văn A, Q.1, TP.HCM
+            Địa chỉ: 613 Âu Cơ, P.Phú Trung, TP.HCM
           </p>
-          <p className="text-sm text-gray-300">Thời gian: 8h00 - 21h00</p>
+          <p className="text-sm text-gray-300">Thời gian: 8h00 - 18h00</p>
         </div>
 
         {/* Cột 2: Liên kết danh mục */}
